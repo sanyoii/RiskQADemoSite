@@ -36,6 +36,14 @@ test("server-renders the public QA Decision Desk", async () => {
   }
 
   assert.match(html, /href="#evidence-register"/);
+  const repoIndex = html.indexOf(">Repo<");
+  const releaseIndex = html.indexOf(">能不能發<");
+  const whyIndex = html.indexOf(">為什麼<");
+  const evidenceIndex = html.indexOf(">證據在哪<");
+  assert.ok(repoIndex >= 0);
+  assert.ok(repoIndex < releaseIndex && releaseIndex < whyIndex && whyIndex < evidenceIndex);
+  assert.match(html, /cex-market-data-quality-lab/);
+  assert.match(html, /<summary>完整受測版本<\/summary>/);
   assert.match(html, /lang="zh-Hant"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|SkeletonPreview/);
   assert.doesNotMatch(html, /protected-evidence|test-records\/pilot-0|current-status\.json/);

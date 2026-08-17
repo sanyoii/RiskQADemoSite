@@ -112,6 +112,23 @@ export default function Home() {
       <section className="section" aria-labelledby="current-title">
         <h2 id="current-title">目前能做什麼決定？</h2>
         <dl className="decision-grid">
+          <div className="decision repo-decision">
+            <dt className="label">Repo</dt>
+            <dd>
+              <div className="subject">
+                <div className="subject-summary">cex-market-data-quality-lab</div>
+                <details>
+                  <summary>完整受測版本</summary>
+                  <dl className="technical-list">
+                    <dt>Repository</dt><dd>sanyoii/cex-market-data-quality-lab</dd>
+                    <dt>Branch</dt><dd>main</dd>
+                    <dt>Release target</dt><dd>0.1.0</dd>
+                    <dt>Full commit SHA</dt><dd>8fd5081254b5429e480ec20a56ef09bcc6f5ab9e</dd>
+                  </dl>
+                </details>
+              </div>
+            </dd>
+          </div>
           <div className="decision">
             <dt className="label">能不能發</dt>
             <dd>尚未核准發布（Unknown）</dd>
@@ -125,19 +142,6 @@ export default function Home() {
             <dd><a href="#evidence-register">查看本次測試證據</a></dd>
           </div>
         </dl>
-
-        <div className="subject">
-          <div className="subject-summary">受測版本：cex-market-data-quality-lab · 0.1.0 · 8fd5081</div>
-          <details>
-            <summary>完整受測版本</summary>
-            <dl className="technical-list">
-              <dt>Repository</dt><dd>sanyoii/cex-market-data-quality-lab</dd>
-              <dt>Branch</dt><dd>main</dd>
-              <dt>Release target</dt><dd>0.1.0</dd>
-              <dt>Full commit SHA</dt><dd>8fd5081254b5429e480ec20a56ef09bcc6f5ab9e</dd>
-            </dl>
-          </details>
-        </div>
 
         <div className="notice-grid">
           <p className="notice"><strong>Ready 不等於零缺陷，也不是品質保證。</strong>它表示受測版本在證據有效期內，符合目前核准的發布條件。</p>

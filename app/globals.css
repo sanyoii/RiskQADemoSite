@@ -56,14 +56,14 @@ p { max-width: 70ch; }
 .stamp { border: 2px solid var(--signal); color: var(--signal); padding: .5rem .7rem; transform: rotate(-2deg); }
 .section { margin-top: 3.5rem; }
 
-.decision-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--ink); border: 1px solid var(--ink); box-shadow: var(--shadow); }
+.decision-grid { display: grid; grid-template-columns: 1.1fr .8fr 1.4fr 1fr; gap: 1px; background: var(--ink); border: 1px solid var(--ink); box-shadow: var(--shadow); }
 .decision { min-width: 0; padding: 1.25rem; background: var(--panel); }
 .decision dd { margin: .65rem 0 0; font-size: 1.15rem; overflow-wrap: anywhere; }
 
 .notice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
 .notice { margin: 0; padding: 1rem 1.2rem; border-left: 6px solid var(--signal); background: rgba(255, 253, 247, .68); }
-.subject { margin: 1.25rem 0 0; color: var(--muted); }
-.subject-summary { font-family: "Cascadia Code", Consolas, monospace; font-size: .82rem; }
+.subject { margin: 0; color: var(--muted); }
+.subject-summary { color: var(--ink); font-family: "Cascadia Code", Consolas, monospace; font-size: .9rem; font-weight: 700; }
 .subject details { margin-top: .45rem; }
 .subject summary, .evidence-card summary { width: fit-content; cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
 .technical-list { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .25rem .75rem; margin: .65rem 0 0; font-size: .86rem; }

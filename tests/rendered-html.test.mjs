@@ -25,6 +25,8 @@ test("server-renders the public QA Decision Desk", async () => {
   for (const text of [
     "QA Decision Desk",
     "尚未核准發布（Unknown）",
+    "TinTin 的簽核目前只有摘要回報",
+    "正式 G6 Go 決定與可核對的簽核紀錄",
     "查看本次測試證據",
     "較早執行 — 未採用",
     "修正後執行 — 目前採用",

@@ -135,7 +135,7 @@ export default function Home() {
           </div>
           <div className="decision">
             <dt className="label">為什麼</dt>
-            <dd>G3 測試已通過。這份案例的正式發布判斷仍保留為 Unknown，因此不把測試通過說成已核准發布。</dd>
+            <dd>G3 測試已通過，但 TinTin 的簽核目前只有摘要回報，還沒有正式 G6 Go 決定與可核對的簽核紀錄。Release Decision Record 因此仍是 Unknown，現在不能發布。</dd>
           </div>
           <div className="decision">
             <dt className="label">證據在哪</dt>

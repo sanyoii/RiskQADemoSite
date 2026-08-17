@@ -44,6 +44,8 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.ok(repoIndex < releaseIndex && releaseIndex < whyIndex && whyIndex < evidenceIndex);
   assert.match(html, /cex-market-data-quality-lab/);
   assert.match(html, /<summary>完整受測版本<\/summary>/);
+  assert.match(html, /class="status release-status" data-state="Unknown"/);
+  assert.match(html, /尚未核准發布（Unknown）/);
   assert.match(html, /lang="zh-Hant"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|SkeletonPreview/);
   assert.doesNotMatch(html, /protected-evidence|test-records\/pilot-0|current-status\.json/);

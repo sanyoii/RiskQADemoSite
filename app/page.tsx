@@ -90,9 +90,9 @@ const scenarios: Array<{
   },
 ];
 
-function Status({ state, children }: { state: StatusName; children: React.ReactNode }) {
+function Status({ state, children, className = "" }: { state: StatusName; children: React.ReactNode; className?: string }) {
   return (
-    <span className="status" data-state={state}>
+    <span className={`status${className ? ` ${className}` : ""}`} data-state={state}>
       {children}
     </span>
   );
@@ -131,7 +131,7 @@ export default function Home() {
           </div>
           <div className="decision">
             <dt className="label">能不能發</dt>
-            <dd>尚未核准發布（Unknown）</dd>
+            <dd><Status state="Unknown" className="release-status">尚未核准發布（Unknown）</Status></dd>
           </div>
           <div className="decision">
             <dt className="label">為什麼</dt>

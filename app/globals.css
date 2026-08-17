@@ -96,6 +96,7 @@ tbody th { color: var(--ink); font-size: .9rem; }
 .status[data-state="At Risk"] { color: var(--warning); }
 .status[data-state="Fail"], .status[data-state="Blocked"] { color: var(--blocked); }
 .status[data-state="Unknown"], .status[data-state="Unreachable"] { color: var(--unknown); }
+.release-status { font-size: 1rem; }
 
 .footnote { color: var(--muted); font-size: .92rem; }
 .footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; margin-top: 4rem; padding-top: 1.25rem; border-top: 1px solid var(--ink); color: var(--muted); font-size: .88rem; }

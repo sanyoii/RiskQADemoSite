@@ -154,27 +154,29 @@ export default function Home() {
         <p>第一組測試因執行流程不合規而作廢。第二組重跑後通過，目前採用第二組結果。原始測試檔已另外保存，公開頁只顯示做決定需要的摘要。</p>
 
         {evidenceGroups.map((group) => (
-          <article className="evidence-group" key={group.id}>
-            <div className="evidence-group-header">
-              <h3>{group.title}</h3>
+          <details className="evidence-group" key={group.id}>
+            <summary className="evidence-group-summary">
+              <span className="group-title">{group.title}</span>
               <span className="group-status">整體結果：{group.disposition}</span>
+            </summary>
+            <div className="evidence-group-body">
+              <p>{group.explanation}</p>
+              <ul className="evidence-list">
+                {group.records.map(([label, runId, localTime, utcTime]) => (
+                  <li className="evidence-card" key={runId}>
+                    <strong>{label}</strong>
+                    <p>測試結果：通過</p>
+                    <p>證據狀態：仍在有效期限內（有效至 2026/08/24 09:58，台灣時間）</p>
+                    <p>執行時間：{localTime}</p>
+                    <details>
+                      <summary>查看技術資訊</summary>
+                      <span className="run-id">完整 Run ID：{runId}<br />UTC 時間：{utcTime}<br />原始測試檔：已另外保存，不在公開頁提供</span>
+                    </details>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <p>{group.explanation}</p>
-            <ul className="evidence-list">
-              {group.records.map(([label, runId, localTime, utcTime]) => (
-                <li className="evidence-card" key={runId}>
-                  <strong>{label}</strong>
-                  <p>測試結果：通過</p>
-                  <p>證據狀態：仍在有效期限內（有效至 2026/08/24 09:58，台灣時間）</p>
-                  <p>執行時間：{localTime}</p>
-                  <details>
-                    <summary>查看技術資訊</summary>
-                    <span className="run-id">完整 Run ID：{runId}<br />UTC 時間：{utcTime}<br />原始測試檔：已另外保存，不在公開頁提供</span>
-                  </details>
-                </li>
-              ))}
-            </ul>
-          </article>
+          </details>
         ))}
 
         <p className="footnote">三項測試都通過，仍不代表可以發布。請看頁面最上方的「能不能發」。</p>

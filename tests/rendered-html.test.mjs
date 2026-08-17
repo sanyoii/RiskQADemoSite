@@ -46,6 +46,9 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.match(html, /<summary>完整受測版本<\/summary>/);
   assert.match(html, /class="status release-status" data-state="Unknown"/);
   assert.match(html, /尚未核准發布（Unknown）/);
+  assert.equal((html.match(/<details class="evidence-group">/g) ?? []).length, 2);
+  assert.match(html, /<summary class="evidence-group-summary">[\s\S]*較早執行 — 未採用/);
+  assert.match(html, /<summary class="evidence-group-summary">[\s\S]*修正後執行 — 目前採用/);
   assert.match(html, /lang="zh-Hant"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|SkeletonPreview/);
   assert.doesNotMatch(html, /protected-evidence|test-records\/pilot-0|current-status\.json/);

@@ -70,8 +70,10 @@ p { max-width: 70ch; }
 .technical-list dt { font-weight: 700; }
 .technical-list dd { margin: 0; overflow-wrap: anywhere; }
 
-.evidence-group { margin-top: 1.5rem; }
-.evidence-group-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1rem; margin-bottom: .5rem; }
+.evidence-group { margin-top: 1.5rem; border: 1px solid var(--ink); background: var(--panel); }
+.evidence-group-summary { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1rem; padding: 1rem; cursor: pointer; }
+.group-title { font-size: 1.35rem; font-weight: 700; }
+.evidence-group-body { padding: 0 1rem 1rem; }
 .evidence-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 0; padding: 1px; list-style: none; background: var(--ink); box-shadow: var(--shadow); }
 .evidence-card { min-width: 0; padding: 1rem; background: var(--panel); }
 .evidence-card strong { display: block; font-size: 1.08rem; }

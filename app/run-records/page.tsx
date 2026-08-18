@@ -1,5 +1,8 @@
 import Link from "next/link";
+import { siteHref } from "../_site";
 import { deterministicGroups, liveGroups, manualGroups, type TestCaseGroup } from "./cases";
+
+export const dynamic = "force-static";
 
 const runGroups = [
   {
@@ -59,19 +62,63 @@ export default function RunRecords() {
           <div className="eyebrow">Risk-based QA records / Pilot 0 / Portfolio demo</div>
           <h1>Test Cases 與執行記錄</h1>
         </div>
-        <Link href="/">回到 Decision Desk</Link>
+        <Link href={siteHref("/")}>回到 Decision Desk</Link>
       </header>
 
       <section className="section record-intro" aria-labelledby="records-title">
         <h2 id="records-title">這一輪測了什麼？</h2>
         <p>每個 Run ID 都連到它收錄的 Test Cases。頁面顯示受測版本、檢查內容與預期結果，讓人不用閱讀 JSON 就能了解測試範圍。</p>
         <p className="notice"><strong>這是 sanitized Run 記錄，沒有逐項 raw output。</strong>現有資料只足以確認 Run 的整體結果與當時收錄的 Test Cases；原始 JUnit／人工檢查檔目前不在公開頁，也不會假裝成可下載的結果。</p>
+        <div className="record-demo-link">
+          <div><strong>Test Case Fail 會怎麼呈現？</strong><span>查看 Run、失敗案例、Expected／Actual、Defect 與發布影響。</span></div>
+          <Link href={siteHref("/run-records/fail-demo")}>開啟 Fail Demo</Link>
+        </div>
         <dl className="technical-list record-subject">
           <dt>Repo</dt><dd>sanyoii/cex-market-data-quality-lab</dd>
           <dt>受測版本</dt><dd>8fd5081254b5429e480ec20a56ef09bcc6f5ab9e</dd>
           <dt>Branch</dt><dd>main</dd>
           <dt>Release target</dt><dd>0.1.0</dd>
         </dl>
+      </section>
+
+      <section className="section failed-run-preview" aria-labelledby="failed-run-preview-title">
+        <header>
+          <div>
+            <div className="eyebrow">Synthetic example / Not current CEX evidence</div>
+            <h2 id="failed-run-preview-title">Test Fail 在 Run Records 的呈現</h2>
+          </div>
+          <span className="status" data-state="Fail">Fail Demo</span>
+        </header>
+        <p className="notice"><strong>以下是一張合成的失敗 Run 卡片。</strong>它只示範失敗資料的閱讀方式，不屬於上方受測版本，也不會改寫目前採用的 Pass 記錄。</p>
+
+        <article className="run-record is-failed" id="DEMO-RUN-FAIL-001">
+          <div className="run-record-heading">
+            <div>
+              <h3>WebSocket ordering checks</h3>
+              <p className="run-summary"><span className="fail-chip">Fail</span> 3 Test Cases · 2 Pass · 1 Fail</p>
+            </div>
+            <Link href="#DEMO-RUN-FAIL-001">Run ID 連結</Link>
+          </div>
+          <dl className="technical-list">
+            <dt>Run ID</dt><dd>DEMO-RUN-FAIL-001</dd>
+            <dt>執行時間</dt><dd>2026/08/18 17:20（台灣時間，示範）</dd>
+            <dt>Run Result</dt><dd><span className="status" data-state="Fail">Fail</span></dd>
+            <dt>Release impact</dt><dd><span className="status" data-state="At Risk">P0 風險未接受，目前 No-Go</span></dd>
+          </dl>
+
+          <div className="run-case-preview" role="list" aria-label="Synthetic failed Run Test Cases">
+            <div role="listitem"><span>TC-MDQ-016</span><strong>接受依序增加的 update</strong><span className="status" data-state="Pass">Pass</span></div>
+            <div className="is-failed" role="listitem"><span>TC-MDQ-017</span><strong>拒絕 sequence 已過期的 update</strong><span className="status" data-state="Fail">Fail</span></div>
+            <div role="listitem"><span>TC-MDQ-018</span><strong>斷線重連後恢復 snapshot</strong><span className="status" data-state="Pass">Pass</span></div>
+          </div>
+
+          <div className="run-failure-summary">
+            <div><p>Expected</p><strong>過期 sequence 應被拒絕</strong></div>
+            <div><p>Actual</p><strong>過期 sequence 覆蓋目前狀態</strong></div>
+            <div><p>Defect</p><strong>DEF-MDQ-004 · High · Open</strong></div>
+            <Link href={siteHref("/run-records/fail-demo#execution-log")}>查看完整 Fail、Defect 與 Execution Log</Link>
+          </div>
+        </article>
       </section>
 
       {runGroups.map((runGroup) => (
@@ -100,7 +147,7 @@ export default function RunRecords() {
         </section>
       ))}
 
-      <footer className="footer"><Link href="/">← 回到 Decision Desk</Link><span>公開頁只顯示做決定需要的記錄摘要。</span></footer>
+      <footer className="footer"><Link href={siteHref("/")}>← 回到 Decision Desk</Link><span>公開頁只顯示做決定需要的記錄摘要。</span></footer>
     </main>
   );
 }

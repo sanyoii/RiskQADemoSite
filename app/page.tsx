@@ -1,223 +1,83 @@
-type StatusName =
-  | "Pass"
-  | "Ready"
-  | "Fail"
-  | "Blocked"
-  | "At Risk"
-  | "Current"
-  | "Unknown"
-  | "Unreachable";
+import Link from "next/link";
+import { siteHref } from "./_site";
+import { MergedRepoDashboard } from "./dashboard-demo/_template-parts";
 
-const evidenceGroups = [
-  {
-    id: "RUN-20260817T013741977Z-8fd5081254b5",
-    title: "較早執行 — 未採用",
-    disposition: "No-Go",
-    explanation: "測試本身通過，但執行流程與測試記錄不合規，因此只保留作為歷史紀錄。",
-    records: [
-      ["自動化測試", "RUN-20260817T013741977Z-8fd5081254b5-DETERMINISTIC", "2026/08/17 09:40（台灣時間）", "2026-08-17T01:40:33.001721Z"],
-      ["Live market-data 測試", "RUN-20260817T013741977Z-8fd5081254b5-LIVE", "2026/08/17 09:40（台灣時間）", "2026-08-17T01:40:51.548476Z"],
-      ["人工檢查", "RUN-20260817T013741977Z-8fd5081254b5-MANUAL", "2026/08/17 09:41（台灣時間）", "2026-08-17T01:41:27.5793869Z"],
-    ],
-  },
-  {
-    id: "RUN-20260817T015452830Z-8fd5081254b5",
-    title: "修正後執行 — 目前採用",
-    disposition: "採用",
-    explanation: "修正流程問題後重新執行；這組結果目前用來支持頁面最上方的發布判斷。",
-    records: [
-      ["自動化測試", "RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC", "2026/08/17 09:57（台灣時間）", "2026-08-17T01:57:49.150407Z"],
-      ["Live market-data 測試", "RUN-20260817T015452830Z-8fd5081254b5-LIVE", "2026/08/17 09:58（台灣時間）", "2026-08-17T01:58:11.069228Z"],
-      ["人工檢查", "RUN-20260817T015452830Z-8fd5081254b5-MANUAL", "2026/08/17 09:58（台灣時間）", "2026-08-17T01:58:44.2768321Z"],
-    ],
-  },
-] as const;
-
-const scenarios: Array<{
-  scenario: string;
-  scenarioState: StatusName;
-  data: string;
-  dataState: StatusName;
-  product: string;
-  productState: StatusName;
-  release: string;
-  reason: string;
-  record: string;
-}> = [
-  {
-    scenario: "通過（Pass）",
-    scenarioState: "Pass",
-    data: "資料已更新（Current）",
-    dataState: "Current",
-    product: "符合發布條件（Ready）",
-    productState: "Ready",
-    release: "可以（Yes）",
-    reason: "必要測試通過，記錄也齊全，可以發布。",
-    record: "測試記錄齊全",
-  },
-  {
-    scenario: "未通過（Fail）",
-    scenarioState: "Fail",
-    data: "資料已更新（Current）",
-    dataState: "Current",
-    product: "有風險（At Risk）",
-    productState: "At Risk",
-    release: "不可以（No）",
-    reason: "測試發現未接受的風險，不能發布。",
-    record: "已記錄未接受的風險",
-  },
-  {
-    scenario: "測試受阻（Blocked）",
-    scenarioState: "Blocked",
-    data: "資料已更新（Current）",
-    dataState: "Current",
-    product: "測試受阻（Blocked）",
-    productState: "Blocked",
-    release: "不可以（No）",
-    reason: "必要測試沒做完，記錄不齊，不能發布。",
-    record: "必要測試尚未完成",
-  },
-  {
-    scenario: "資料無法取得（Unreachable）",
-    scenarioState: "Unreachable",
-    data: "資料無法取得（Unreachable）",
-    dataState: "Unreachable",
-    product: "狀態未知（Unknown）",
-    productState: "Unknown",
-    release: "尚未決定（Unknown）",
-    reason: "Dashboard 拿不到最新測試資料，發布狀態維持 Unknown。",
-    record: "最新資料取得失敗",
-  },
-];
-
-function Status({ state, children, className = "" }: { state: StatusName; children: React.ReactNode; className?: string }) {
-  return (
-    <span className={`status${className ? ` ${className}` : ""}`} data-state={state}>
-      {children}
-    </span>
-  );
-}
+export const dynamic = "force-static";
 
 export default function Home() {
   return (
-    <main className="shell">
-      <header className="masthead">
-        <div>
-          <div className="eyebrow">Risk-based QA records / Pilot 0 / Portfolio demo</div>
-          <h1>QA Decision Desk</h1>
+    <main className="visual-samples site-template formal-dashboard">
+      <a className="vs-skip" href="#formal-dashboard">跳到 Repository Quality Dashboard</a>
+
+      <header className="st-header fd-header">
+        <div className="st-topline">
+          <p>Risk-Based QA Records · Pilot 0</p>
+          <span>Read-only portfolio</span>
         </div>
-        <div className="stamp">唯讀作品集展示</div>
+
+        <div className="st-title-row">
+          <div>
+            <p className="st-overline">Low-Tech Testing Dashboard</p>
+            <h1>QA Decision Desk</h1>
+            <p>每個 Repo 一列；先看能不能發，需要時再展開 Gate 與測試記錄。</p>
+          </div>
+          <div className="st-release-summary">
+            <small>Current portfolio</small>
+            <span className="vs-signal" data-tone="good">
+              <span className="vs-signal-mark" aria-hidden="true">✓</span>
+              2 releases ready
+            </span>
+          </div>
+        </div>
+
+        <nav className="st-nav" aria-label="Primary navigation">
+          <span aria-current="page">Dashboard</span>
+          <Link href={siteHref("/run-records")}>Test Cases 與執行記錄</Link>
+          <Link href={siteHref("/run-records/fail-demo")}>Fail 與 Log Demo</Link>
+          <Link href={siteHref("/dashboard-demo")}>Design Samples</Link>
+        </nav>
       </header>
 
-      <section className="section" aria-labelledby="current-title">
-        <h2 id="current-title">目前能做什麼決定？</h2>
-        <dl className="decision-grid">
-          <div className="decision repo-decision">
-            <dt className="label">Repo</dt>
-            <dd>
-              <div className="subject">
-                <div className="subject-summary">cex-market-data-quality-lab</div>
-                <details>
-                  <summary>完整受測版本</summary>
-                  <dl className="technical-list">
-                    <dt>Repository</dt><dd>sanyoii/cex-market-data-quality-lab</dd>
-                    <dt>Branch</dt><dd>main</dd>
-                    <dt>Release target</dt><dd>0.1.0</dd>
-                    <dt>Full commit SHA</dt><dd>8fd5081254b5429e480ec20a56ef09bcc6f5ab9e</dd>
-                  </dl>
-                </details>
-              </div>
-            </dd>
-          </div>
-          <div className="decision">
-            <dt className="label">能不能發</dt>
-            <dd><Status state="Unknown" className="release-status">尚未核准發布（Unknown）</Status></dd>
-          </div>
-          <div className="decision">
-            <dt className="label">為什麼</dt>
-            <dd>G3 測試已通過，但 TinTin 的簽核目前只有摘要回報，還沒有正式 G6 Go 決定與可核對的簽核紀錄。Release Decision Record 因此仍是 Unknown，現在不能發布。</dd>
-          </div>
-          <div className="decision">
-            <dt className="label">紀錄在哪</dt>
-            <dd><a href="#test-records">查看本次測試記錄</a></dd>
-          </div>
-        </dl>
+      <div className="st-content" id="formal-dashboard">
+        <MergedRepoDashboard includeGates formal />
 
-        <div className="notice-grid">
-          <p className="notice"><strong>Ready 不等於零缺陷，也不是品質保證。</strong>它表示受測版本在記錄有效期內，符合目前核准的發布條件。</p>
-          <p className="notice"><strong>Unreachable：Dashboard 暫時拿不到最新測試資料。</strong>這不是產品故障警報，也不是即時監控。</p>
-        </div>
-      </section>
-
-      <section className="section" id="test-records" aria-labelledby="records-title" tabIndex={-1}>
-        <h2 id="records-title">本次測試記錄</h2>
-        <p>第一組測試因執行流程不合規而作廢。第二組重跑後通過，目前採用第二組結果。原始測試檔已另外保存，公開頁只顯示做決定需要的摘要。</p>
-
-        {evidenceGroups.map((group) => (
-          <details className="evidence-group" key={group.id}>
-            <summary className="evidence-group-summary">
-              <span className="group-title">{group.title}</span>
-              <span className="group-status">整體結果：{group.disposition}</span>
-            </summary>
-            <div className="evidence-group-body">
-              <p>{group.explanation}</p>
-              <ul className="evidence-list">
-                {group.records.map(([label, runId, localTime, utcTime]) => (
-                  <li className="evidence-card" key={runId}>
-                    <strong>{label}</strong>
-                    <p>測試結果：通過</p>
-                    <p>記錄狀態：仍在有效期限內（有效至 2026/08/24 09:58，台灣時間）</p>
-                    <p>執行時間：{localTime}</p>
-                    <p><a href={`/run-records#${runId}`}>查看 Test Cases 與執行記錄</a></p>
-                    <details>
-                      <summary>查看技術資訊</summary>
-                      <span className="run-id">完整 Run ID：{runId}<br />UTC 時間：{utcTime}<br />原始測試檔：已另外保存，不在公開頁提供</span>
-                    </details>
-                  </li>
-                ))}
-              </ul>
+        <section className="fd-rules" aria-labelledby="status-rules-title">
+          <details>
+            <summary id="status-rules-title">查看狀態定義與資料邊界</summary>
+            <div className="fd-rule-grid">
+              <article>
+                <p>Release Ready</p>
+                <strong>正式 Go 已核准</strong>
+                <span>CEX 的 G3 測試、外部檢視與 G6 正式 Go 紀錄已完成；portfolio site 也有 fresh local 與 CI checks。</span>
+              </article>
+              <article>
+                <p>Ready</p>
+                <strong>符合目前發布條件</strong>
+                <span>不代表零缺陷，也不是品質保證。</span>
+              </article>
+              <article>
+                <p>Unreachable</p>
+                <strong>拿不到最新測試資料</strong>
+                <span>不是產品故障，也不是即時監控。</span>
+              </article>
+              <article>
+                <p>Data boundary</p>
+                <strong>未量測就不顯示數字</strong>
+                <span>Defect Finding、UX、Performance、Security 尚未納入本次 Pilot。</span>
+              </article>
             </div>
           </details>
-        ))}
+        </section>
+      </div>
 
-        <p className="footnote">三項測試都通過，仍不代表可以發布。請看頁面最上方的「能不能發」。</p>
-      </section>
-
-      <section className="section" aria-labelledby="scenarios-title">
-        <h2 id="scenarios-title">四種情境怎麼影響發布</h2>
-        <div className="table-wrap">
-          <table>
-            <caption>Pass、Fail、Blocked、Unreachable 對發布的影響</caption>
-            <thead>
-              <tr>
-                <th scope="col">情境</th>
-                <th scope="col">資料狀態</th>
-                <th scope="col">產品狀態</th>
-                <th scope="col">能不能發</th>
-                <th scope="col">為什麼</th>
-                <th scope="col">記錄</th>
-              </tr>
-            </thead>
-            <tbody>
-              {scenarios.map((row) => (
-                <tr key={row.scenarioState}>
-                  <th scope="row"><Status state={row.scenarioState}>{row.scenario}</Status></th>
-                  <td><Status state={row.dataState}>{row.data}</Status></td>
-                  <td><Status state={row.productState}>{row.product}</Status></td>
-                  <td>{row.release}</td>
-                  <td>{row.reason}</td>
-                  <td>{row.record}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+      <footer className="fd-footer">
+        <div>
+          <strong>Sanitized public projection</strong>
+          <span>只顯示支援決定所需資訊；raw artifacts 與 protected receipts 不公開。</span>
         </div>
-        <p className="footnote">這四列用來說明判斷規則，不是本次產品的測試結果。本次決定請看頁面最上方。</p>
-      </section>
-
-      <footer className="footer">
-        <strong>Portfolio demo</strong>
-        <span>這個公開頁只包含 sanitized decision summary 與測試記錄摘要，不含 raw artifacts、protected receipts 或內部文件。</span>
+        <nav aria-label="Record links">
+          <Link href={siteHref("/run-records")}>查看 Test Cases、Runs 與 Logs</Link>
+        </nav>
       </footer>
     </main>
   );

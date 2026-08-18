@@ -81,6 +81,24 @@ p { max-width: 70ch; }
 .evidence-card details { margin-top: .8rem; color: var(--muted); }
 .run-id { display: block; margin-top: .35rem; overflow-wrap: anywhere; font-family: "Cascadia Code", Consolas, monospace; font-size: .72rem; }
 
+.compact-masthead h1 { max-width: 18ch; font-size: clamp(2.4rem, 6vw, 5rem); }
+.record-intro { max-width: 62rem; }
+.record-subject { margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--rule); background: var(--panel); }
+.run-record-list { display: grid; gap: 1.5rem; }
+.run-record { scroll-margin-top: 1rem; padding: 1.25rem; border: 1px solid var(--ink); background: var(--panel); box-shadow: var(--shadow); }
+.run-record:target { outline: 4px solid var(--signal); outline-offset: 4px; }
+.run-record-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
+.run-record-heading p { margin: .35rem 0 0; }
+.run-summary { color: var(--muted); }
+.pass-chip { display: inline-block; margin-right: .4rem; padding: .1rem .45rem; border-radius: 999px; color: white; background: var(--safe); font-family: "Cascadia Code", Consolas, monospace; font-size: .75rem; font-weight: 700; }
+.case-groups { margin-top: 1.25rem; }
+.case-group { border-top: 1px solid var(--rule); }
+.case-group:last-child { border-bottom: 1px solid var(--rule); }
+.case-group > summary { padding: .8rem 0; cursor: pointer; font-weight: 700; }
+.case-table-wrap { overflow-x: auto; }
+.case-table { min-width: 48rem; background: rgba(255, 253, 247, .5); }
+.case-table th:first-child { width: 8.5rem; color: var(--ink); font-family: "Cascadia Code", Consolas, monospace; font-size: .8rem; }
+
 .table-wrap { overflow-x: auto; background: var(--panel); box-shadow: var(--shadow); border: 1px solid var(--ink); }
 table { width: 100%; min-width: 52rem; border-collapse: collapse; }
 caption { text-align: left; padding: 1rem; font-weight: 700; }

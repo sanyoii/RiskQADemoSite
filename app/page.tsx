@@ -13,7 +13,7 @@ const evidenceGroups = [
     id: "RUN-20260817T013741977Z-8fd5081254b5",
     title: "較早執行 — 未採用",
     disposition: "No-Go",
-    explanation: "測試本身通過，但執行流程與證據紀錄不合規，因此只保留作為歷史紀錄。",
+    explanation: "測試本身通過，但執行流程與測試記錄不合規，因此只保留作為歷史紀錄。",
     records: [
       ["自動化測試", "RUN-20260817T013741977Z-8fd5081254b5-DETERMINISTIC", "2026/08/17 09:40（台灣時間）", "2026-08-17T01:40:33.001721Z"],
       ["Live market-data 測試", "RUN-20260817T013741977Z-8fd5081254b5-LIVE", "2026/08/17 09:40（台灣時間）", "2026-08-17T01:40:51.548476Z"],
@@ -42,7 +42,7 @@ const scenarios: Array<{
   productState: StatusName;
   release: string;
   reason: string;
-  evidence: string;
+  record: string;
 }> = [
   {
     scenario: "通過（Pass）",
@@ -52,8 +52,8 @@ const scenarios: Array<{
     product: "符合發布條件（Ready）",
     productState: "Ready",
     release: "可以（Yes）",
-    reason: "必要測試通過，證據也齊全，可以發布。",
-    evidence: "測試與證據齊全",
+    reason: "必要測試通過，記錄也齊全，可以發布。",
+    record: "測試記錄齊全",
   },
   {
     scenario: "未通過（Fail）",
@@ -64,7 +64,7 @@ const scenarios: Array<{
     productState: "At Risk",
     release: "不可以（No）",
     reason: "測試發現未接受的風險，不能發布。",
-    evidence: "已記錄未接受的風險",
+    record: "已記錄未接受的風險",
   },
   {
     scenario: "測試受阻（Blocked）",
@@ -74,8 +74,8 @@ const scenarios: Array<{
     product: "測試受阻（Blocked）",
     productState: "Blocked",
     release: "不可以（No）",
-    reason: "必要測試沒做完，證據不齊，不能發布。",
-    evidence: "必要測試尚未完成",
+    reason: "必要測試沒做完，記錄不齊，不能發布。",
+    record: "必要測試尚未完成",
   },
   {
     scenario: "資料無法取得（Unreachable）",
@@ -86,7 +86,7 @@ const scenarios: Array<{
     productState: "Unknown",
     release: "尚未決定（Unknown）",
     reason: "Dashboard 拿不到最新測試資料，發布狀態維持 Unknown。",
-    evidence: "最新資料取得失敗",
+    record: "最新資料取得失敗",
   },
 ];
 
@@ -103,7 +103,7 @@ export default function Home() {
     <main className="shell">
       <header className="masthead">
         <div>
-          <div className="eyebrow">Risk-based QA evidence / Pilot 0 / Portfolio demo</div>
+          <div className="eyebrow">Risk-based QA records / Pilot 0 / Portfolio demo</div>
           <h1>QA Decision Desk</h1>
         </div>
         <div className="stamp">唯讀作品集展示</div>
@@ -138,19 +138,19 @@ export default function Home() {
             <dd>G3 測試已通過，但 TinTin 的簽核目前只有摘要回報，還沒有正式 G6 Go 決定與可核對的簽核紀錄。Release Decision Record 因此仍是 Unknown，現在不能發布。</dd>
           </div>
           <div className="decision">
-            <dt className="label">證據在哪</dt>
-            <dd><a href="#evidence-register">查看本次測試證據</a></dd>
+            <dt className="label">紀錄在哪</dt>
+            <dd><a href="#test-records">查看本次測試記錄</a></dd>
           </div>
         </dl>
 
         <div className="notice-grid">
-          <p className="notice"><strong>Ready 不等於零缺陷，也不是品質保證。</strong>它表示受測版本在證據有效期內，符合目前核准的發布條件。</p>
+          <p className="notice"><strong>Ready 不等於零缺陷，也不是品質保證。</strong>它表示受測版本在記錄有效期內，符合目前核准的發布條件。</p>
           <p className="notice"><strong>Unreachable：Dashboard 暫時拿不到最新測試資料。</strong>這不是產品故障警報，也不是即時監控。</p>
         </div>
       </section>
 
-      <section className="section" id="evidence-register" aria-labelledby="evidence-title" tabIndex={-1}>
-        <h2 id="evidence-title">本次測試證據</h2>
+      <section className="section" id="test-records" aria-labelledby="records-title" tabIndex={-1}>
+        <h2 id="records-title">本次測試記錄</h2>
         <p>第一組測試因執行流程不合規而作廢。第二組重跑後通過，目前採用第二組結果。原始測試檔已另外保存，公開頁只顯示做決定需要的摘要。</p>
 
         {evidenceGroups.map((group) => (
@@ -166,8 +166,9 @@ export default function Home() {
                   <li className="evidence-card" key={runId}>
                     <strong>{label}</strong>
                     <p>測試結果：通過</p>
-                    <p>證據狀態：仍在有效期限內（有效至 2026/08/24 09:58，台灣時間）</p>
+                    <p>記錄狀態：仍在有效期限內（有效至 2026/08/24 09:58，台灣時間）</p>
                     <p>執行時間：{localTime}</p>
+                    <p><a href={`/run-records#${runId}`}>查看 Test Cases 與執行記錄</a></p>
                     <details>
                       <summary>查看技術資訊</summary>
                       <span className="run-id">完整 Run ID：{runId}<br />UTC 時間：{utcTime}<br />原始測試檔：已另外保存，不在公開頁提供</span>
@@ -194,7 +195,7 @@ export default function Home() {
                 <th scope="col">產品狀態</th>
                 <th scope="col">能不能發</th>
                 <th scope="col">為什麼</th>
-                <th scope="col">證據</th>
+                <th scope="col">記錄</th>
               </tr>
             </thead>
             <tbody>
@@ -205,7 +206,7 @@ export default function Home() {
                   <td><Status state={row.productState}>{row.product}</Status></td>
                   <td>{row.release}</td>
                   <td>{row.reason}</td>
-                  <td>{row.evidence}</td>
+                  <td>{row.record}</td>
                 </tr>
               ))}
             </tbody>
@@ -216,7 +217,7 @@ export default function Home() {
 
       <footer className="footer">
         <strong>Portfolio demo</strong>
-        <span>這個公開頁只包含 sanitized decision summary，不含 raw artifacts、protected receipts 或內部文件。</span>
+        <span>這個公開頁只包含 sanitized decision summary 與測試記錄摘要，不含 raw artifacts、protected receipts 或內部文件。</span>
       </footer>
     </main>
   );

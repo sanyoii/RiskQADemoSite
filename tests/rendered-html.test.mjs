@@ -3,6 +3,14 @@ import { access, readFile } from "node:fs/promises";
 import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
+const runIds = [
+  "RUN-20260817T013741977Z-8fd5081254b5-DETERMINISTIC",
+  "RUN-20260817T013741977Z-8fd5081254b5-LIVE",
+  "RUN-20260817T013741977Z-8fd5081254b5-MANUAL",
+  "RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC",
+  "RUN-20260817T015452830Z-8fd5081254b5-LIVE",
+  "RUN-20260817T015452830Z-8fd5081254b5-MANUAL",
+];
 
 async function render(pathname = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -50,7 +58,9 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.match(html, /尚未核准發布（Unknown）/);
   assert.equal((html.match(/<details class="evidence-group">/g) ?? []).length, 2);
   assert.match(html, /查看 Test Cases 與執行記錄/);
-  assert.match(html, /href="\/run-records#RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC"/);
+  for (const runId of runIds) {
+    assert.match(html, new RegExp(`href="/run-records#${runId}"`));
+  }
   assert.doesNotMatch(html, /證據在哪|本次測試證據|查看本次測試證據|測試證據/);
   assert.match(html, /<summary class="evidence-group-summary">[\s\S]*較早執行 — 未採用/);
   assert.match(html, /<summary class="evidence-group-summary">[\s\S]*修正後執行 — 目前採用/);
@@ -67,6 +77,7 @@ test("server-renders human-readable Test Case and Run records", async () => {
   for (const text of [
     "Test Cases 與執行記錄",
     "39 個自動化檢查",
+    "涵蓋 34 個 logical Test Case IDs",
     "5 個 Live market-data 檢查",
     "2 個人工檢查",
     "OB-001",
@@ -81,7 +92,9 @@ test("server-renders human-readable Test Case and Run records", async () => {
     assert.match(html, new RegExp(text));
   }
 
-  assert.match(html, /id="RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC"/);
+  for (const runId of runIds) {
+    assert.match(html, new RegExp(`id="${runId}"`));
+  }
   assert.match(html, /href="\/"/);
   assert.doesNotMatch(html, /測試證據|本次測試證據/);
 });

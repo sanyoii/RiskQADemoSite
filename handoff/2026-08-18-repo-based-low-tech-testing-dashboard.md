@@ -33,7 +33,7 @@
 
 - P0／P1：本次保存、發布、production verification 與第二 Repo 接入均已完成，沒有 release blocker。
 - P2：Dashboard 是已驗證 snapshot，不是持續同步或即時監控；下次更新前仍要 refresh repo HEAD、worktree、local tests、CI 與 Pages 狀態。
-- P2：Dashboard source repo 沒有 configured Git remote，因此本次只能 local commit，無 source push target；Pages artifact 已在 `sanyoii/sanyoii.github.io` 保存並推送。
+- Source 保存缺口已完成：public repo `https://github.com/sanyoii/RiskQADemoSite`，`main` 追蹤 `origin/main`。
 
 ## 修改過的檔案
 
@@ -67,7 +67,7 @@
 ## 已知 Bug／風險
 
 - Medium — Dashboard 是 sanitized snapshot，不是 live monitor；頁面上的 Ready／Released 只代表本次記錄的 release checks。
-- Medium — Dashboard source repo 沒有 remote；local commit 若本機 repo 遺失，只有 Pages artifact 仍在 remote。
+- Low — Dashboard source repo 是 public；只允許提交 sanitized portfolio content，新增檔案前仍需做 secret／PII／internal URL 檢查。
 - Low — GitHub Actions 對 `actions/checkout@v4`、`actions/setup-python@v5`、`actions/upload-artifact@v4` 顯示 Node.js 20 deprecation annotation；兩個 workflows 仍 success，未阻擋本次 release。
 - Low — `git status` 顯示無法讀取 `C:\Users\sanyo\.config\git\ignore` 的 permission warning，但 status、diff、build、tests、lint、commit 與 push 均成功。
 - Low — Pages clone 保留一個未追蹤的 `test-records/pytest-results.xml`，來自 fresh local pytest receipt；它未被 stage、commit 或發布。
@@ -76,6 +76,8 @@
 
 - Dashboard source `npm test` → exit 0；7 pass、0 fail。
 - Dashboard source `npm run lint` → exit 0。
+- Dashboard source public repo → `https://github.com/sanyoii/RiskQADemoSite`；visibility `PUBLIC`、default branch `main`。
+- Source local／upstream／remote SHA 在首次 push 後均為 `ede33d18e36a1a7dfd80642bdd6c13fc10cfaec3`；worktree clean。
 - `GITHUB_PAGES=true npm run build` → exit 0；7 routes、0 skipped。
 - Pages repo local `python -m pytest tests\ -v` → 17 pass、0 fail；只有 pytest cache warning。
 - Latest GitHub Tests run `32157367364` → success；Pages run `32157366025` → success。
@@ -91,14 +93,14 @@
 - Workspace 內未發現 `AGENTS.md`；目前 runtime 提供的 `AGENTS.md` instructions 仍適用。
 - 此專案未發現 `PROJECT_MEMORY.md`。
 - 本 Session 未修改 Memory 或 `AGENTS.md`。
-- 使用者明確授權 stage、commit、push 與 deploy；Pages repo 已完成這些操作。Dashboard source repo 只做 local stage／commit，因沒有 remote 而未 push。
+- 使用者明確授權建立 public `sanyoii/RiskQADemoSite`、設定 `origin` 並 push；source 與 Pages repos 均已保存到 GitHub。
 
 ## 下一步從哪開始
 
 1. 保持 read-only，核對兩個 repos 的 branch、HEAD、`git status --short`、Dashboard source tests/lint/export 與 Pages 最新 CI／production routes。
 2. 只有在資料 refresh 後才更新 Repo row；不得把本次 snapshot 當成新的 live proof。
 3. 若重新發布，從 Dashboard source export，部署到 Pages repo 的 `test-status/`，保留根首頁與 `.nojekyll`，並等待 Tests／Pages workflows 都完成。
-4. Source repo 仍無 remote；若要 push source，必須由使用者指定或授權新增 remote，不能猜測。
+4. Source 變更只推送到 `origin=https://github.com/sanyoii/RiskQADemoSite.git`；push 前確認 public disclosure boundary 與 upstream SHA。
 
 ## New Session 完整提示詞
 

@@ -1,0 +1,65 @@
+{
+  "contractVersion": "1.0.0",
+  "snapshotId": "sanyoii--portfolio--20260819",
+  "repository": {
+    "name": "sanyoii.github.io",
+    "url": "https://github.com/sanyoii/sanyoii.github.io",
+    "releaseTarget": "Pages production",
+    "branch": "main",
+    "fullSha": "ceee878f3027f88ead2913ae8253131fccdbb811"
+  },
+  "objective": "Deployment Confidence",
+  "environment": "GitHub Pages; Python 3.14.2; Chromium",
+  "testedScope": ["static", "runtime"],
+  "excludedScope": ["cross-browser"],
+  "releaseAssessment": {
+    "status": "ready",
+    "rationale": "Fresh local and CI checks passed.",
+    "decidedAt": "2026-08-19T09:00:00+08:00",
+    "expiresAt": "2026-08-26T09:00:00+08:00",
+    "qaOwner": "William",
+    "reviewer": "GitHub Actions",
+    "decisionOwner": "William"
+  },
+  "summary": {
+    "effortLevel": "medium",
+    "coverage": "2+",
+    "quality": "good",
+    "comment": "17 fresh cases passed"
+  },
+  "productAreas": [
+    {
+      "id": "runtime",
+      "name": "Runtime behavior",
+      "effortLevel": "medium",
+      "executionState": "complete",
+      "coverage": "2+",
+      "targetCoverage": "2",
+      "quality": "good",
+      "comment": "Chromium checks passed.",
+      "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"]
+    }
+  ],
+  "gates": [
+    {
+      "id": "G3",
+      "title": "17 fresh cases passed",
+      "note": "Python 3.14.2; Chromium",
+      "state": "complete"
+    }
+  ],
+  "runs": [
+    {
+      "runId": "32157367364",
+      "executedAt": "2026-08-18T23:55:21+08:00",
+      "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+    }
+  ],
+  "provenance": {
+    "generatedAt": "2026-08-19T09:05:00+08:00",
+    "syncedAt": "2026-08-19T09:06:00+08:00",
+    "sourceSha": "ceee878f3027f88ead2913ae8253131fccdbb811"
+  },
+  "dataStatus": "fresh",
+  "publicDisclosure": "public"
+}

@@ -50,6 +50,9 @@ test("server-renders the public QA Decision Desk", async () => {
     "Deployment Confidence",
     "展開 Repo 查看 Gate Flow",
     "Release Gate Flow",
+    "Product Areas",
+    "Order-book synchronization",
+    "Document integrity and privacy",
     "測試已通過",
     "外部檢視完成",
     "New Repo",
@@ -67,7 +70,9 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.match(html, /href="\/run-records"/);
   assert.match(html, /href="\/run-records\/fail-demo"/);
   assert.match(html, /href="\/dashboard-demo"/);
-  assert.match(html, /actions\/runs\/32156748489/);
+  assert.match(html, /actions\/runs\/32157367364/);
+  assert.match(html, /main · GitHub Pages production · ceee878/);
+  assert.equal((html.match(/class="st-area-table"/g) ?? []).length, 2);
   assert.equal((html.match(/<details class="st-merged-repo">/g) ?? []).length, 2);
   assert.doesNotMatch(html, /1 decision pending/);
   assert.doesNotMatch(html, /正式紀錄未完成|缺 G6 正式紀錄/);

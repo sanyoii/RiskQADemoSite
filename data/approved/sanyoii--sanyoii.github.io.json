@@ -1,0 +1,45 @@
+{
+  "contractVersion": "1.0.0",
+  "snapshotId": "portfolio-pages-ceee878-20260819",
+  "repository": {
+    "name": "sanyoii.github.io",
+    "url": "https://github.com/sanyoii/sanyoii.github.io",
+    "releaseTarget": "GitHub Pages production",
+    "branch": "main",
+    "fullSha": "ceee878f3027f88ead2913ae8253131fccdbb811"
+  },
+  "objective": "Deployment Confidence",
+  "environment": "GitHub Pages; Python 3.14.2; Chromium 1208",
+  "testedScope": ["static HTML", "runtime behavior", "responsive layouts", "bilingual behavior", "reduced motion", "404 page"],
+  "excludedScope": ["cross-browser beyond Chromium", "performance", "scheduled monitoring", "analytics"],
+  "releaseAssessment": {
+    "status": "ready",
+    "rationale": "Fresh local 17/17 checks passed; Tests and Pages workflows succeeded for the deployed SHA.",
+    "decidedAt": "2026-08-19T17:53:42+08:00",
+    "expiresAt": "2026-08-26T17:53:42+08:00",
+    "qaOwner": "William",
+    "reviewer": "GitHub Actions",
+    "decisionOwner": "William"
+  },
+  "summary": { "effortLevel": "medium", "coverage": "2+", "quality": "good", "comment": "17 fresh cases passed" },
+  "productAreas": [
+    { "id": "document", "name": "Document integrity and privacy", "effortLevel": "medium", "executionState": "complete", "coverage": "2", "targetCoverage": "2", "quality": "good", "comment": "Structure, URL allowlist and phone-data checks passed.", "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"] },
+    { "id": "responsive", "name": "Responsive layout", "effortLevel": "medium", "executionState": "complete", "coverage": "2+", "targetCoverage": "2", "quality": "good", "comment": "375, 768 and 1440 px overflow checks passed.", "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"] },
+    { "id": "bilingual", "name": "Bilingual behavior", "effortLevel": "medium", "executionState": "complete", "coverage": "2+", "targetCoverage": "2", "quality": "good", "comment": "Language toggle, metadata and persisted state passed.", "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"] },
+    { "id": "runtime", "name": "Runtime and accessibility behavior", "effortLevel": "medium", "executionState": "complete", "coverage": "2", "targetCoverage": "2", "quality": "good", "comment": "No external requests, reduced motion and 404 behavior passed.", "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"] }
+  ],
+  "gates": [
+    { "id": "G1", "title": "測試範圍已定義", "note": "TESTPLAN.md · 12 checks", "state": "complete" },
+    { "id": "G3", "title": "17 fresh cases passed", "note": "Python 3.14.2 · Chromium", "state": "complete" },
+    { "id": "G5", "title": "Release CI passed", "note": "Tests workflow · success", "state": "complete" },
+    { "id": "G6", "title": "Pages production verified", "note": "6 routes · HTTP 200", "state": "complete" },
+    { "id": "Release", "title": "Released", "note": "Production verified", "state": "complete" }
+  ],
+  "runs": [
+    { "runId": "32157367364", "executedAt": "2026-08-18T23:55:21+08:00", "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364" },
+    { "runId": "32157366025", "executedAt": "2026-08-18T23:55:21+08:00", "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157366025" }
+  ],
+  "provenance": { "generatedAt": "2026-08-19T09:53:42Z", "syncedAt": "2026-08-19T09:53:42Z", "sourceSha": "ceee878f3027f88ead2913ae8253131fccdbb811" },
+  "dataStatus": "fresh",
+  "publicDisclosure": "public"
+}

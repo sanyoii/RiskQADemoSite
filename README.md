@@ -57,7 +57,7 @@ Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是 code c
 | Repository | Objective | Decision | Effort | Coverage | Quality | Public evidence |
 |---|---|---|---|---|---|---|
 | `cex-market-data-quality-lab` | Release Readiness | Ready | High | Level 2+ | Ready | [Test Cases 與 Run Records](https://sanyoii.github.io/test-status/run-records/) |
-| `sanyoii.github.io` | Deployment Confidence | Ready | Medium | Level 2+ | Healthy | [GitHub Actions run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32156748489) |
+| `sanyoii.github.io` | Deployment Confidence | Ready | Medium | Level 2+ | Healthy | [GitHub Actions run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364) |
 
 Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targeted rerun 與 No-Go 的呈現方式；它不屬於目前兩個 repository 的正式結果。
 
@@ -67,15 +67,15 @@ Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targ
 
 | Template | Canonical file | 套用後的 repository 位置 |
 |---|---|---|
-| [00 QA Test Request](#00-qa-test-request) | `Templates/QA/00-qa-test-request.md` | `docs/quality/<release>/quality-decision-brief.md` |
-| [01 Quality Risk Assessment](#01-quality-risk-assessment) | `Templates/QA/01-quality-risk-assessment.md` | `docs/quality/<release>/risk-assessment.md` |
-| [02 Test Spec](#02-test-spec) | `Templates/QA/02-test-spec.md` | `docs/quality/<release>/test-spec.md` |
-| [03 Test Scenario](#03-test-scenario) | `Templates/QA/03-test-scenario.md` | `docs/quality/<release>/coverage-inventory.md` |
-| [04 Test Case](#04-test-case) | `Templates/QA/04-test-case.md` | `docs/quality/<release>/test-cases.md` |
-| [05 Test Run Record](#05-test-run-record) | `Templates/QA/05-test-run-record.md` | `test-records/<run-id>/run-record.md` |
-| [06 Defect Report](#06-defect-report) | `Templates/QA/06-defect-report.md` | `docs/quality/<release>/defect-log.md` |
-| [07 Release Quality Summary](#07-release-quality-summary) | `Templates/QA/07-release-quality-summary.md` | `docs/quality/<release>/release-quality-summary.md` |
-| [08 Dashboard Status Contract](#08-dashboard-status-contract) | `Templates/QA/08-dashboard-status-contract.md` | `.test-dashboard/status.json` |
+| [00 QA Test Request](Templates/QA/00-qa-test-request.md) | `Templates/QA/00-qa-test-request.md` | `docs/quality/<release>/quality-decision-brief.md` |
+| [01 Quality Risk Assessment](Templates/QA/01-quality-risk-assessment.md) | `Templates/QA/01-quality-risk-assessment.md` | `docs/quality/<release>/risk-assessment.md` |
+| [02 Test Spec](Templates/QA/02-test-spec.md) | `Templates/QA/02-test-spec.md` | `docs/quality/<release>/test-spec.md` |
+| [03 Test Scenario](Templates/QA/03-test-scenario.md) | `Templates/QA/03-test-scenario.md` | `docs/quality/<release>/coverage-inventory.md` |
+| [04 Test Case](Templates/QA/04-test-case.md) | `Templates/QA/04-test-case.md` | `docs/quality/<release>/test-cases.md` |
+| [05 Test Run Record](Templates/QA/05-test-run-record.md) | `Templates/QA/05-test-run-record.md` | `test-records/<run-id>/run-record.md` |
+| [06 Defect Report](Templates/QA/06-defect-report.md) | `Templates/QA/06-defect-report.md` | `docs/quality/<release>/defect-log.md` |
+| [07 Release Quality Summary](Templates/QA/07-release-quality-summary.md) | `Templates/QA/07-release-quality-summary.md` | `docs/quality/<release>/release-quality-summary.md` |
+| [08 Dashboard Status Contract](Templates/QA/08-dashboard-status-contract.md) | `Templates/QA/08-dashboard-status-contract.md` | `.test-dashboard/status.json` |
 
 九份模板不等於每次 release 都要產生九份文件。`QA-Lite` 可以把 request、risk、coverage 與 decision 收在同一份短文件；Test Run Record 與 Release Quality Summary 每次執行都要保留。`QA-Standard`、`QA-High-Risk` 與命中 hard trigger 的範圍，再加入詳細 case 或 conditional templates。
 
@@ -129,9 +129,15 @@ Public surface 不包含 raw logs、protected receipts、credentials、test acco
 ## Repository map
 
 - [正式 Dashboard](app/page.tsx)
-- [Repository data 與 Gate Flow](app/dashboard-demo/_template-parts.tsx)
+- [九個核心 QA 模板](Templates/QA/README.md)
+- [Status contract schema](schema/test-status.schema.json)
+- [Approved source records](data/approved)
+- [Public snapshot registry](data/repos/index.json)
+- [Repository data adapter](app/dashboard-data.ts)
+- [Gate Flow UI](app/dashboard-demo/_template-parts.tsx)
 - [Test Cases 與 Run Records](app/run-records/page.tsx)
 - [Synthetic Fail Demo](app/run-records/fail-demo/page.tsx)
+- [Contract、sync 與 registry tests](tests/status-contract.test.mjs)
 - [Rendered route tests](tests/rendered-html.test.mjs)
 - [Continuity handoff](handoff/2026-08-18-repo-based-low-tech-testing-dashboard.md)
 
@@ -146,4 +152,4 @@ npm test
 npm run lint
 ```
 
-`npm test` 會先 build，再驗證正式 Dashboard、Run Records、Fail Demo、Design Samples、public disclosure boundary、metadata 與 starter-only files 的移除狀態。
+`npm test` 會先驗證 snapshot registry、contract、freshness、chronology 與 public disclosure boundary，再 build 並驗證正式 Dashboard、Run Records、Fail Demo、Design Samples、metadata 與 starter-only files 的移除狀態。

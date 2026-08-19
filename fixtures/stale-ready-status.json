@@ -1,0 +1,31 @@
+{
+  "contractVersion": "1.0.0",
+  "snapshotId": "stale-ready-demo",
+  "repository": {
+    "name": "stale-demo",
+    "url": "https://github.com/sanyoii/stale-demo",
+    "releaseTarget": "demo",
+    "branch": "main",
+    "fullSha": "1111111111111111111111111111111111111111"
+  },
+  "objective": "Policy fixture",
+  "environment": "synthetic fixture",
+  "testedScope": ["policy"],
+  "excludedScope": [],
+  "releaseAssessment": {
+    "status": "ready",
+    "rationale": "Synthetic stale fixture.",
+    "decidedAt": "2026-08-01T09:00:00+08:00",
+    "expiresAt": "2026-08-02T09:00:00+08:00",
+    "qaOwner": "Fixture",
+    "reviewer": "Fixture",
+    "decisionOwner": "Fixture"
+  },
+  "summary": { "effortLevel": "low", "coverage": "1", "quality": "good", "comment": "Synthetic" },
+  "productAreas": [{ "id": "policy", "name": "Policy", "effortLevel": "low", "executionState": "complete", "coverage": "1", "targetCoverage": "1", "quality": "good", "comment": "Synthetic", "evidenceLinks": [] }],
+  "gates": [],
+  "runs": [{ "runId": "stale-run-1", "executedAt": "2026-08-01T08:30:00+08:00", "evidenceUrl": "https://github.com/sanyoii/stale-demo/actions/runs/1" }],
+  "provenance": { "generatedAt": "2026-08-01T09:00:00+08:00", "syncedAt": "2026-08-01T09:00:00+08:00", "sourceSha": "1111111111111111111111111111111111111111" },
+  "dataStatus": "fresh",
+  "publicDisclosure": "public"
+}

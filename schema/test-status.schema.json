@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sanyoii/RiskQADemoSite/schema/test-status.schema.json",
+  "title": "QA Decision Desk public repository snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contractVersion", "snapshotId", "repository", "objective", "environment", "testedScope", "excludedScope", "releaseAssessment", "summary", "productAreas", "gates", "runs", "provenance", "dataStatus", "publicDisclosure"],
+  "properties": {
+    "contractVersion": { "const": "1.0.0" },
+    "snapshotId": { "type": "string", "minLength": 1 },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "url", "releaseTarget", "branch", "fullSha"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "pattern": "^https://github\\.com/[^/]+/[^/]+$" },
+        "releaseTarget": { "type": "string", "minLength": 1 },
+        "branch": { "type": "string", "minLength": 1 },
+        "fullSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      }
+    },
+    "objective": { "type": "string", "minLength": 1 },
+    "environment": { "type": "string", "minLength": 1 },
+    "testedScope": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+    "excludedScope": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "releaseAssessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "rationale", "decidedAt", "expiresAt", "qaOwner", "reviewer", "decisionOwner"],
+      "properties": {
+        "status": { "enum": ["ready", "at-risk", "blocked", "unknown"] },
+        "rationale": { "type": "string", "minLength": 1 },
+        "decidedAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" },
+        "qaOwner": { "type": "string", "minLength": 1 },
+        "reviewer": { "type": "string", "minLength": 1 },
+        "decisionOwner": { "type": "string", "minLength": 1 }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["effortLevel", "coverage", "quality", "comment"],
+      "properties": {
+        "effortLevel": { "enum": ["none", "low", "medium", "high"] },
+        "coverage": { "$ref": "#/$defs/coverage" },
+        "quality": { "$ref": "#/$defs/quality" },
+        "comment": { "type": "string", "minLength": 1 }
+      }
+    },
+    "productAreas": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/productArea" } },
+    "gates": { "type": "array", "items": { "$ref": "#/$defs/gate" } },
+    "runs": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/run" } },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generatedAt", "syncedAt", "sourceSha"],
+      "properties": {
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "syncedAt": { "type": "string", "format": "date-time" },
+        "sourceSha": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+      }
+    },
+    "dataStatus": { "enum": ["fresh", "stale", "invalid", "not-configured", "unreachable"] },
+    "publicDisclosure": { "const": "public" }
+  },
+  "$defs": {
+    "coverage": { "enum": ["0", "1", "1+", "2", "2+", "3"] },
+    "quality": { "enum": ["good", "warning", "bad"] },
+    "productArea": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "effortLevel", "executionState", "coverage", "targetCoverage", "quality", "comment", "evidenceLinks"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "effortLevel": { "enum": ["none", "low", "medium", "high"] },
+        "executionState": { "enum": ["not-started", "in-progress", "paused", "blocked", "complete"] },
+        "coverage": { "$ref": "#/$defs/coverage" },
+        "targetCoverage": { "$ref": "#/$defs/coverage" },
+        "quality": { "$ref": "#/$defs/quality" },
+        "comment": { "type": "string" },
+        "evidenceLinks": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "note", "state"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "note": { "type": "string", "minLength": 1 },
+        "state": { "enum": ["complete", "blocked", "unknown"] }
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["runId", "executedAt", "evidenceUrl"],
+      "properties": {
+        "runId": { "type": "string", "minLength": 1 },
+        "executedAt": { "type": "string", "format": "date-time" },
+        "evidenceUrl": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -1,89 +1,8 @@
 import Link from "next/link";
 import { siteHref } from "../_site";
+import { dashboardRepos, templateRepo, type DashboardRepo, type QualityTone, type SignalTone } from "../dashboard-data";
 
-type SignalTone = "good" | "warning" | "unknown";
-type GateState = "complete" | "blocked" | "unknown";
-
-type DashboardRepo = {
-  name: string;
-  version: string;
-  objective: string;
-  decision: string;
-  decisionTone: SignalTone;
-  decisionNote: string;
-  effort: string;
-  effortBars: number;
-  coverage: string;
-  coverageLabel: string;
-  quality: string;
-  qualityTone: "good" | "warning";
-  qualityLabel: string;
-  finalDecision: string;
-  finalNote: string;
-  gateSummary: string;
-  nextAction: string;
-  recordsHref: string;
-  recordsLabel: string;
-  gates: Array<{ id: string; title: string; note: string; state: GateState }>;
-};
-
-export const dashboardRepos: DashboardRepo[] = [{
-  name: "cex-market-data-quality-lab",
-  version: "main · 0.1.0 · 8fd5081",
-  objective: "Release Readiness",
-  decision: "Ready",
-  decisionTone: "good",
-  decisionNote: "正式 Go 已核准",
-  effort: "High",
-  effortBars: 4,
-  coverage: "Level 2+",
-  coverageLabel: "常見路徑與錯誤路徑已覆蓋",
-  quality: "Ready",
-  qualityTone: "good",
-  qualityLabel: "測試通過，正式 Go 紀錄完成",
-  finalDecision: "可以發布",
-  finalNote: "Release 已核准",
-  gateSummary: "G6 正式紀錄完成",
-  nextAction: "Release approved · 保留目前測試與決定紀錄",
-  recordsHref: siteHref("/run-records"),
-  recordsLabel: "查看測試記錄",
-  gates: [
-    { id: "G1", title: "範圍已鎖定", note: "Scope complete", state: "complete" },
-    { id: "G3", title: "測試已通過", note: "3 類測試完成", state: "complete" },
-    { id: "G5", title: "外部檢視完成", note: "回饋已取得", state: "complete" },
-    { id: "G6", title: "正式 Go 紀錄完成", note: "Release authorized", state: "complete" },
-    { id: "Release", title: "Ready", note: "可以發布", state: "complete" },
-  ],
-}, {
-  name: "sanyoii.github.io",
-  version: "deployed · GitHub Pages",
-  objective: "Deployment Confidence",
-  decision: "Ready",
-  decisionTone: "good",
-  decisionNote: "17 fresh cases passed",
-  effort: "Medium",
-  effortBars: 3,
-  coverage: "Level 2+",
-  coverageLabel: "Static、runtime、responsive 與 bilingual behavior",
-  quality: "Healthy",
-  qualityTone: "good",
-  qualityLabel: "Local 17/17 + release CI pass",
-  finalDecision: "可以發布",
-  finalNote: "Pages production verified",
-  gateSummary: "Fresh local、CI 與 Pages checks 通過",
-  nextAction: "Released · 保留目前 checks 與 receipts",
-  recordsHref: "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32156748489",
-  recordsLabel: "查看 GitHub Actions",
-  gates: [
-    { id: "G1", title: "測試範圍已定義", note: "TESTPLAN.md · 12 checks", state: "complete" },
-    { id: "G3", title: "17 fresh cases passed", note: "Python 3.14 · Chromium", state: "complete" },
-    { id: "G5", title: "Release CI passed", note: "Tests workflow · success", state: "complete" },
-    { id: "G6", title: "Pages production verified", note: "6 routes · HTTP 200", state: "complete" },
-    { id: "Release", title: "Released", note: "Production verified", state: "complete" },
-  ],
-}];
-
-export const templateRepo = dashboardRepos[0];
+export { dashboardRepos };
 
 function Signal({ tone, mark, children }: { tone: SignalTone; mark: string; children: React.ReactNode }) {
   return (
@@ -113,10 +32,10 @@ function CoverageSegments({ compact = false }: { compact?: boolean }) {
   );
 }
 
-function QualityLights({ compact = false, tone = "warning", label = "Warning" }: { compact?: boolean; tone?: "good" | "warning"; label?: string }) {
+function QualityLights({ compact = false, tone = "warning", label = "Warning" }: { compact?: boolean; tone?: QualityTone; label?: string }) {
   return (
-    <span className={`vs-lights${compact ? " is-compact" : ""}`} role="img" aria-label={`Quality Assessment：${label}，${tone === "good" ? "綠色" : "黃色"}燈號`}>
-      <span className="is-red" /><span className={`is-yellow${tone === "warning" ? " is-on" : ""}`} /><span className={`is-green${tone === "good" ? " is-on" : ""}`} />
+    <span className={`vs-lights${compact ? " is-compact" : ""}`} role="img" aria-label={`Quality Assessment：${label}，${tone === "good" ? "綠色" : tone === "warning" ? "黃色" : "紅色"}燈號`}>
+      <span className={`is-red${tone === "bad" ? " is-on" : ""}`} /><span className={`is-yellow${tone === "warning" ? " is-on" : ""}`} /><span className={`is-green${tone === "good" ? " is-on" : ""}`} />
     </span>
   );
 }
@@ -194,6 +113,18 @@ function InlineReleaseGates({ repo, formal = false }: { repo: DashboardRepo; for
           <li data-state={gate.state} key={gate.id}><span className="vs-gate-node" aria-hidden="true">{gate.state === "complete" ? "✓" : gate.state === "blocked" ? "!" : "?"}</span><div><small>{gate.id}</small><strong>{gate.title}</strong><span>{gate.note}</span></div></li>
         ))}
       </ol>
+      <div className="st-area-table" role="region" aria-label={`${repo.name} Product Areas`}>
+        <div className="st-area-head" aria-hidden="true"><span>Product Area</span><span>Effort</span><span>Coverage</span><span>Quality</span><span>Comments</span></div>
+        {repo.productAreas.map((area) => (
+          <article className="st-area-row" key={area.id}>
+            <strong data-label="Product Area">{area.name}</strong>
+            <span data-label="Effort">{area.effortLevel} / {area.executionState}</span>
+            <span data-label="Coverage">{area.coverage} / target {area.targetCoverage}</span>
+            <span data-label="Quality">{area.quality}</span>
+            <span data-label="Comments">{area.comment}</span>
+          </article>
+        ))}
+      </div>
       <div className="st-inline-next">
         <div><small>Next action</small><strong>{repo.nextAction}</strong></div>
         <Link href={formal ? repo.recordsHref : siteHref("/")}>{formal ? repo.recordsLabel : "查看發布判斷"}</Link>

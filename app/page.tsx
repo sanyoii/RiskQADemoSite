@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { siteHref } from "./_site";
 import { MergedRepoDashboard } from "./dashboard-demo/_template-parts";
+import { readyRepoCount } from "./dashboard-data";
 
 export const dynamic = "force-static";
 
@@ -25,7 +26,7 @@ export default function Home() {
             <small>Current portfolio</small>
             <span className="vs-signal" data-tone="good">
               <span className="vs-signal-mark" aria-hidden="true">✓</span>
-              2 releases ready
+              {`${readyRepoCount} releases ready`}
             </span>
           </div>
         </div>

@@ -1,0 +1,7 @@
+{
+  "contractVersion": "1.0.0",
+  "repositories": [
+    { "url": "https://github.com/sanyoii/cex-market-data-quality-lab", "snapshot": "sanyoii--cex-market-data-quality-lab.json" },
+    { "url": "https://github.com/sanyoii/sanyoii.github.io", "snapshot": "sanyoii--sanyoii.github.io.json" }
+  ]
+}

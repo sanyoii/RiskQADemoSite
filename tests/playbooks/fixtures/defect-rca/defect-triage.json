@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "defect-triage-batch",
+  "playbook": "defect-triage",
+  "caseType": "incomplete",
+  "inputProvenance": {
+    "source": "synthetic defect batch",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "mixed"
+  },
+  "input": "BUG-1 and BUG-2 both report checkout timeout but differ by browser and build. BUG-3 lacks environment and evidence. No component ownership map is supplied.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "possible duplicate",
+      "severity recommendation",
+      "priority recommendation",
+      "owner suggestion",
+      "missing information",
+      "Unknown",
+      "No external write"
+    ],
+    "mustNotInclude": ["BUG-2 closed as duplicate", "assigned to payments", "Result: Pass"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "needs-clarification",
+  "candidateState": "needs-clarification",
+  "candidateOutput": "Review state: draft\nState: needs-clarification\nBUG-1 / BUG-2: possible duplicate; browser and build differences require comparison before any merge.\nseverity recommendation: Unknown until impact is confirmed.\npriority recommendation: Unknown without release urgency.\nowner suggestion: Unknown because no ownership map was supplied.\nBUG-3 missing information: environment and evidence.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

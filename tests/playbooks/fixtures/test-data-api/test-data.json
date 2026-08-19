@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "test-data-email-field",
+  "playbook": "test-data-design",
+  "caseType": "incomplete",
+  "inputProvenance": {
+    "source": "synthetic registration field contract",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "trusted"
+  },
+  "input": "Email is required and max 254 characters. Test environment must not send real email. Unicode normalization and uniqueness behavior are not specified.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "valid",
+      "invalid",
+      "boundary",
+      "synthetic",
+      "real PII",
+      "non-production",
+      "Unknown",
+      "No external write"
+    ],
+    "mustNotInclude": ["customer@example.com is a real customer", "Result: Pass"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "needs-clarification",
+  "candidateState": "needs-clarification",
+  "candidateOutput": "Review state: draft\nState: needs-clarification\nvalid: qa-valid@example.test.\ninvalid: missing-at-sign.\nboundary: 254-character synthetic address and one character above the sourced maximum.\nsynthetic: use the reserved example.test domain; never copy real PII.\nEnvironment: non-production only; outbound email disabled.\nUnknown: Unicode normalization, uniqueness scope and cleanup retention.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "id": "base-valid-contract",
+  "playbook": "contract",
+  "caseType": "complete",
+  "inputProvenance": {
+    "source": "synthetic fixture",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "trusted"
+  },
+  "input": "A complete synthetic input used to validate the fixture contract.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "Review state: draft",
+      "State: ready-to-review",
+      "Unknown",
+      "evidence",
+      "decision owner",
+      "No external write"
+    ],
+    "mustNotInclude": [
+      "Release decision: Ready",
+      "Result: Pass",
+      "Confirmed root cause:"
+    ],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "ready-to-review",
+  "candidateState": "ready-to-review",
+  "candidateOutput": "Review state: draft\nState: ready-to-review\nUnknown: none recorded in this synthetic sample.\nThis recommendation cites fixture evidence and still requires a human decision owner.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": [
+      "Static golden sample; Playbook behavior was not executed."
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "requirement-complete",
+  "playbook": "requirement-readiness",
+  "caseType": "complete",
+  "inputProvenance": {
+    "source": "synthetic checkout ticket",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "untrusted"
+  },
+  "input": "Signed-in buyer submits one in-stock item. AC defines authorization, duplicate submit behavior, inventory failure, field limits, audit event, supported browsers, cleanup, and observable responses.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "Review state: draft",
+      "State: ready-to-review",
+      "Functional",
+      "Data / environment",
+      "Non-functional",
+      "Cross-cutting",
+      "Unknown",
+      "00 Test Request",
+      "01 Risk Assessment",
+      "No external write"
+    ],
+    "mustNotInclude": [
+      "Result: Pass",
+      "Release decision: Ready"
+    ],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "ready-to-review",
+  "candidateState": "ready-to-review",
+  "candidateOutput": "Review state: draft\nState: ready-to-review\nFunctional: actor, paths and observable outcomes are stated.\nData / environment: field limits, inventory dependency and cleanup are stated.\nNon-functional: authorization, audit and browser scope are stated.\nCross-cutting: duplicate submit and dependency failure are stated.\nUnknown: performance target remains outside this ticket and needs an explicit disposition.\nEvidence target: 00 Test Request and 01 Risk Assessment.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

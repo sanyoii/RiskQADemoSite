@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "id": "coverage-mixed",
+  "playbook": "coverage-analysis",
+  "caseType": "complete",
+  "inputProvenance": {
+    "source": "synthetic requirements, cases and run records",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "trusted"
+  },
+  "input": {
+    "AC-1": "SC-1 -> TC-1 -> RUN-1 Pass",
+    "AC-2": "SC-2 -> TC-2 -> no run",
+    "AC-3": "no scenario or case"
+  },
+  "expectedAssertions": {
+    "mustInclude": [
+      "Requirement",
+      "Scenario",
+      "Case",
+      "Run",
+      "covered-and-passing",
+      "designed-not-run",
+      "unmapped",
+      "docs/quality/v1.0.0/coverage-inventory.md",
+      "07 Release Quality Summary",
+      "Unknown",
+      "No external write"
+    ],
+    "mustNotInclude": ["Release decision: Ready", "Result: Pass"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "draft",
+  "candidateState": "draft",
+  "candidateOutput": "Review state: draft\nState: draft\nRequirement AC-1 -> Scenario SC-1 -> Case TC-1 -> Run RUN-1: covered-and-passing.\nRequirement AC-2 -> Scenario SC-2 -> Case TC-2 -> Run Unknown: designed-not-run.\nRequirement AC-3 -> Scenario Unknown -> Case Unknown -> Run Unknown: unmapped.\nEvidence target: docs/quality/v1.0.0/coverage-inventory.md.\n07 Release Quality Summary receives only the summary and link.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

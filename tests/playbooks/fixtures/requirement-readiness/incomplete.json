@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "requirement-incomplete",
+  "playbook": "requirement-readiness",
+  "caseType": "incomplete",
+  "inputProvenance": {
+    "source": "synthetic profile ticket",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "untrusted"
+  },
+  "input": "Users can update their profile quickly. No field constraints, roles, error behavior, environment, accessibility or audit requirements are supplied.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "State: needs-clarification",
+      "Unknown",
+      "field constraints",
+      "authorization",
+      "accessibility",
+      "No external write"
+    ],
+    "mustNotInclude": ["Result: Pass", "Release decision: Ready"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "needs-clarification",
+  "candidateState": "needs-clarification",
+  "candidateOutput": "Review state: draft\nState: needs-clarification\nUnknown: field constraints, authorization roles, error behavior, environment, accessibility and audit expectations.\nQuestions for the author: define each missing constraint before test design.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

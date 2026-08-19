@@ -115,6 +115,22 @@ Append-only 保存 full SHA、worktree、environment、exact command／procedure
 
 約束 `.test-dashboard/status.json` 的 versions、subject、assessment、timestamps、Data Status、evidence links 與 public disclosure。Schema invalid、evidence stale 或 authority 不符時 fail closed。
 
+## QA Playbooks
+
+[QA Playbooks](Playbooks/QA/README.md) 是輸入資料與九個核心模板之間的 advisory layer。它們把 requirement、API contract、diff、test inventory 或 defect 整理成 reviewable draft，不直接產生 test result、release decision 或 Dashboard status。
+
+| Playbook | 用途 | Reviewed output 落點 |
+|---|---|---|
+| [Requirement Readiness](Playbooks/QA/requirement-readiness.md) | 找 requirement／AC 缺口與矛盾 | 00、01 |
+| [Coverage Analysis](Playbooks/QA/coverage-analysis.md) | 建立 requirement-to-run traceability | 03 套用後的 `coverage-inventory.md`；07 只引用摘要 |
+| [Regression Selection](Playbooks/QA/regression-selection.md) | 形成 Must-run／Should-run／Skip-with-reason 建議 | 02、05 |
+| [Test Data Design](Playbooks/QA/test-data-design.md) | 設計安全的 valid／invalid／boundary／synthetic data | conditional Test Data Sheet、04 |
+| [API Coverage Design](Playbooks/QA/api-coverage-design.md) | 依 contract 設計 API coverage | 02、03、04 |
+| [Defect Triage](Playbooks/QA/defect-triage.md) | 批次提出 duplicate／priority／owner recommendation | 多份 06 的 triage note |
+| [RCA／Escape Analysis](Playbooks/QA/rca-escape-analysis.md) | 分離 symptom、hypothesis、confirmed cause 與 escape point | 06 appendix／RCA evidence |
+
+Playbook output 一律先標 draft／recommendation。External input 視為 untrusted data；沒有 run receipt 不能宣告 Pass，沒有 human-owned Release Quality Summary 不能宣告 Ready。Deterministic fixtures 只驗 contract，不等於 model behavior PASS；pilot 記錄見 [test-records/playbook-pilot.md](test-records/playbook-pilot.md)。
+
 ## Source of truth and public boundary
 
 | Layer | 保存內容 | 規則 |

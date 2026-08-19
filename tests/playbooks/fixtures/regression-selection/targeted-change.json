@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "id": "regression-targeted-change",
+  "playbook": "regression-selection",
+  "caseType": "complete",
+  "inputProvenance": {
+    "source": "synthetic checkout diff and test inventory",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "trusted"
+  },
+  "input": "Change touches order submission and shared auth middleware. Inventory lists order contract, duplicate-submit, auth roles, reporting export and critical smoke tests.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "Must-run",
+      "Should-run",
+      "safety net",
+      "Skip-with-reason",
+      "uncovered gap",
+      "residual risk",
+      "human approval",
+      "Unknown",
+      "No external write"
+    ],
+    "mustNotInclude": [
+      "Release decision: Ready",
+      "targeted subset is risk-free",
+      "Result: Pass"
+    ],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "draft",
+  "candidateState": "draft",
+  "candidateOutput": "Review state: draft\nState: draft\nMust-run: order contract, duplicate-submit, auth-role tests.\nShould-run: shared session and permission-adjacent tests.\nsafety net: critical checkout smoke.\nSkip-with-reason: reporting export is outside the mapped change; uncovered gap is cross-feature authorization reuse, residual risk remains until a human approval records the final scope.\nUnknown: no historical defect mapping was supplied.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

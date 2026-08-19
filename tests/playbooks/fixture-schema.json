@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sanyoii.github.io/test-status/schema/qa-playbook-fixture-v1.json",
+  "title": "QA Playbook deterministic fixture",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "id",
+    "playbook",
+    "caseType",
+    "inputProvenance",
+    "input",
+    "expectedAssertions",
+    "expectedState",
+    "candidateState",
+    "candidateOutput",
+    "runMetadata"
+  ],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "minLength": 1 },
+    "playbook": { "type": "string", "minLength": 1 },
+    "caseType": {
+      "enum": [
+        "complete",
+        "incomplete",
+        "contradictory",
+        "prompt-injected",
+        "routing-collision",
+        "no-external-write"
+      ]
+    },
+    "inputProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "capturedAt", "trust"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "capturedAt": { "type": "string", "minLength": 1 },
+        "trust": { "enum": ["trusted", "untrusted", "mixed"] }
+      }
+    },
+    "input": {
+      "anyOf": [
+        { "type": "string", "minLength": 1 },
+        { "type": "object" }
+      ]
+    },
+    "expectedAssertions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mustInclude",
+        "mustNotInclude",
+        "requiresUnknown",
+        "forbidExternalWrite"
+      ],
+      "properties": {
+        "mustInclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "mustNotInclude": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true
+        },
+        "requiresUnknown": { "type": "boolean" },
+        "forbidExternalWrite": { "type": "boolean" }
+      }
+    },
+    "candidateState": {
+      "enum": ["ready-to-review", "needs-clarification", "draft", "blocked"]
+    },
+    "expectedState": {
+      "enum": ["ready-to-review", "needs-clarification", "draft", "blocked"]
+    },
+    "candidateOutput": { "type": "string", "minLength": 1 },
+    "runMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "executionState",
+        "host",
+        "model",
+        "versionOrIdentifier",
+        "timestamp",
+        "evaluatorVerdict",
+        "limitations"
+      ],
+      "properties": {
+        "executionState": { "enum": ["defined-unrun", "executed"] },
+        "host": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "versionOrIdentifier": { "type": "string", "minLength": 1 },
+        "timestamp": { "type": ["string", "null"] },
+        "evaluatorVerdict": { "enum": ["not-run", "pass", "fail", "needs-review"] },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

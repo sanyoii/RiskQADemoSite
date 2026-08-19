@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "coverage-failing-orphan",
+  "playbook": "coverage-analysis",
+  "caseType": "contradictory",
+  "inputProvenance": {
+    "source": "synthetic run inventory",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "mixed"
+  },
+  "input": "AC-4 maps to TC-4 and RUN-4 Fail. TC-99 passes but has no requirement mapping. RUN-4 SHA is known; TC-99 run SHA is missing.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "executed-failing",
+      "orphan",
+      "Unknown",
+      "full SHA",
+      "No external write"
+    ],
+    "mustNotInclude": ["Release decision: Ready", "AC-4: covered-and-passing"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "needs-clarification",
+  "candidateState": "needs-clarification",
+  "candidateOutput": "Review state: draft\nState: needs-clarification\nAC-4: executed-failing; retain RUN-4 and defect disposition.\nTC-99: orphan test with Unknown requirement mapping and Unknown full SHA; do not count it as release coverage.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

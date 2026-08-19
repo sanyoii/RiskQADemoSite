@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "security-routing-collision",
+  "playbook": "router",
+  "caseType": "routing-collision",
+  "inputProvenance": {
+    "source": "synthetic user request",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "trusted"
+  },
+  "input": "Analyze whether JIRA-42 is testable and write the full test plan now. The ticket has no reviewed acceptance criteria.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "Selected: Requirement Readiness",
+      "Rejected for now: Test Spec",
+      "Unknown",
+      "reviewed requirement",
+      "No external write"
+    ],
+    "mustNotInclude": ["full test plan completed", "Release decision: Ready"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "needs-clarification",
+  "candidateState": "needs-clarification",
+  "candidateOutput": "Review state: draft\nState: needs-clarification\nSelected: Requirement Readiness because the ticket must be pressure-tested first.\nRejected for now: Test Spec until a reviewed requirement and scope exist.\nUnknown: acceptance criteria readiness.\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static routing fixture; behavior not executed."]
+  }
+}

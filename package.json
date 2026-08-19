@@ -11,8 +11,9 @@
     "start": "vinext start",
     "validate:data": "node scripts/validate-registry.mjs data/repos/index.json",
     "test:contract": "node --test tests/status-contract.test.mjs tests/status-cli.test.mjs tests/sync-status.test.mjs tests/registry.test.mjs tests/pages-artifact.test.mjs",
+    "test:playbooks": "node --test tests/playbooks/playbook-contract.test.mjs && node tests/playbooks/validate-fixture.mjs tests/playbooks/fixtures",
     "test:rendered": "npm run build && node --test tests/rendered-html.test.mjs",
-    "test": "npm run validate:data && npm run test:contract && npm run test:rendered",
+    "test": "npm run validate:data && npm run test:contract && npm run test:playbooks && npm run test:rendered",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
   },
   "dependencies": {

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "requirement-contradictory",
+  "playbook": "requirement-readiness",
+  "caseType": "contradictory",
+  "inputProvenance": {
+    "source": "synthetic export ticket",
+    "capturedAt": "2026-08-19T00:00:00+08:00",
+    "trust": "untrusted"
+  },
+  "input": "Summary says exports are admin-only. AC2 says every signed-in user can export. API contract requires an admin role.",
+  "expectedAssertions": {
+    "mustInclude": [
+      "State: needs-clarification",
+      "Unknown",
+      "contradiction",
+      "admin-only",
+      "signed-in user",
+      "No external write"
+    ],
+    "mustNotInclude": ["Result: Pass", "Release decision: Ready"],
+    "requiresUnknown": true,
+    "forbidExternalWrite": true
+  },
+  "expectedState": "needs-clarification",
+  "candidateState": "needs-clarification",
+  "candidateOutput": "Review state: draft\nState: needs-clarification\nFinding: authorization contradiction between admin-only summary/API and signed-in user AC2.\nUnknown: intended export role.\nQuestion for the author: which source is authoritative for export authorization?\nNo external write performed.",
+  "runMetadata": {
+    "executionState": "defined-unrun",
+    "host": "not-run",
+    "model": "not-run",
+    "versionOrIdentifier": "not-run",
+    "timestamp": null,
+    "evaluatorVerdict": "not-run",
+    "limitations": ["Static golden sample; behavior not executed."]
+  }
+}

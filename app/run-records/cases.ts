@@ -11,6 +11,59 @@ export type TestCaseGroup = {
   cases: TestCase[];
 };
 
+export const caseGroupTitlesEn: Record<string, string> = {
+  "order-book": "Order book (9 Test Cases)",
+  "rest-contract": "REST contract (9 Test Cases)",
+  "websocket-contract": "WebSocket contract (12 Test Cases)",
+  "documentation-contract": "Documentation contract (4 Test Cases)",
+  "live-market-data": "Live market data (5 Test Cases)",
+  "manual-checks": "Manual checks (2 Test Cases in this Run)",
+};
+
+export const caseTextEn: Record<string, { check: string; expected: string }> = {
+  "OB-001": { check: "Create an unsorted order book and read the best bid and ask.", expected: "Return the highest bid and lowest ask while preserving Decimal precision." },
+  "OB-002": { check: "Apply sequential updates that add levels and set quantities to zero.", expected: "Add levels, remove zero-quantity levels, and advance the update ID to 101." },
+  "OB-003": { check: "Apply a stale event to the current order book.", expected: "Return False without changing the update ID or visible levels." },
+  "OB-004": { check: "Apply an event with a sequence gap.", expected: "Raise SequenceGapError before changing any data." },
+  "OB-005": { check: "Create an order book from a crossed snapshot where the bid exceeds the ask.", expected: "Raise MarketInvariantError and retain the bid and ask details." },
+  "OB-006": { check: "Synchronize a snapshot with a stale event and sequential events.", expected: "Skip the stale event and apply sequentially through update 102." },
+  "OB-007": { check: "Create snapshots with zero price, zero quantity, and negative quantity.", expected: "Raise MarketInvariantError for every invalid dataset." },
+  "OB-008": { check: "Apply a negative-quantity update to a valid order book.", expected: "Raise MarketInvariantError; zero remains the only value that removes a level." },
+  "OB-009": { check: "Create an order book from a snapshot missing bids or asks.", expected: "Raise MarketInvariantError because both market sides must be present." },
+  "REST-001": { check: "Fetch bookTicker with a lowercase symbol and inspect the request and response.", expected: "Send BTCUSDT and return a normalized symbol with Decimal values." },
+  "REST-002": { check: "Handle a ticker whose bid exceeds its ask.", expected: "Reject crossed market data with RestContractError." },
+  "REST-003": { check: "Fetch depth for btcusdt with limit 5.", expected: "Send normalized parameters and return only after validating the snapshot." },
+  "REST-004": { check: "Request an unknown symbol and inspect the error.", expected: "Preserve HTTP 400, exchange code -1121, and the message." },
+  "REST-005": { check: "Fetch exchangeInfo for one symbol.", expected: "Return BTCUSDT, TRADING, PRICE_FILTER, and LOT_SIZE." },
+  "REST-006": { check: "Handle a ticker with a zero bid quantity.", expected: "Reject non-positive values with RestContractError." },
+  "REST-007": { check: "Handle exchangeInfo returning zero or two symbols.", expected: "Raise RestContractError unless exactly one symbol is returned." },
+  "REST-008": { check: "Handle ticker payloads with missing fields or a non-object shape.", expected: "Raise RestContractError with a stable schema message." },
+  "REST-009": { check: "Simulate a REST transport timeout.", expected: "Preserve the httpx.ReadTimeout type and original message." },
+  "WS-001": { check: "Subscribe to one ticker and inspect control messages and the event.", expected: "Subscribe, validate, and unsubscribe with request IDs 1 and 2 matched correctly." },
+  "WS-002": { check: "Receive update ID 101 after update ID 102.", expected: "Raise WebSocketContractError when the update ID goes backward." },
+  "WS-003": { check: "Expect BTCUSDT but receive ETHUSDT.", expected: "Reject the wrong symbol and include the expected and actual values." },
+  "WS-004": { check: "Receive an event whose quantity is zero.", expected: "Reject non-positive price or quantity values." },
+  "WS-005": { check: "Receive an event whose bid exceeds its ask.", expected: "Reject crossed market data." },
+  "WS-006": { check: "Expect acknowledgement ID 1 but receive 99.", expected: "Reject the mismatched acknowledgement." },
+  "WS-007": { check: "Receive a market event after unsubscribe but before its acknowledgement.", expected: "Ignore the in-flight event and complete after the correct acknowledgement." },
+  "WS-008": { check: "Synchronize REST snapshot 100 with stale and sequential events.", expected: "Return a synchronized order book at update 102 with the expected levels." },
+  "WS-009": { check: "Wait for a slow connection with a 0.01-second timeout.", expected: "Raise TimeoutError within the configured limit." },
+  "WS-010": { check: "Receive malformed JSON after subscribing.", expected: "Raise WebSocketContractError with a message that identifies invalid JSON." },
+  "WS-011": { check: "Receive a JSON array after subscribing.", expected: "Reject it because protocol payloads must be objects." },
+  "WS-012": { check: "Receive a valid acknowledgement followed by a ticker missing field A.", expected: "Raise WebSocketContractError with a stable schema message." },
+  "DOC-001": { check: "Compare requirement IDs in the requirements and traceability documents.", expected: "Both documents contain the same set of requirement IDs." },
+  "DOC-002": { check: "Compare Test Cases, the Automation Map, and pytest functions.", expected: "Every logical Case ID maps to an existing pytest function." },
+  "DOC-003": { check: "Resolve relative links in Markdown.", expected: "Every relative link points to an existing path." },
+  "DOC-004": { check: "Inspect base URLs, endpoint paths, and CI settings.", expected: "Only allowlisted public market-data interfaces are used; no account or trading interfaces appear." },
+  "LIVE-REST-001": { check: "Fetch BTCUSDT exchangeInfo from public REST.", expected: "The symbol is trading and includes price and quantity filters." },
+  "LIVE-REST-002": { check: "Fetch the BTCUSDT book ticker from public REST.", expected: "Quantities are positive and the best bid does not exceed the best ask." },
+  "LIVE-REST-003": { check: "Fetch BTCUSDT depth with limit 100 and create an order book.", expected: "The update ID is positive and the order-book state is valid." },
+  "LIVE-WS-001": { check: "Subscribe to public WebSocket, collect three events, then unsubscribe.", expected: "All three events are valid and update IDs never move backward." },
+  "LIVE-SYNC-001": { check: "Synchronize a public REST snapshot with a WebSocket depth stream.", expected: "The order book synchronizes without crossing and has a positive update ID." },
+  "MTC-SAFE-001": { check: "Inspect REST/WebSocket URLs, headers, variables, and authentication settings.", expected: "Only public allowlisted hosts are used; there are no credentials, authorization headers, account endpoints, or trading actions." },
+  "MTC-EVID-001": { check: "Compare Run records with executed cases, record paths, defects, retries, warnings, and limitations.", expected: "Every executed case has a status and actual result; missing required records prevent a manual-pass claim." },
+};
+
 export const deterministicGroups: TestCaseGroup[] = [
   {
     id: "order-book",

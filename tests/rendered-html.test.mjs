@@ -24,6 +24,31 @@ async function render(pathname = "/") {
   );
 }
 
+test("server-renders the bilingual contract on every public route", async () => {
+  const routes = ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"];
+
+  for (const route of routes) {
+    const response = await render(route);
+    assert.equal(response.status, 200, route);
+    const html = await response.text();
+    assert.match(html, /class="qa-language-toggle"/, route);
+    assert.match(html, /data-page-title-en="[^"]+"/, route);
+    assert.match(html, /data-page-title-zh="[^"]+"/, route);
+    assert.match(html, /data-page-description-en="[^"]+"/, route);
+    assert.match(html, /data-page-description-zh="[^"]+"/, route);
+    assert.match(html, /data-en="[^"]+" data-zh="[^"]+"/, route);
+  }
+});
+
+test("server-renders a bilingual not-found page", async () => {
+  const response = await render("/missing-page");
+  assert.equal(response.status, 404);
+  const html = await response.text();
+  assert.match(html, /data-en="Page not found" data-zh="找不到頁面"/);
+  assert.match(html, /href="\/"/);
+  assert.match(html, /class="qa-language-toggle"/);
+});
+
 test("server-renders the public QA Decision Desk", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -67,9 +92,9 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.match(html, /class="st-merged-head has-gates"/);
   assert.match(html, /<details class="st-merged-repo">/);
   assert.doesNotMatch(html, /data-state="blocked"/);
-  assert.match(html, /href="\/run-records"/);
-  assert.match(html, /href="\/run-records\/fail-demo"/);
-  assert.match(html, /href="\/dashboard-demo"/);
+  assert.match(html, /href="\/run-records\/"/);
+  assert.match(html, /href="\/run-records\/fail-demo\/"/);
+  assert.match(html, /href="\/dashboard-demo\/"/);
   assert.match(html, /actions\/runs\/32241879480/);
   assert.match(html, /main · GitHub Pages production · fd337bd/);
   assert.equal((html.match(/class="st-area-table"/g) ?? []).length, 2);
@@ -78,7 +103,9 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.doesNotMatch(html, /正式紀錄未完成|缺 G6 正式紀錄/);
   assert.doesNotMatch(html, /<details class="evidence-group">/);
   assert.doesNotMatch(html, /142 Total Bugs|92%|85\/100|1\.2s/);
-  assert.match(html, /lang="zh-Hant"/);
+  assert.match(html, /lang="en"/);
+  assert.match(html, /class="qa-language-toggle"/);
+  assert.match(html, /data-en="Test Cases and Run Records" data-zh="Test Cases 與執行記錄"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|SkeletonPreview/);
   assert.doesNotMatch(html, /test-records\/pilot-0|current-status\.json/);
 });
@@ -115,8 +142,8 @@ test("server-renders human-readable Test Case and Run records", async () => {
     assert.match(html, new RegExp(`id="${runId}"`));
   }
   assert.match(html, /href="\/"/);
-  assert.match(html, /href="\/run-records\/fail-demo"/);
-  assert.match(html, /href="\/run-records\/fail-demo#execution-log"/);
+  assert.match(html, /href="\/run-records\/fail-demo\/"/);
+  assert.match(html, /href="\/run-records\/fail-demo\/#execution-log"/);
   assert.match(html, /開啟 Fail Demo/);
   assert.doesNotMatch(html, /測試證據|本次測試證據/);
 });
@@ -158,7 +185,7 @@ test("server-renders the synthetic failed Test Case and Run demo", async () => {
   assert.match(html, /id="execution-log"/);
   assert.match(html, /<details class="raw-log" open=""/);
   assert.match(html, /data-state="Fail"/);
-  assert.match(html, /href="\/run-records"/);
+  assert.match(html, /href="\/run-records\/"/);
   assert.doesNotMatch(html, /RUN-20260817/);
 });
 
@@ -201,14 +228,17 @@ test("server-renders three truthful visual dashboard samples", async () => {
   assert.ok(html.indexOf("Sample A") < html.indexOf("Sample B"));
   assert.ok(html.indexOf("Sample B") < html.indexOf("Sample C"));
   assert.match(html, /href="\/"/);
-  assert.match(html, /href="\/run-records"/);
+  assert.match(html, /href="\/run-records\/"/);
   assert.match(html, /href="#sample-cards"/);
   assert.match(html, /href="#sample-gates"/);
   assert.match(html, /href="#sample-portfolio"/);
   assert.match(html, /<details>/);
-  assert.match(html, /aria-label="Test Effort：High，四格中 4 格"/);
-  assert.match(html, /aria-label="Coverage：Level 2\+，常見路徑與錯誤路徑已覆蓋"/);
-  assert.match(html, /aria-label="Quality Assessment：Ready，綠色燈號"/);
+  assert.match(html, /aria-label="Test Effort: High, 4 of 4 bars"/);
+  assert.match(html, /data-aria-label-zh="Test Effort：高，四格中 4 格"/);
+  assert.match(html, /aria-label="Coverage: Level 2\+, common and error paths covered"/);
+  assert.match(html, /data-aria-label-zh="Coverage：Level 2\+，常見路徑與錯誤路徑已覆蓋"/);
+  assert.match(html, /aria-label="Quality Assessment: Ready, green light"/);
+  assert.match(html, /data-aria-label-zh="Quality Assessment：就緒，綠色燈號"/);
   assert.doesNotMatch(html, /data-state="blocked"/);
   assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
   assert.doesNotMatch(html, /Ship<\//);
@@ -245,8 +275,8 @@ test("server-renders the A+C dashboard site template", async () => {
   assert.match(html, /class="st-merged-grid has-decision"/);
   assert.doesNotMatch(html, /<details class="st-merged-repo">/);
   assert.doesNotMatch(html, /B · Release Gate Flow/);
-  assert.match(html, /href="\/dashboard-demo\/abc"/);
-  assert.match(html, /href="\/run-records"/);
+  assert.match(html, /href="\/dashboard-demo\/abc\/"/);
+  assert.match(html, /href="\/run-records\/"/);
   assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
 });
 
@@ -281,7 +311,7 @@ test("server-renders the A+B+C dashboard site template", async () => {
   assert.match(html, /class="st-merged-head has-gates"/);
   assert.match(html, /<details class="st-merged-repo">/);
   assert.match(html, /<summary class="st-merged-grid has-gates"/);
-  assert.match(html, /href="\/dashboard-demo\/ac"/);
+  assert.match(html, /href="\/dashboard-demo\/ac\/"/);
   assert.doesNotMatch(html, /data-state="blocked"/);
   assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
 });

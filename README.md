@@ -57,7 +57,7 @@ Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是 code c
 | Repository | Objective | Decision | Effort | Coverage | Quality | Public evidence |
 |---|---|---|---|---|---|---|
 | `cex-market-data-quality-lab` | Release Readiness | Ready | High | Level 2+ | Ready | [Test Cases 與 Run Records](https://sanyoii.github.io/test-status/run-records/) |
-| `sanyoii.github.io` | Deployment Confidence | Ready | Medium | Level 2+ | Healthy | [GitHub Actions run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364) |
+| `sanyoii.github.io` | Deployment Confidence | Ready | Medium | Level 2+ | Healthy | [Test-gated Pages run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480) |
 
 Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targeted rerun 與 No-Go 的呈現方式；它不屬於目前兩個 repository 的正式結果。
 

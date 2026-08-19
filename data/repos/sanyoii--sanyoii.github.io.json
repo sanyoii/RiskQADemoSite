@@ -1,15 +1,15 @@
 {
   "contractVersion": "1.0.0",
-  "snapshotId": "portfolio-pages-ceee878-20260819",
+  "snapshotId": "portfolio-pages-fd337bd-20260819",
   "repository": {
     "name": "sanyoii.github.io",
     "url": "https://github.com/sanyoii/sanyoii.github.io",
     "releaseTarget": "GitHub Pages production",
     "branch": "main",
-    "fullSha": "ceee878f3027f88ead2913ae8253131fccdbb811"
+    "fullSha": "fd337bd45bba4a10c370da1364b1e37a7ef5732f"
   },
   "objective": "Deployment Confidence",
-  "environment": "GitHub Pages; Python 3.14.2; Chromium 1208",
+  "environment": "GitHub Pages Actions; Python 3.14; Chromium; Node.js 24",
   "testedScope": [
     "static HTML",
     "runtime behavior",
@@ -26,9 +26,9 @@
   ],
   "releaseAssessment": {
     "status": "ready",
-    "rationale": "Fresh local 17/17 checks passed; Tests and Pages workflows succeeded for the deployed SHA.",
-    "decidedAt": "2026-08-19T17:53:42+08:00",
-    "expiresAt": "2026-08-26T17:53:42+08:00",
+    "rationale": "The test-gated workflow passed 17 portfolio checks plus Dashboard contract, rendered, lint and export checks before deployment.",
+    "decidedAt": "2026-08-19T18:18:29+08:00",
+    "expiresAt": "2026-08-26T18:18:29+08:00",
     "qaOwner": "William",
     "reviewer": "GitHub Actions",
     "decisionOwner": "William"
@@ -50,7 +50,7 @@
       "quality": "good",
       "comment": "Structure, URL allowlist and phone-data checks passed.",
       "evidenceLinks": [
-        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"
       ]
     },
     {
@@ -63,7 +63,7 @@
       "quality": "good",
       "comment": "375, 768 and 1440 px overflow checks passed.",
       "evidenceLinks": [
-        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"
       ]
     },
     {
@@ -76,7 +76,7 @@
       "quality": "good",
       "comment": "Language toggle, metadata and persisted state passed.",
       "evidenceLinks": [
-        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"
       ]
     },
     {
@@ -89,7 +89,7 @@
       "quality": "good",
       "comment": "No external requests, reduced motion and 404 behavior passed.",
       "evidenceLinks": [
-        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"
       ]
     }
   ],
@@ -108,14 +108,14 @@
     },
     {
       "id": "G5",
-      "title": "Release CI passed",
-      "note": "Tests workflow · success",
+      "title": "Test-gated build passed",
+      "note": "Portfolio + Dashboard checks",
       "state": "complete"
     },
     {
       "id": "G6",
       "title": "Pages production verified",
-      "note": "6 routes · HTTP 200",
+      "note": "8 routes + CSS · HTTP 200",
       "state": "complete"
     },
     {
@@ -127,20 +127,20 @@
   ],
   "runs": [
     {
-      "runId": "32157367364",
-      "executedAt": "2026-08-18T23:55:21+08:00",
-      "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+      "runId": "32241879480",
+      "executedAt": "2026-08-19T18:16:35+08:00",
+      "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"
     },
     {
-      "runId": "32157366025",
-      "executedAt": "2026-08-18T23:55:21+08:00",
-      "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157366025"
+      "runId": "32241747124",
+      "executedAt": "2026-08-19T18:15:01+08:00",
+      "evidenceUrl": "https://github.com/sanyoii/RiskQADemoSite/actions/runs/32241747124"
     }
   ],
   "provenance": {
-    "generatedAt": "2026-08-19T09:53:42Z",
-    "syncedAt": "2026-08-19T09:53:42Z",
-    "sourceSha": "ceee878f3027f88ead2913ae8253131fccdbb811"
+    "generatedAt": "2026-08-19T10:20:03Z",
+    "syncedAt": "2026-08-19T10:20:03Z",
+    "sourceSha": "fd337bd45bba4a10c370da1364b1e37a7ef5732f"
   },
   "dataStatus": "fresh",
   "publicDisclosure": "public"

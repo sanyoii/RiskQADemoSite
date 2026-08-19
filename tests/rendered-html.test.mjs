@@ -70,8 +70,8 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.match(html, /href="\/run-records"/);
   assert.match(html, /href="\/run-records\/fail-demo"/);
   assert.match(html, /href="\/dashboard-demo"/);
-  assert.match(html, /actions\/runs\/32157367364/);
-  assert.match(html, /main · GitHub Pages production · ceee878/);
+  assert.match(html, /actions\/runs\/32241879480/);
+  assert.match(html, /main · GitHub Pages production · fd337bd/);
   assert.equal((html.match(/class="st-area-table"/g) ?? []).length, 2);
   assert.equal((html.match(/<details class="st-merged-repo">/g) ?? []).length, 2);
   assert.doesNotMatch(html, /1 decision pending/);

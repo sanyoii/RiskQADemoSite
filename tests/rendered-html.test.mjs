@@ -189,6 +189,13 @@ test("server-renders the synthetic failed Test Case and Run demo", async () => {
   assert.doesNotMatch(html, /RUN-20260817/);
 });
 
+test("failure result icon styles do not constrain localized text", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+
+  assert.doesNotMatch(css, /\.fail-result\s*>\s*span\s*\{/);
+  assert.match(css, /\.fail-result\s*>\s*span\[aria-hidden="true"\]\s*\{/);
+});
+
 test("server-renders three truthful visual dashboard samples", async () => {
   const response = await render("/dashboard-demo");
   assert.equal(response.status, 200);

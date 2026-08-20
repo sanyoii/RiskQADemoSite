@@ -1114,12 +1114,12 @@ tbody th { color: var(--ink); font-size: .9rem; }
 .fail-summary-grid article > strong { font-size: 1.25rem; overflow-wrap: anywhere; }
 .fail-summary-grid small { color: var(--muted); }
 .fail-result { display: inline-flex; align-items: center; gap: .45rem; font-family: "Cascadia Code", Consolas, monospace; font-size: .82rem; font-weight: 800; }
-.fail-result > span { display: inline-grid; width: 1.35rem; height: 1.35rem; flex: 0 0 auto; place-items: center; border-radius: 50%; color: white; background: var(--blocked); font-family: Arial, sans-serif; line-height: 1; }
+.fail-result > span[aria-hidden="true"] { display: inline-grid; width: 1.35rem; height: 1.35rem; flex: 0 0 auto; place-items: center; border-radius: 50%; color: white; background: var(--blocked); font-family: Arial, sans-serif; line-height: 1; }
 .fail-result[data-state="Pass"] { color: var(--safe); }
-.fail-result[data-state="Pass"] > span { background: var(--safe); }
+.fail-result[data-state="Pass"] > span[aria-hidden="true"] { background: var(--safe); }
 .fail-result[data-state="Fail"], .fail-result[data-state="No-Go"] { color: var(--blocked); }
 .fail-result[data-state="At Risk"] { color: var(--warning); }
-.fail-result[data-state="At Risk"] > span { color: var(--ink); background: #d89a00; }
+.fail-result[data-state="At Risk"] > span[aria-hidden="true"] { color: var(--ink); background: #d89a00; }
 .fail-decision-heading > .fail-result, .fail-run-header > .fail-result { font-size: 1rem; }
 .fail-run-meta { margin-top: 1rem; padding: 1rem; border: 1px solid var(--rule); background: var(--panel); }
 .fail-case-list { margin-top: 1rem; border: 1px solid var(--ink); background: var(--panel); }

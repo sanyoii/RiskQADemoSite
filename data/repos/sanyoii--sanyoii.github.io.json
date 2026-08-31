@@ -1,6 +1,6 @@
 {
   "contractVersion": "1.0.0",
-  "snapshotId": "portfolio-pages-fd337bd-20260819",
+  "snapshotId": "portfolio-pages-fd337bd-20260831-stale",
   "repository": {
     "name": "sanyoii.github.io",
     "url": "https://github.com/sanyoii/sanyoii.github.io",
@@ -25,19 +25,19 @@
     "analytics"
   ],
   "releaseAssessment": {
-    "status": "ready",
-    "rationale": "The test-gated workflow passed 17 portfolio checks plus Dashboard contract, rendered, lint and export checks before deployment.",
-    "decidedAt": "2026-08-19T18:18:29+08:00",
-    "expiresAt": "2026-08-26T18:18:29+08:00",
+    "status": "unknown",
+    "rationale": "The previous Ready assessment expired. Historical runs remain available, but no current release decision is claimed until fresh evidence is reviewed.",
+    "decidedAt": "2026-08-31T23:56:31+08:00",
+    "expiresAt": "2026-09-07T23:56:31+08:00",
     "qaOwner": "William",
-    "reviewer": "GitHub Actions",
+    "reviewer": "Freshness gate review",
     "decisionOwner": "William"
   },
   "summary": {
     "effortLevel": "medium",
     "coverage": "2+",
-    "quality": "good",
-    "comment": "17 fresh cases passed"
+    "quality": "warning",
+    "comment": "Historical runs are retained; the current release assessment is Unknown because the evidence expired."
   },
   "productAreas": [
     {
@@ -120,9 +120,9 @@
     },
     {
       "id": "Release",
-      "title": "Released",
-      "note": "Production verified",
-      "state": "complete"
+      "title": "Unknown",
+      "note": "Fresh evidence review required",
+      "state": "unknown"
     }
   ],
   "runs": [
@@ -138,10 +138,10 @@
     }
   ],
   "provenance": {
-    "generatedAt": "2026-08-19T10:20:03Z",
-    "syncedAt": "2026-08-19T10:20:03Z",
+    "generatedAt": "2026-08-31T15:56:31Z",
+    "syncedAt": "2026-08-31T15:56:31Z",
     "sourceSha": "fd337bd45bba4a10c370da1364b1e37a7ef5732f"
   },
-  "dataStatus": "fresh",
+  "dataStatus": "stale",
   "publicDisclosure": "public"
 }

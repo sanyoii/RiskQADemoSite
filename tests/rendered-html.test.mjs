@@ -59,19 +59,19 @@ test("server-renders the public QA Decision Desk", async () => {
     "QA Decision Desk",
     "Low-Tech Testing Dashboard",
     "Repository Quality Dashboard",
-    "2 releases ready",
+    "2 release decisions require review",
     "cex-market-data-quality-lab",
     "sanyoii.github.io",
-    "17 fresh cases passed",
+    "Evidence expired",
     "Pages production verified",
-    "Released",
+    "Fresh evidence review required",
     "正式 Go 紀錄完成",
     "Release Readiness",
     "Ready",
     "High",
     "Medium",
     "Level 2+",
-    "Healthy",
+    "Warning",
     "Deployment Confidence",
     "展開 Repo 查看 Gate Flow",
     "Release Gate Flow",
@@ -81,7 +81,7 @@ test("server-renders the public QA Decision Desk", async () => {
     "測試已通過",
     "外部檢視完成",
     "New Repo",
-    "正式 Go 已核准",
+    "證據已過期",
     "不代表零缺陷，也不是品質保證",
     "不是產品故障，也不是即時監控",
     "Sanitized public projection",
@@ -100,6 +100,7 @@ test("server-renders the public QA Decision Desk", async () => {
   assert.equal((html.match(/class="st-area-table"/g) ?? []).length, 2);
   assert.equal((html.match(/<details class="st-merged-repo">/g) ?? []).length, 2);
   assert.doesNotMatch(html, /1 decision pending/);
+  assert.doesNotMatch(html, /2 releases ready/);
   assert.doesNotMatch(html, /正式紀錄未完成|缺 G6 正式紀錄/);
   assert.doesNotMatch(html, /<details class="evidence-group">/);
   assert.doesNotMatch(html, /142 Total Bugs|92%|85\/100|1\.2s/);
@@ -219,7 +220,7 @@ test("server-renders three truthful visual dashboard samples", async () => {
     "正式 Go 已核准",
     "High",
     "Level 2+",
-    "Ready",
+    "Unknown",
     "G3",
     "測試已通過",
     "G5",
@@ -268,9 +269,9 @@ test("server-renders the A+C dashboard site template", async () => {
     "Decision",
     "cex-market-data-quality-lab",
     "Release Readiness",
-    "Ready",
+    "Unknown",
     "sanyoii.github.io",
-    "17 fresh cases passed",
+    "Evidence expired",
     "New Repo",
     "A + C",
     "A + B + C",
@@ -284,6 +285,7 @@ test("server-renders the A+C dashboard site template", async () => {
   assert.doesNotMatch(html, /B · Release Gate Flow/);
   assert.match(html, /href="\/dashboard-demo\/abc\/"/);
   assert.match(html, /href="\/run-records\/"/);
+  assert.doesNotMatch(html, /2 releases ready/);
   assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
 });
 
@@ -309,7 +311,7 @@ test("server-renders the A+B+C dashboard site template", async () => {
     "G6",
     "正式 Go 紀錄完成",
     "sanyoii.github.io",
-    "17 fresh cases passed",
+    "Evidence expired",
     "New Repo",
   ]) {
     assert.match(html, new RegExp(text.replace(/[+]/g, "\\+")));

@@ -1,6 +1,6 @@
 {
   "contractVersion": "1.0.0",
-  "snapshotId": "cex-0.1.0-8fd5081-20260819",
+  "snapshotId": "cex-0.1.0-8fd5081-20260831-stale",
   "repository": {
     "name": "cex-market-data-quality-lab",
     "url": "https://github.com/sanyoii/cex-market-data-quality-lab",
@@ -13,15 +13,15 @@
   "testedScope": ["unit", "REST contract", "WebSocket contract", "order-book sync", "live market data", "manual evidence review"],
   "excludedScope": ["authenticated account", "orders", "trades", "funds", "load testing"],
   "releaseAssessment": {
-    "status": "ready",
-    "rationale": "Deterministic, live and required manual evidence passed; formal Go was recorded.",
-    "decidedAt": "2026-08-17T10:00:00+08:00",
-    "expiresAt": "2026-08-24T10:00:00+08:00",
+    "status": "unknown",
+    "rationale": "The previous Ready assessment expired. Historical runs remain available, but no current release decision is claimed until fresh evidence is reviewed.",
+    "decidedAt": "2026-08-31T23:56:31+08:00",
+    "expiresAt": "2026-09-07T23:56:31+08:00",
     "qaOwner": "William",
-    "reviewer": "External portfolio review",
+    "reviewer": "Freshness gate review",
     "decisionOwner": "William"
   },
-  "summary": { "effortLevel": "high", "coverage": "2+", "quality": "good", "comment": "正式 Go 已核准" },
+  "summary": { "effortLevel": "high", "coverage": "2+", "quality": "warning", "comment": "Historical runs are retained; the current release assessment is Unknown because the evidence expired." },
   "productAreas": [
     { "id": "deterministic", "name": "Deterministic checks", "effortLevel": "high", "executionState": "complete", "coverage": "2+", "targetCoverage": "2", "quality": "good", "comment": "Unit, contract and meta checks passed.", "evidenceLinks": ["/run-records"] },
     { "id": "market-data", "name": "Live market data", "effortLevel": "high", "executionState": "complete", "coverage": "2", "targetCoverage": "2", "quality": "good", "comment": "Required public-endpoint checks passed.", "evidenceLinks": ["/run-records"] },
@@ -33,14 +33,14 @@
     { "id": "G3", "title": "測試已通過", "note": "3 類測試完成", "state": "complete" },
     { "id": "G5", "title": "外部檢視完成", "note": "回饋已取得", "state": "complete" },
     { "id": "G6", "title": "正式 Go 紀錄完成", "note": "Release authorized", "state": "complete" },
-    { "id": "Release", "title": "Ready", "note": "可以發布", "state": "complete" }
+    { "id": "Release", "title": "Unknown", "note": "Fresh evidence review required", "state": "unknown" }
   ],
   "runs": [
     { "runId": "RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC", "executedAt": "2026-08-17T09:54:52+08:00", "evidenceUrl": "/run-records#RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC" },
     { "runId": "RUN-20260817T015452830Z-8fd5081254b5-LIVE", "executedAt": "2026-08-17T09:54:52+08:00", "evidenceUrl": "/run-records#RUN-20260817T015452830Z-8fd5081254b5-LIVE" },
     { "runId": "RUN-20260817T015452830Z-8fd5081254b5-MANUAL", "executedAt": "2026-08-17T09:54:52+08:00", "evidenceUrl": "/run-records#RUN-20260817T015452830Z-8fd5081254b5-MANUAL" }
   ],
-  "provenance": { "generatedAt": "2026-08-19T09:53:42Z", "syncedAt": "2026-08-19T09:53:42Z", "sourceSha": "8fd5081254b5429e480ec20a56ef09bcc6f5ab9e" },
-  "dataStatus": "fresh",
+  "provenance": { "generatedAt": "2026-08-31T15:56:31Z", "syncedAt": "2026-08-31T15:56:31Z", "sourceSha": "8fd5081254b5429e480ec20a56ef09bcc6f5ab9e" },
+  "dataStatus": "stale",
   "publicDisclosure": "public"
 }

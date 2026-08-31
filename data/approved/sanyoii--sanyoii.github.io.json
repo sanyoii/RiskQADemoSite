@@ -1,6 +1,6 @@
 {
   "contractVersion": "1.0.0",
-  "snapshotId": "portfolio-pages-fd337bd-20260819",
+  "snapshotId": "portfolio-pages-fd337bd-20260831-stale",
   "repository": {
     "name": "sanyoii.github.io",
     "url": "https://github.com/sanyoii/sanyoii.github.io",
@@ -13,15 +13,15 @@
   "testedScope": ["static HTML", "runtime behavior", "responsive layouts", "bilingual behavior", "reduced motion", "404 page"],
   "excludedScope": ["cross-browser beyond Chromium", "performance", "scheduled monitoring", "analytics"],
   "releaseAssessment": {
-    "status": "ready",
-    "rationale": "The test-gated workflow passed 17 portfolio checks plus Dashboard contract, rendered, lint and export checks before deployment.",
-    "decidedAt": "2026-08-19T18:18:29+08:00",
-    "expiresAt": "2026-08-26T18:18:29+08:00",
+    "status": "unknown",
+    "rationale": "The previous Ready assessment expired. Historical runs remain available, but no current release decision is claimed until fresh evidence is reviewed.",
+    "decidedAt": "2026-08-31T23:56:31+08:00",
+    "expiresAt": "2026-09-07T23:56:31+08:00",
     "qaOwner": "William",
-    "reviewer": "GitHub Actions",
+    "reviewer": "Freshness gate review",
     "decisionOwner": "William"
   },
-  "summary": { "effortLevel": "medium", "coverage": "2+", "quality": "good", "comment": "17 fresh cases passed" },
+  "summary": { "effortLevel": "medium", "coverage": "2+", "quality": "warning", "comment": "Historical runs are retained; the current release assessment is Unknown because the evidence expired." },
   "productAreas": [
     { "id": "document", "name": "Document integrity and privacy", "effortLevel": "medium", "executionState": "complete", "coverage": "2", "targetCoverage": "2", "quality": "good", "comment": "Structure, URL allowlist and phone-data checks passed.", "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"] },
     { "id": "responsive", "name": "Responsive layout", "effortLevel": "medium", "executionState": "complete", "coverage": "2+", "targetCoverage": "2", "quality": "good", "comment": "375, 768 and 1440 px overflow checks passed.", "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480"] },
@@ -33,13 +33,13 @@
     { "id": "G3", "title": "17 fresh cases passed", "note": "Python 3.14.2 · Chromium", "state": "complete" },
     { "id": "G5", "title": "Test-gated build passed", "note": "Portfolio + Dashboard checks", "state": "complete" },
     { "id": "G6", "title": "Pages production verified", "note": "8 routes + CSS · HTTP 200", "state": "complete" },
-    { "id": "Release", "title": "Released", "note": "Production verified", "state": "complete" }
+    { "id": "Release", "title": "Unknown", "note": "Fresh evidence review required", "state": "unknown" }
   ],
   "runs": [
     { "runId": "32241879480", "executedAt": "2026-08-19T18:16:35+08:00", "evidenceUrl": "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480" },
     { "runId": "32241747124", "executedAt": "2026-08-19T18:15:01+08:00", "evidenceUrl": "https://github.com/sanyoii/RiskQADemoSite/actions/runs/32241747124" }
   ],
-  "provenance": { "generatedAt": "2026-08-19T10:20:03Z", "syncedAt": "2026-08-19T10:20:03Z", "sourceSha": "fd337bd45bba4a10c370da1364b1e37a7ef5732f" },
-  "dataStatus": "fresh",
+  "provenance": { "generatedAt": "2026-08-31T15:56:31Z", "syncedAt": "2026-08-31T15:56:31Z", "sourceSha": "fd337bd45bba4a10c370da1364b1e37a7ef5732f" },
+  "dataStatus": "stale",
   "publicDisclosure": "public"
 }

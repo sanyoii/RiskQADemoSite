@@ -1,6 +1,6 @@
 {
   "contractVersion": "1.0.0",
-  "snapshotId": "cex-0.1.0-8fd5081-20260819",
+  "snapshotId": "cex-0.1.0-8fd5081-20260831-stale",
   "repository": {
     "name": "cex-market-data-quality-lab",
     "url": "https://github.com/sanyoii/cex-market-data-quality-lab",
@@ -26,19 +26,19 @@
     "load testing"
   ],
   "releaseAssessment": {
-    "status": "ready",
-    "rationale": "Deterministic, live and required manual evidence passed; formal Go was recorded.",
-    "decidedAt": "2026-08-17T10:00:00+08:00",
-    "expiresAt": "2026-08-24T10:00:00+08:00",
+    "status": "unknown",
+    "rationale": "The previous Ready assessment expired. Historical runs remain available, but no current release decision is claimed until fresh evidence is reviewed.",
+    "decidedAt": "2026-08-31T23:56:31+08:00",
+    "expiresAt": "2026-09-07T23:56:31+08:00",
     "qaOwner": "William",
-    "reviewer": "External portfolio review",
+    "reviewer": "Freshness gate review",
     "decisionOwner": "William"
   },
   "summary": {
     "effortLevel": "high",
     "coverage": "2+",
-    "quality": "good",
-    "comment": "正式 Go 已核准"
+    "quality": "warning",
+    "comment": "Historical runs are retained; the current release assessment is Unknown because the evidence expired."
   },
   "productAreas": [
     {
@@ -121,9 +121,9 @@
     },
     {
       "id": "Release",
-      "title": "Ready",
-      "note": "可以發布",
-      "state": "complete"
+      "title": "Unknown",
+      "note": "Fresh evidence review required",
+      "state": "unknown"
     }
   ],
   "runs": [
@@ -144,10 +144,10 @@
     }
   ],
   "provenance": {
-    "generatedAt": "2026-08-19T09:53:42Z",
-    "syncedAt": "2026-08-19T09:53:42Z",
+    "generatedAt": "2026-08-31T15:56:31Z",
+    "syncedAt": "2026-08-31T15:56:31Z",
     "sourceSha": "8fd5081254b5429e480ec20a56ef09bcc6f5ab9e"
   },
-  "dataStatus": "fresh",
+  "dataStatus": "stale",
   "publicDisclosure": "public"
 }

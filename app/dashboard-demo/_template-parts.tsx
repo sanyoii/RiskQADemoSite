@@ -1,6 +1,6 @@
 import { siteHref } from "../_site";
 import { T, type LocalizedText } from "../_i18n";
-import { dashboardRepos, templateRepo, type DashboardRepo, type QualityTone, type SignalTone } from "../dashboard-data";
+import { dashboardRepos, portfolioDecisionSummary, templateRepo, type DashboardRepo, type QualityTone, type SignalTone } from "../dashboard-data";
 
 export { dashboardRepos };
 
@@ -65,7 +65,7 @@ export function TemplateHeader({ current }: { current: "ac" | "abc" }) {
         </div>
         <div className="st-release-summary">
           <small><T en="Portfolio status" zh="作品集狀態" /></small>
-          <Signal tone="good" mark="✓"><T en="2 releases ready" zh="2 個 release 已就緒" /></Signal>
+          <Signal tone={portfolioDecisionSummary.tone} mark={portfolioDecisionSummary.mark}><T {...portfolioDecisionSummary.label} /></Signal>
         </div>
       </div>
       <nav className="st-nav" aria-label="Template navigation" data-aria-label-en="Template navigation" data-aria-label-zh="範本導覽">
@@ -115,7 +115,7 @@ function InlineReleaseGates({ repo, formal = false }: { repo: DashboardRepo; for
     <div className="st-inline-gates">
       <header>
         <div><p>{formal ? "Release Gate Flow" : "B · Release Gate Flow"}</p><h3><T en="How were the release conditions completed?" zh="發布條件如何完成？" /></h3></div>
-        <Signal tone="good" mark="✓"><T {...repo.gateSummary} /></Signal>
+        <Signal tone={repo.decisionTone} mark={repo.decisionTone === "good" ? "✓" : repo.decisionTone === "warning" ? "!" : "?"}><T {...repo.gateSummary} /></Signal>
       </header>
       <ol className="vs-gates" aria-label={`${repo.name} release gate status`} data-aria-label-en={`${repo.name} release gate status`} data-aria-label-zh={`${repo.name} release gate 狀態`}>
         {repo.gates.map((gate) => (
@@ -200,7 +200,7 @@ export function ObjectiveCards() {
         <div className="vs-objective-cards">
           <article className="vs-objective-card is-decision">
             <p>Release Decision</p>
-            <div className="vs-decision-orbit" aria-label="Release Decision: Ready, formally approved" data-aria-label-en="Release Decision: Ready, formally approved" data-aria-label-zh="Release Decision：就緒，正式核准"><span>✓</span></div>
+            <div className="vs-decision-orbit" aria-label={`Release Decision: ${repo.decision.en}`} data-aria-label-en={`Release Decision: ${repo.decision.en}`} data-aria-label-zh={`Release Decision：${repo.decision.zh}`}><span>{repo.decisionTone === "good" ? "✓" : repo.decisionTone === "warning" ? "!" : "?"}</span></div>
             <strong><T {...repo.decision} /></strong><small><T {...repo.decisionNote} /></small>
           </article>
           <article className="vs-objective-card is-effort">
@@ -215,7 +215,7 @@ export function ObjectiveCards() {
         </div>
         <div className="vs-board-answer">
           <span><T en="Can this release now?" zh="現在能不能發？" /></span>
-          <strong><Signal tone="good" mark="✓"><T en="Yes. The formal G6 Go record is complete." zh="可以。G6 正式 Go 紀錄已完成。" /></Signal></strong>
+          <strong><Signal tone={repo.decisionTone} mark={repo.decisionTone === "good" ? "✓" : repo.decisionTone === "warning" ? "!" : "?"}><T {...repo.finalDecision} /></Signal></strong>
         </div>
       </div>
     </section>
@@ -228,18 +228,18 @@ export function ReleaseGateFlow() {
     <section className="st-section" aria-labelledby="release-gates-heading">
       <header className="st-section-heading">
         <div><span className="st-section-letter is-orange">B</span><div><p>Selected repository</p><h2 id="release-gates-heading">Release Gate Flow</h2></div></div>
-        <span><T en="All gates complete" zh="全部 Gate 已完成" /></span>
+        <span><T {...repo.gateSummary} /></span>
       </header>
       <div className="vs-board vs-gate-board">
         <div className="vs-gate-summary">
           <div><p>{repo.name}</p><h3>Release Readiness</h3></div>
-          <div className="vs-release-lock"><span aria-hidden="true">✓</span><div><small>Release Decision</small><strong>Ready</strong></div></div>
+          <div className="vs-release-lock"><span aria-hidden="true">{repo.decisionTone === "good" ? "✓" : repo.decisionTone === "warning" ? "!" : "?"}</span><div><small>Release Decision</small><strong><T {...repo.decision} /></strong></div></div>
         </div>
         <ol className="vs-gates" aria-label="Release gate status" data-aria-label-en="Release gate status" data-aria-label-zh="Release gate 狀態">
-        {repo.gates.map((gate) => <li data-state={gate.state} key={gate.id}><span className="vs-gate-node" aria-hidden="true">✓</span><div><small>{gate.id}</small><strong><T {...gate.title} /></strong><span><T {...gate.note} /></span></div></li>)}
+        {repo.gates.map((gate) => <li data-state={gate.state} key={gate.id}><span className="vs-gate-node" aria-hidden="true">{gate.state === "complete" ? "✓" : gate.state === "blocked" ? "!" : "?"}</span><div><small>{gate.id}</small><strong><T {...gate.title} /></strong><span><T {...gate.note} /></span></div></li>)}
         </ol>
         <div className="vs-blocker-callout">
-          <span className="vs-callout-icon" aria-hidden="true">✓</span>
+          <span className="vs-callout-icon" aria-hidden="true">{repo.decisionTone === "good" ? "✓" : repo.decisionTone === "warning" ? "!" : "?"}</span>
           <div><small>Release state</small><strong><T {...repo.nextAction} /></strong></div>
           <a href={siteHref("/")}><T en="View release decision" zh="查看發布判斷" /></a>
         </div>
@@ -265,7 +265,7 @@ export function RepoPortfolio() {
           <div className="vs-repo-cell" data-label="Effort" data-label-en="Effort" data-label-zh="投入"><strong><T {...repo.effort} /></strong><EffortBars compact level={repo.effortBars} label={repo.effort} /></div>
           <div className="vs-repo-cell" data-label="Coverage" data-label-en="Coverage" data-label-zh="覆蓋"><strong>{repo.coverage}</strong><CoverageSegments compact /></div>
           <div className="vs-repo-cell" data-label="Quality" data-label-en="Quality" data-label-zh="品質"><strong><T {...repo.quality} /></strong><QualityLights compact tone={repo.qualityTone} label={repo.quality} /></div>
-          <div className="vs-repo-cell is-decision" data-label="Decision" data-label-en="Decision" data-label-zh="決定"><Signal tone={repo.decisionTone} mark="✓"><T {...repo.decision} /></Signal><span><T {...repo.finalNote} /></span></div>
+          <div className="vs-repo-cell is-decision" data-label="Decision" data-label-en="Decision" data-label-zh="決定"><Signal tone={repo.decisionTone} mark={repo.decisionTone === "good" ? "✓" : repo.decisionTone === "warning" ? "!" : "?"}><T {...repo.decision} /></Signal><span><T {...repo.finalNote} /></span></div>
         </article>)}
         <div className="vs-future-row"><span aria-hidden="true">＋</span><p><strong><T en="Add one row when the next repo is onboarded." zh="下一個 Repo 接入後，新增一列。" /></strong><T en=" Reviewers keep using the same fields." zh="管理者仍使用同一套欄位閱讀。" /></p></div>
       </div>

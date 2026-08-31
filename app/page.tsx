@@ -1,7 +1,7 @@
 import { siteHref } from "./_site";
 import { pageLanguageData, T } from "./_i18n";
 import { MergedRepoDashboard } from "./dashboard-demo/_template-parts";
-import { readyRepoCount } from "./dashboard-data";
+import { portfolioDecisionSummary } from "./dashboard-data";
 
 export const dynamic = "force-static";
 
@@ -30,9 +30,9 @@ export default function Home() {
           </div>
           <div className="st-release-summary">
             <small><T en="Current portfolio" zh="目前作品集" /></small>
-            <span className="vs-signal" data-tone="good">
-              <span className="vs-signal-mark" aria-hidden="true">✓</span>
-              {`${readyRepoCount} releases ready`}
+            <span className="vs-signal" data-tone={portfolioDecisionSummary.tone}>
+              <span className="vs-signal-mark" aria-hidden="true">{portfolioDecisionSummary.mark}</span>
+              <T {...portfolioDecisionSummary.label} />
             </span>
           </div>
         </div>
@@ -53,9 +53,9 @@ export default function Home() {
             <summary id="status-rules-title"><T en="View status definitions and data boundaries" zh="查看狀態定義與資料邊界" /></summary>
             <div className="fd-rule-grid">
               <article>
-                <p>Release Ready</p>
-                <strong><T en="Formal Go approved" zh="正式 Go 已核准" /></strong>
-                <span><T en="CEX G3 tests, external review, and the formal G6 Go record are complete; the portfolio site also has fresh local and CI checks." zh="CEX 的 G3 測試、外部檢視與 G6 正式 Go 紀錄已完成；portfolio site 也有 fresh local 與 CI checks。" /></span>
+                <p>Historical evidence</p>
+                <strong><T en="Previous checks remain recorded" zh="先前檢查仍保留紀錄" /></strong>
+                <span><T en="The evidence has expired, so it does not establish a current release decision." zh="這些證據已過期，因此不能用來判定目前是否可以發布。" /></span>
               </article>
               <article>
                 <p>Ready</p>

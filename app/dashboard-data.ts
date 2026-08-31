@@ -125,23 +125,29 @@ export const dashboardRepos: DashboardRepo[] = snapshots.map((snapshot) => {
   const quality = snapshot.summary.quality as keyof typeof qualityLabel;
   const translations = repoTranslations[snapshot.repository.name as keyof typeof repoTranslations];
   const primaryEvidence = snapshot.runs[0]?.evidenceUrl ?? snapshot.repository.url;
+  const currentSummary = assessment === "unknown"
+    ? { en: "Evidence expired", zh: "證據已過期" }
+    : translations.summary;
+  const currentRationale = assessment === "unknown"
+    ? { en: "Fresh evidence review is required before a current release decision.", zh: "重新檢視最新證據後，才能做出目前的發布決定。" }
+    : translations.rationale;
   return {
     name: snapshot.repository.name,
     version: `${snapshot.repository.branch} · ${snapshot.repository.releaseTarget} · ${snapshot.repository.fullSha.slice(0, 7)}`,
     objective: translations.objective,
     decision: statusLabel[assessment],
     decisionTone: decisionTone[assessment],
-    decisionNote: translations.summary,
+    decisionNote: currentSummary,
     effort: effortLabel[effort],
     effortBars: effortBars[effort],
     coverage: `Level ${snapshot.summary.coverage}`,
     coverageLabel: translations.summary,
     quality: qualityLabel[quality],
     qualityTone: snapshot.summary.quality as QualityTone,
-    qualityLabel: translations.summary,
+    qualityLabel: currentSummary,
     finalDecision: finalDecision[assessment],
-    finalNote: translations.rationale,
-    gateSummary: translations.gates.G6.title,
+    finalNote: currentRationale,
+    gateSummary: assessment === "unknown" ? { en: "Fresh evidence review required", zh: "需要重新檢視最新證據" } : translations.gates.G6.title,
     nextAction: assessment === "ready" ? translations.nextAction : { en: "Review required", zh: "需要檢視" },
     recordsHref: evidenceHref(primaryEvidence),
     recordsLabel: translations.recordsLabel,
@@ -160,10 +166,17 @@ export const dashboardRepos: DashboardRepo[] = snapshots.map((snapshot) => {
     }),
     gates: snapshot.gates.map((gate) => {
       const translated = translations.gates[gate.id as keyof typeof translations.gates];
-      return { id: gate.id, title: translated.title, note: translated.note, state: gate.state as GateState };
+      const currentGate = gate.id === "Release" && gate.state === "unknown"
+        ? { title: { en: "Unknown", zh: "未知" }, note: { en: "Fresh evidence review required", zh: "需要重新檢視最新證據" } }
+        : translated;
+      return { id: gate.id, title: currentGate.title, note: currentGate.note, state: gate.state as GateState };
     }),
   };
 });
 
 export const readyRepoCount = dashboardRepos.filter((repo) => repo.decision.en === "Ready").length;
+const reviewRepoCount = dashboardRepos.length - readyRepoCount;
+export const portfolioDecisionSummary = reviewRepoCount === 0
+  ? { tone: "good" as const, mark: "✓", label: { en: `${readyRepoCount} releases ready`, zh: `${readyRepoCount} 個 release 已就緒` } }
+  : { tone: "unknown" as const, mark: "?", label: { en: `${reviewRepoCount} release decisions require review`, zh: `${reviewRepoCount} 個發布決定需要檢視` } };
 export const templateRepo = dashboardRepos[0];

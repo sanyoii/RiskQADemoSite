@@ -1,5 +1,5 @@
-import { access, cp, mkdir, readdir, rm } from "node:fs/promises";
-import { basename, dirname, extname, join, resolve } from "node:path";
+import { access, cp, mkdir, readdir, rm, realpath } from "node:fs/promises";
+import { basename, dirname, extname, join, resolve, relative, isAbsolute } from "node:path";
 
 function argumentValue(name) {
   const index = process.argv.indexOf(name);
@@ -19,6 +19,7 @@ async function collectHtml(directory) {
   const files = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
+    if (entry.isSymbolicLink()) throw new Error("SOURCE_SYMLINK_NOT_ALLOWED");
     if (entry.isDirectory()) files.push(...await collectHtml(path));
     else if (entry.isFile() && extname(entry.name) === ".html") files.push(path);
   }
@@ -36,7 +37,12 @@ const source = resolve(sourceArgument);
 const output = resolve(outputArgument);
 
 try {
-  await rm(output, { recursive: true, force: true });
+  // Never recursively erase a caller-provided output. Use a new artifact directory.
+  if (await exists(output)) throw new Error("OUTPUT_MUST_BE_NEW");
+  const actualSource = await realpath(source);
+  const relation = relative(actualSource, output);
+  if (!relation || (!relation.startsWith("..") && !isAbsolute(relation))) throw new Error("OUTPUT_INSIDE_SOURCE");
+  await collectHtml(actualSource); // Reject symlinks before copying any artifact.
   await mkdir(dirname(output), { recursive: true });
   await cp(source, output, { recursive: true });
 

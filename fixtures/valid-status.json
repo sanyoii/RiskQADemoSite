@@ -10,8 +10,13 @@
   },
   "objective": "Deployment Confidence",
   "environment": "GitHub Pages; Python 3.14.2; Chromium",
-  "testedScope": ["static", "runtime"],
-  "excludedScope": ["cross-browser"],
+  "testedScope": [
+    "static",
+    "runtime"
+  ],
+  "excludedScope": [
+    "cross-browser"
+  ],
   "releaseAssessment": {
     "status": "ready",
     "rationale": "Fresh local and CI checks passed.",
@@ -37,7 +42,9 @@
       "targetCoverage": "2",
       "quality": "good",
       "comment": "Chromium checks passed.",
-      "evidenceLinks": ["https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"]
+      "evidenceLinks": [
+        "https://github.com/sanyoii/sanyoii.github.io/actions/runs/32157367364"
+      ]
     }
   ],
   "gates": [
@@ -45,6 +52,12 @@
       "id": "G3",
       "title": "17 fresh cases passed",
       "note": "Python 3.14.2; Chromium",
+      "state": "complete"
+    },
+    {
+      "id": "G6",
+      "title": "Fixture approval",
+      "note": "Synthetic test fixture; not a real release approval",
       "state": "complete"
     }
   ],

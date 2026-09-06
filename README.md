@@ -1,6 +1,6 @@
 # QA Decision Desk
 
-QA Decision Desk 把 repository、CI、manual check 與 release review 的結果整理成一個可追溯的發布判斷介面。每個 repo 只佔一列，先回答三個問題：能不能發、為什麼、證據在哪裡。
+QA Decision Desk 把 repository、CI、manual check 與 release review 的結果整理成可追溯的發布判斷介面。每個 repo 先回答：現在能不能發、缺什麼、誰要補什麼；歷史決定與證據收在明細，不當成目前核准。
 
 [Live Dashboard](https://sanyoii.github.io/test-status/) · [Test Cases 與執行記錄](https://sanyoii.github.io/test-status/run-records/) · [Fail 與 Log Demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [Design Samples](https://sanyoii.github.io/test-status/dashboard-demo/) · [Source](https://github.com/sanyoii/RiskQADemoSite)
 
@@ -9,6 +9,16 @@ QA Decision Desk 把 repository、CI、manual check 與 release review 的結果
 測試結果常散在 CI logs、人工紀錄、issue、聊天與個人判斷裡。QA Decision Desk 把這些 evidence 接回同一個 release subject，讓讀者先看到 decision，再按需要展開 Gate Flow、Test Case、Run 與 Defect。
 
 Dashboard 是 sanitized、read-only projection。Release Quality Summary 保留人工作出的判斷；Run Record 保存實際執行；Defect／Risk Log 保存 failure 與 disposition；`.test-dashboard/status.json` 負責 machine-readable projection。畫面不建立第二套真相來源。
+
+## 現役流程與驗證入口
+
+完整契約、遷移與減量取捨見 [Decision workflow](docs/decision-workflow.md)。主要實作已統一在此 repository，原 TestDashboard pilot 保留為歷史參考。
+
+- **QA-Lite 三份記錄**：brief/design、append-only run ledger、human-owned decision。九份模板仍是 library。
+- **填寫內容可驗證**：Requirement → Risk → Design → Case → Run → Review ID 鏈、oracle source hash、artifact 實檔雜湊、同 subject/environment/config、例外期限與審查 input digest。
+- **目前與歷史分開**：`npm test` 驗證軟體與歷史一致性；`npm run gate:release` 驗證目前發布資格。過期 evidence 不靠改日期變綠。
+- **Decision replay / change impact**：畫面只回放已記錄的歷史；synthetic 後續步驟停在核准前。CLI `review:release --previous` 輸出保守的 must-run 清單。
+- **設計減量**：Samples、AC、ABC 已移到設計演進，舊 URL 保留；首頁不再有 effort bars、固定 Level 2+ 或複製的核准文字。
 
 ## Decision flow
 
@@ -44,20 +54,22 @@ flowchart LR
 | Repository | 正在看哪個 release subject？ | repo、release／tag、branch、full SHA |
 | Objective | 這次要支持什麼決策？ | Test Request／Test Spec |
 | Release Decision | 現在能不能發布？ | human-owned Release Quality Summary |
-| Test Effort | 這次投入多少種測試活動？ | Run inventory＋QA assessment |
+| Test Effort（明細） | 當時投入多少種測試活動？ | Run inventory＋QA assessment |
 | Coverage | 風險區域測到多深？ | Risk Assessment＋Coverage Inventory |
 | Quality Assessment | 有哪些 warning、blocker 或 residual risk？ | Defect／Risk Log＋QA assessment |
-| Gate Flow | Scope、execution、review、approval 到哪一步？ | G1、G3、G5、G6、Release receipts |
+| Historical Gates（明細） | 原決定當時記錄了什麼？ | G1、G3、G5、G6、Release receipts；不是目前授權 |
 | Records | 判斷可否被重建？ | Test Cases、Run IDs、artifacts、public CI links |
 
 Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是 code coverage 百分比。`Ready` 代表發布條件已由 decision owner 核准；缺陷、限制與 residual risk 仍要保留 disposition。`Unreachable` 表示最新 snapshot 取得失敗，產品狀態需要重新確認。
 
-## 目前顯示的 repositories
+## 歷史資料範例（不是目前發布核准）
 
 | Repository | Objective | Decision | Effort | Coverage | Quality | Public evidence |
 |---|---|---|---|---|---|---|
-| `cex-market-data-quality-lab` | Release Readiness | Ready | High | Level 2+ | Ready | [Test Cases 與 Run Records](https://sanyoii.github.io/test-status/run-records/) |
-| `sanyoii.github.io` | Deployment Confidence | Ready | Medium | Level 2+ | Healthy | [Test-gated Pages run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480) |
+| `cex-market-data-quality-lab` | Release Readiness | 歷史 Ready；目前重新檢查 | High | Level 2+ | 歷史 assessment | [Test Cases 與 Run Records](https://sanyoii.github.io/test-status/run-records/) |
+| `sanyoii.github.io` | Deployment Confidence | 歷史 Ready；目前重新檢查 | Medium | Level 2+ | 歷史 assessment | [Test-gated Pages run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480) |
+
+現有 sample 的有效期限已過，且尚未補齊新契約的 release packet；新版 Dashboard 顯示 Unknown，不推定晚於資料的 Go。
 
 Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targeted rerun 與 No-Go 的呈現方式；它不屬於目前兩個 repository 的正式結果。
 
@@ -150,7 +162,9 @@ Public surface 不包含 raw logs、protected receipts、credentials、test acco
 - [Approved source records](data/approved)
 - [Public snapshot registry](data/repos/index.json)
 - [Repository data adapter](app/dashboard-data.ts)
-- [Gate Flow UI](app/dashboard-demo/_template-parts.tsx)
+- [Current decision / historical evidence UI](app/_dashboard.tsx)
+- [Shared decision policy](lib/decision-policy.mjs)
+- [Filled release evidence validator](lib/release-evidence.mjs)
 - [Test Cases 與 Run Records](app/run-records/page.tsx)
 - [Synthetic Fail Demo](app/run-records/fail-demo/page.tsx)
 - [Contract、sync 與 registry tests](tests/status-contract.test.mjs)
@@ -168,4 +182,8 @@ npm test
 npm run lint
 ```
 
-`npm test` 會先驗證 snapshot registry、contract、freshness、chronology 與 public disclosure boundary，再 build 並驗證正式 Dashboard、Run Records、Fail Demo、Design Samples、metadata 與 starter-only files 的移除狀態。
+`npm test` 驗證 archive registry、contract、chronology、public disclosure boundary、playbooks，再 build 並檢查所有 routes。它不宣告目前的 evidence freshness 或發布核准。
+
+`npm run verify:workflow` 另外記錄 lint、typecheck、Pages build/export 與 release gate；每次執行輸出新的實際 logs、SHA-256 和 source/worktree digest。Raw artifacts 留在忽略的本機資料夾，不打包進公開 UI。`release-gate` 結果獨立保存，軟體 Pass 不掩蓋產品 release Fail。
+
+Pages export 要指定新的 output directory；不再自動遞迴刪除既有目錄。Cloudflare/Sites 仍支援目前本機 preview 與 rendered-test runtime，沒有新增 production dependency，也沒有修改 hosted deployment 設定。

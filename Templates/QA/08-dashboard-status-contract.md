@@ -75,6 +75,11 @@ tags:
     "evidenceLinks": ["https://github.com/owner/repository/actions/runs/123"]
   }],
   "gates": [{
+    "id": "G3",
+    "title": "Required checks completed",
+    "note": "Illustrative example only",
+    "state": "complete"
+  }, {
     "id": "G6",
     "title": "Release decision recorded",
     "note": "Decision owner approved",

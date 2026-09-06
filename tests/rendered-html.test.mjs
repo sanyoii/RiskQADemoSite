@@ -49,65 +49,22 @@ test("server-renders a bilingual not-found page", async () => {
   assert.match(html, /class="qa-language-toggle"/);
 });
 
-test("server-renders the public QA Decision Desk", async () => {
+test("server-rendering fails closed and separates current state from historical approvals", async () => {
   const response = await render();
   assert.equal(response.status, 200);
-  assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
-
   const html = await response.text();
-  for (const text of [
-    "QA Decision Desk",
-    "Low-Tech Testing Dashboard",
-    "Repository Quality Dashboard",
-    "2 releases ready",
-    "cex-market-data-quality-lab",
-    "sanyoii.github.io",
-    "17 fresh cases passed",
-    "Pages production verified",
-    "Released",
-    "正式 Go 紀錄完成",
-    "Release Readiness",
-    "Ready",
-    "High",
-    "Medium",
-    "Level 2+",
-    "Healthy",
-    "Deployment Confidence",
-    "展開 Repo 查看 Gate Flow",
-    "Release Gate Flow",
-    "Product Areas",
-    "Order-book synchronization",
-    "Document integrity and privacy",
-    "測試已通過",
-    "外部檢視完成",
-    "New Repo",
-    "正式 Go 已核准",
-    "不代表零缺陷，也不是品質保證",
-    "不是產品故障，也不是即時監控",
-    "Sanitized public projection",
-  ]) {
-    assert.ok(html.includes(text), `missing rendered text: ${text}`);
+  for (const text of ["QA Decision Desk", "Repository Quality Dashboard", "0 / 2 currently ready", "cex-market-data-quality-lab", "sanyoii.github.io",
+    "CLOCK_UNCONFIRMED", "RELEASE_EVIDENCE_REQUIRED", "What prevents a current Go?", "Owner", "Historical decision replay", "Original validity boundary",
+    "Source SHA", "SHA-256", "Coverage", "Target", "Unreachable", "不是產品故障", "Sanitized public projection"]) {
+    assert.ok(html.includes(text), `missing ${text}`);
   }
-
-  assert.match(html, /class="st-merged-head has-gates"/);
-  assert.match(html, /<details class="st-merged-repo">/);
-  assert.doesNotMatch(html, /data-state="blocked"/);
-  assert.match(html, /href="\/run-records\/"/);
-  assert.match(html, /href="\/run-records\/fail-demo\/"/);
-  assert.match(html, /href="\/dashboard-demo\/"/);
+  assert.equal((html.match(/class="decision-current" data-status="unknown"/g) ?? []).length, 2);
+  assert.equal((html.match(/class="decision-repo"/g) ?? []).length, 2);
+  for (const href of ["/run-records/", "/run-records/fail-demo/", "/dashboard-demo/"]) assert.ok(html.includes(`href="${href}"`));
+  assert.doesNotMatch(html, /2 releases ready|st-merged|effort-bars|142 Total Bugs|92%|85\/100/);
+  assert.ok(!html.split('<details class="decision-details">')[0].includes("17 fresh cases passed"));
+  assert.doesNotMatch(html, /test-records\/pilot-0|current-status\.json|authorityRef|internalNotes/);
   assert.match(html, /actions\/runs\/32241879480/);
-  assert.match(html, /main · GitHub Pages production · fd337bd/);
-  assert.equal((html.match(/class="st-area-table"/g) ?? []).length, 2);
-  assert.equal((html.match(/<details class="st-merged-repo">/g) ?? []).length, 2);
-  assert.doesNotMatch(html, /1 decision pending/);
-  assert.doesNotMatch(html, /正式紀錄未完成|缺 G6 正式紀錄/);
-  assert.doesNotMatch(html, /<details class="evidence-group">/);
-  assert.doesNotMatch(html, /142 Total Bugs|92%|85\/100|1\.2s/);
-  assert.match(html, /lang="en"/);
-  assert.match(html, /class="qa-language-toggle"/);
-  assert.match(html, /data-en="Test Cases and Run Records" data-zh="Test Cases 與執行記錄"/);
-  assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|SkeletonPreview/);
-  assert.doesNotMatch(html, /test-records\/pilot-0|current-status\.json/);
 });
 
 test("server-renders human-readable Test Case and Run records", async () => {
@@ -196,131 +153,32 @@ test("failure result icon styles do not constrain localized text", async () => {
   assert.match(css, /\.fail-result\s*>\s*span\[aria-hidden="true"\]\s*\{/);
 });
 
-test("server-renders three truthful visual dashboard samples", async () => {
+test("design evolution is secondary and contains no duplicated current status", async () => {
   const response = await render("/dashboard-demo");
   assert.equal(response.status, 200);
   const html = await response.text();
-
-  for (const text of [
-    "Low-Tech Testing Dashboard",
-    "同一份 CEX 狀態，三種更直觀的視覺化方式",
-    "Sample A",
-    "Sample B",
-    "Sample C",
-    "Objective Cards",
-    "Release Gate Flow",
-    "Repo Portfolio Matrix",
-    "Release Readiness",
-    "Release Decision",
-    "Test Effort",
-    "Coverage",
-    "Quality Assessment",
-    "cex-market-data-quality-lab",
-    "正式 Go 已核准",
-    "High",
-    "Level 2+",
-    "Ready",
-    "G3",
-    "測試已通過",
-    "G5",
-    "外部檢視完成",
-    "G6",
-    "正式 Go 紀錄完成",
-    "正式 Go 已核准",
-    "不顯示虛構數字",
-  ]) {
-    assert.match(html, new RegExp(text.replace(/[+]/g, "\\+")));
-  }
-
-  assert.ok(html.indexOf("Sample A") < html.indexOf("Sample B"));
-  assert.ok(html.indexOf("Sample B") < html.indexOf("Sample C"));
-  assert.match(html, /href="\/"/);
-  assert.match(html, /href="\/run-records\/"/);
-  assert.match(html, /href="#sample-cards"/);
-  assert.match(html, /href="#sample-gates"/);
-  assert.match(html, /href="#sample-portfolio"/);
-  assert.match(html, /<details>/);
-  assert.match(html, /aria-label="Test Effort: High, 4 of 4 bars"/);
-  assert.match(html, /data-aria-label-zh="Test Effort：高，四格中 4 格"/);
-  assert.match(html, /aria-label="Coverage: Level 2\+, common and error paths covered"/);
-  assert.match(html, /data-aria-label-zh="Coverage：Level 2\+，常見路徑與錯誤路徑已覆蓋"/);
-  assert.match(html, /aria-label="Quality Assessment: Ready, green light"/);
-  assert.match(html, /data-aria-label-zh="Quality Assessment：就緒，綠色燈號"/);
-  assert.doesNotMatch(html, /data-state="blocked"/);
-  assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
-  assert.doesNotMatch(html, /Ship<\//);
+  for (const value of ["Design evolution", "Objective Cards", "Release Gate Flow", "Repo Portfolio Matrix", "retired as live dashboards"]) assert.ok(html.includes(value));
+  assert.doesNotMatch(html, /cex-market-data-quality-lab|Formal Go approved|aria-label="Coverage: Level 2/);
 });
 
-test("server-renders the A+C dashboard site template", async () => {
+test("legacy A+C URL remains compatible without a duplicate dashboard", async () => {
   const response = await render("/dashboard-demo/ac");
   assert.equal(response.status, 200);
   const html = await response.text();
-
-  for (const text of [
-    "A + C · Merged Repo View",
-    "Merged Repo Dashboard",
-    "Repo",
-    "Objective",
-    "Release Decision",
-    "Test Effort",
-    "Coverage",
-    "Quality Assessment",
-    "Decision",
-    "cex-market-data-quality-lab",
-    "Release Readiness",
-    "Ready",
-    "sanyoii.github.io",
-    "17 fresh cases passed",
-    "New Repo",
-    "A + C",
-    "A + B + C",
-  ]) {
-    assert.match(html, new RegExp(text.replace(/[+]/g, "\\+")));
-  }
-
-  assert.match(html, /class="st-merged-head has-decision"/);
-  assert.match(html, /class="st-merged-grid has-decision"/);
-  assert.doesNotMatch(html, /<details class="st-merged-repo">/);
-  assert.doesNotMatch(html, /B · Release Gate Flow/);
-  assert.match(html, /href="\/dashboard-demo\/abc\/"/);
-  assert.match(html, /href="\/run-records\/"/);
-  assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
+  assert.match(html, /A \+ C/);
+  assert.match(html, /Retired sample/);
+  assert.match(html, /href="\/"/);
+  assert.doesNotMatch(html, /st-merged|17 fresh cases|data-status="ready"/);
 });
 
-test("server-renders the A+B+C dashboard site template", async () => {
+test("legacy A+B+C URL remains compatible without a duplicate dashboard", async () => {
   const response = await render("/dashboard-demo/abc");
   assert.equal(response.status, 200);
   const html = await response.text();
-
-  for (const text of [
-    "A + B + C · Merged Repo + Gates",
-    "Merged Repo Dashboard",
-    "Repo",
-    "Objective",
-    "Release Decision",
-    "Test Effort",
-    "Coverage",
-    "Quality Assessment",
-    "B · Release Gate Flow",
-    "G3",
-    "測試已通過",
-    "G5",
-    "外部檢視完成",
-    "G6",
-    "正式 Go 紀錄完成",
-    "sanyoii.github.io",
-    "17 fresh cases passed",
-    "New Repo",
-  ]) {
-    assert.match(html, new RegExp(text.replace(/[+]/g, "\\+")));
-  }
-
-  assert.match(html, /class="st-merged-head has-gates"/);
-  assert.match(html, /<details class="st-merged-repo">/);
-  assert.match(html, /<summary class="st-merged-grid has-gates"/);
-  assert.match(html, /href="\/dashboard-demo\/ac\/"/);
-  assert.doesNotMatch(html, /data-state="blocked"/);
-  assert.doesNotMatch(html, /142|85\/100|1\.2s|92%/);
+  assert.ok(html.includes("A + B + C"));
+  assert.match(html, /Retired sample/);
+  assert.match(html, /href="\/dashboard-demo\/"/);
+  assert.doesNotMatch(html, /st-merged|17 fresh cases|data-status="ready"/);
 });
 
 test("removes starter-only files and keeps public metadata complete", async () => {
@@ -331,7 +189,7 @@ test("removes starter-only files and keeps public metadata complete", async () =
   ]);
 
   assert.match(page, /Read-only portfolio/);
-  assert.match(page, /MergedRepoDashboard includeGates formal/);
+  assert.match(page, /DecisionDashboard/);
   assert.match(layout, /\/og\.png/);
   assert.match(layout, /https:\/\/sanyoii\.github\.io\/test-status/);
   assert.doesNotMatch(layout, /from "next\/headers"/);

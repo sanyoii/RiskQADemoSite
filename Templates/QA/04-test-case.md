@@ -1,6 +1,6 @@
 ---
 type: test-case
-templateVersion: 0.1.0
+templateVersion: 0.2.0
 status: designed
 caseId:
 repository:
@@ -30,6 +30,12 @@ tags:
 | Requirement | |
 | Risk | |
 | Scenario | |
+| Design decision | |
+| Selected technique | |
+| Technique parameters | |
+| Oracle／source | approved source / `Assumption` / `Unknown／needs-clarification` |
+| Coverage claim | |
+| Residual risk | |
 | Test type | Functional / Non-Functional / Change-related |
 | Execution | automated / manual |
 
@@ -43,9 +49,9 @@ tags:
 
 ## Procedure
 
-| Step | Action | Data | Observable expected result |
-|---|---|---|---|
-| 1 | | | |
+| Step | Action | Data | Observable expected result | Oracle reference |
+|---|---|---|---|---|
+| 1 | | | | |
 
 ## Cleanup／rollback
 
@@ -74,6 +80,9 @@ tags:
 
 ## Review
 
+- Technique traces to risk／failure mode：`yes` / `no` / `not-reviewed`
+- Expected results have an approved Oracle／source or explicit `Assumption`／`Unknown`：`yes` / `no` / `not-reviewed`
+- Coverage claim and Residual risk are explainable：`yes` / `no` / `not-reviewed`
 - Reproducible by another tester：`yes` / `no` / `not-reviewed`
 - Review outcome：`approved` / `changes-required` / `blocked`
 - Reviewer notes：

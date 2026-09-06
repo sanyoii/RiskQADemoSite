@@ -1,0 +1,255 @@
+{
+  "version": "1.0.0",
+  "classification": "real",
+  "subject": {
+    "repository": "https://github.com/sanyoii/RiskQADemoSite",
+    "sha": "e90bafca187c076db1e6ceaf5e79b57ce850c934",
+    "environment": "Windows local worktree; Node 24.19.0; Chrome; not production",
+    "configDigest": "c7dd7893c03623cf6025c539167cc57a1ac81dcec9e3f249deffbd1c17493a6f",
+    "dirty": true,
+    "description": "Base SHA is not the tested worktree. Verification receipts bind actual source bytes separately; no release approval.",
+    "workspaceDigest": "5e43e0e4d0f3627553ef37cbab0504ead9e3c5b564b49f431aded15a8b52df76"
+  },
+  "requirements": [
+    {
+      "id": "REQ-DESK-001",
+      "sourcePath": "quality-decision-brief.md",
+      "digest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+    },
+    {
+      "id": "REQ-CHAIN-001",
+      "sourcePath": "quality-decision-brief.md",
+      "digest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+    },
+    {
+      "id": "REQ-UX-001",
+      "sourcePath": "quality-decision-brief.md",
+      "digest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+    },
+    {
+      "id": "REQ-DELIVERY-001",
+      "sourcePath": "quality-decision-brief.md",
+      "digest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-FALSE-GO",
+      "required": true,
+      "requirementIds": [
+        "REQ-DESK-001"
+      ]
+    },
+    {
+      "id": "RISK-BROKEN-CHAIN",
+      "required": true,
+      "requirementIds": [
+        "REQ-CHAIN-001"
+      ]
+    },
+    {
+      "id": "RISK-MISLEADING-UI",
+      "required": true,
+      "requirementIds": [
+        "REQ-UX-001"
+      ]
+    },
+    {
+      "id": "RISK-UNSAFE-DELIVERY",
+      "required": true,
+      "requirementIds": [
+        "REQ-DELIVERY-001"
+      ]
+    }
+  ],
+  "designs": [
+    {
+      "id": "DESIGN-POLICY",
+      "riskIds": [
+        "RISK-FALSE-GO"
+      ],
+      "method": "Decision table and boundary analysis",
+      "parameters": "Before/at/after expiry; contradictory Ready; absent review packet",
+      "coverageClaim": "Shared snapshot policy rejects unsafe Go",
+      "exclusions": [
+        "New real product evidence and independent owner review"
+      ],
+      "oracle": {
+        "status": "assumption",
+        "reference": "quality-decision-brief.md; owner acceptance pending",
+        "sourcePath": "quality-decision-brief.md",
+        "sourceDigest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+      }
+    },
+    {
+      "id": "DESIGN-CHAIN",
+      "riskIds": [
+        "RISK-BROKEN-CHAIN"
+      ],
+      "method": "Graph integrity and state transitions",
+      "parameters": "Required/optional; orphan IDs; changed hashes; old failure and later Pass",
+      "coverageClaim": "Evidence relationships and append-only review input",
+      "exclusions": [
+        "New real product evidence and independent owner review"
+      ],
+      "oracle": {
+        "status": "assumption",
+        "reference": "quality-decision-brief.md; owner acceptance pending",
+        "sourcePath": "quality-decision-brief.md",
+        "sourceDigest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+      }
+    },
+    {
+      "id": "DESIGN-UX",
+      "riskIds": [
+        "RISK-MISLEADING-UI"
+      ],
+      "method": "Scenario and responsive interaction",
+      "parameters": "Six routes; EN/ZH; reload; keyboard; 375px and desktop",
+      "coverageClaim": "Visible current/historical separation and localized controls",
+      "exclusions": [
+        "New real product evidence and independent owner review"
+      ],
+      "oracle": {
+        "status": "assumption",
+        "reference": "quality-decision-brief.md; owner acceptance pending",
+        "sourcePath": "quality-decision-brief.md",
+        "sourceDigest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+      }
+    },
+    {
+      "id": "DESIGN-EXPORT",
+      "riskIds": [
+        "RISK-UNSAFE-DELIVERY"
+      ],
+      "method": "Failure injection and artifact checks",
+      "parameters": "Existing output; stale archive; failed sync; Pages export",
+      "coverageClaim": "No destructive overwrite; recoverable history and honest release gate",
+      "exclusions": [
+        "New real product evidence and independent owner review"
+      ],
+      "oracle": {
+        "status": "assumption",
+        "reference": "quality-decision-brief.md; owner acceptance pending",
+        "sourcePath": "quality-decision-brief.md",
+        "sourceDigest": "a9c214545a21113d3d246285e25555df60a1acb5a9fba283c96a737dcd3f5752"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "CASE-SOFTWARE",
+      "designId": "DESIGN-POLICY",
+      "required": true
+    },
+    {
+      "id": "CASE-CHAIN",
+      "designId": "DESIGN-CHAIN",
+      "required": true
+    },
+    {
+      "id": "CASE-UI",
+      "designId": "DESIGN-UX",
+      "required": true
+    },
+    {
+      "id": "CASE-DELIVERY",
+      "designId": "DESIGN-EXPORT",
+      "required": true
+    }
+  ],
+  "runs": [
+    {
+      "id": "LOCAL-SOFTWARE-20260906",
+      "caseId": "CASE-SOFTWARE",
+      "subjectSha": "e90bafca187c076db1e6ceaf5e79b57ce850c934",
+      "environment": "Windows local worktree; Node 24.19.0; Chrome; not production",
+      "configDigest": "c7dd7893c03623cf6025c539167cc57a1ac81dcec9e3f249deffbd1c17493a6f",
+      "workspaceDigest": "5e43e0e4d0f3627553ef37cbab0504ead9e3c5b564b49f431aded15a8b52df76",
+      "kind": "deterministic",
+      "status": "Pass",
+      "executedAt": "2026-09-06T10:07:00.896Z",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "artifacts/2026-09-06T10-06-44-646Z/receipt.json",
+        "sha256": "4c83c2bf7d64c282e6a228863756f81aab64eaf023a302f27a17119b07f98738"
+      },
+      "note": "npm test, lint and typecheck passed; the separate product release gate failed. This record is not Go."
+    },
+    {
+      "id": "LOCAL-CHAIN-20260906",
+      "caseId": "CASE-CHAIN",
+      "subjectSha": "e90bafca187c076db1e6ceaf5e79b57ce850c934",
+      "environment": "Windows local worktree; Node 24.19.0; Chrome; not production",
+      "configDigest": "c7dd7893c03623cf6025c539167cc57a1ac81dcec9e3f249deffbd1c17493a6f",
+      "workspaceDigest": "5e43e0e4d0f3627553ef37cbab0504ead9e3c5b564b49f431aded15a8b52df76",
+      "kind": "deterministic",
+      "status": "Pass",
+      "executedAt": "2026-09-06T10:06:55.853Z",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "artifacts/2026-09-06T10-06-44-646Z/software.log",
+        "sha256": "8aff27b0097c00d36f99b8495aabdf2ec7ecb76271ef7361474695d617e579d9"
+      },
+      "note": "Evidence-chain checks are part of the recorded software run, not a second independent execution."
+    },
+    {
+      "id": "LOCAL-DELIVERY-20260906",
+      "caseId": "CASE-DELIVERY",
+      "subjectSha": "e90bafca187c076db1e6ceaf5e79b57ce850c934",
+      "environment": "Windows local worktree; Node 24.19.0; Chrome; not production",
+      "configDigest": "c7dd7893c03623cf6025c539167cc57a1ac81dcec9e3f249deffbd1c17493a6f",
+      "workspaceDigest": "5e43e0e4d0f3627553ef37cbab0504ead9e3c5b564b49f431aded15a8b52df76",
+      "kind": "deterministic",
+      "status": "Pass",
+      "executedAt": "2026-09-06T10:07:04.556Z",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "artifacts/2026-09-06T10-06-44-646Z/receipt.json",
+        "sha256": "4c83c2bf7d64c282e6a228863756f81aab64eaf023a302f27a17119b07f98738"
+      },
+      "note": "Software/archive and safe-export checks passed. The expected stale real-release gate remains Fail."
+    },
+    {
+      "id": "LOCAL-UI-20260906",
+      "caseId": "CASE-UI",
+      "subjectSha": "e90bafca187c076db1e6ceaf5e79b57ce850c934",
+      "environment": "Windows local worktree; Node 24.19.0; Chrome; not production",
+      "configDigest": "c7dd7893c03623cf6025c539167cc57a1ac81dcec9e3f249deffbd1c17493a6f",
+      "workspaceDigest": "5e43e0e4d0f3627553ef37cbab0504ead9e3c5b564b49f431aded15a8b52df76",
+      "kind": "manual",
+      "status": "Pass",
+      "executedAt": "2026-09-06T10:14:02Z",
+      "validUntil": "2026-09-06T11:14:02.000Z",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "browser-checks.md",
+        "sha256": "75cdf8292e3fba062420f5e4d7e6bb2b058b3502dcb371559465b5a844ac7ebc"
+      },
+      "note": "Tool-assisted visible UI observation; not independent human QA. One-hour observation lease is a conservative local assumption, not owner-approved acceptance. Extension warnings and initial language flash are retained."
+    }
+  ],
+  "events": [
+    {
+      "id": "EVENT-LOCAL-VERIFICATION",
+      "at": "2026-09-06T10:14:02Z",
+      "type": "verification-recorded",
+      "reason": "Local implementation evidence recorded; oracle acceptance, clean committed subject and owner decision remain pending.",
+      "previousEventIds": [],
+      "runIds": [
+        "LOCAL-SOFTWARE-20260906",
+        "LOCAL-CHAIN-20260906",
+        "LOCAL-DELIVERY-20260906",
+        "LOCAL-UI-20260906"
+      ]
+    }
+  ],
+  "waivers": [],
+  "review": {
+    "status": "needs-review",
+    "decision": "Hold",
+    "decisionOwner": "William",
+    "reviewer": "Unassigned",
+    "note": "Implementation verification is recorded separately; no reviewer or owner approval has been fabricated."
+  }
+}

@@ -5,6 +5,18 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
 
+test("export never deletes an existing output or writes inside its source", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "qa-pages-guard-"));
+  try {
+    const marker = join(directory, "keep.txt");
+    await writeFile(marker, "preserve");
+    const run = output => spawnSync(process.execPath, ["scripts/prepare-pages-artifact.mjs", "--source", directory, "--output", output], { cwd: new URL("../", import.meta.url), encoding: "utf8" });
+    assert.equal(run(directory).status, 1);
+    assert.equal(await readFile(marker, "utf8"), "preserve");
+    assert.match(run(join(directory, "nested")).stderr, /OUTPUT_INSIDE_SOURCE/);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
 test("prepares directory routes and lifts prefixed assets for Pages", async () => {
   const directory = await mkdtemp(join(tmpdir(), "qa-pages-"));
   const source = join(directory, "source");

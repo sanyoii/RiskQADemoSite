@@ -3,7 +3,7 @@ import { spawnSync } from "node:child_process";
 import test from "node:test";
 
 test("registry validates every public snapshot and repository mapping", () => {
-  const result = spawnSync(process.execPath, ["scripts/validate-registry.mjs", "data/repos/index.json", "--now", "2026-08-19T10:00:00+08:00"], {
+  const result = spawnSync(process.execPath, ["scripts/validate-registry.mjs", "data/repos/index.json", "--historical"], {
     cwd: new URL("../", import.meta.url),
     encoding: "utf8",
   });

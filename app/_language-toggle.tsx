@@ -11,7 +11,7 @@ function applyLanguage(language: Language) {
 
   document.querySelectorAll<HTMLElement>("[data-en][data-zh]").forEach((node) => {
     const value = node.dataset[key];
-    if (value !== undefined) node.textContent = value;
+    if (value !== undefined && node.textContent !== value) node.textContent = value;
   });
 
   document.querySelectorAll<HTMLElement>("[data-aria-label-en][data-aria-label-zh]").forEach((node) => {
@@ -53,6 +53,15 @@ export function LanguageToggle() {
     }
     const initial = saved === "zh" ? "zh" : "en";
     applyLanguage(initial);
+    // Dynamic clock/replay updates must keep the selected language too.
+    const options = { subtree: true, childList: true, attributes: true, attributeFilter: ["data-en", "data-zh", "data-aria-label-en", "data-aria-label-zh"] };
+    const observer = new MutationObserver(() => {
+      observer.disconnect();
+      applyLanguage(document.documentElement.lang === "zh-Hant" ? "zh" : "en");
+      observer.observe(document.body, options);
+    });
+    observer.observe(document.body, options);
+    return () => observer.disconnect();
   }, []);
 
   function toggleLanguage() {

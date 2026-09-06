@@ -10,7 +10,9 @@
   },
   "objective": "Policy fixture",
   "environment": "synthetic fixture",
-  "testedScope": ["policy"],
+  "testedScope": [
+    "policy"
+  ],
   "excludedScope": [],
   "releaseAssessment": {
     "status": "ready",
@@ -21,11 +23,51 @@
     "reviewer": "Fixture",
     "decisionOwner": "Fixture"
   },
-  "summary": { "effortLevel": "low", "coverage": "1", "quality": "good", "comment": "Synthetic" },
-  "productAreas": [{ "id": "policy", "name": "Policy", "effortLevel": "low", "executionState": "complete", "coverage": "1", "targetCoverage": "1", "quality": "good", "comment": "Synthetic", "evidenceLinks": [] }],
-  "gates": [],
-  "runs": [{ "runId": "stale-run-1", "executedAt": "2026-08-01T08:30:00+08:00", "evidenceUrl": "https://github.com/sanyoii/stale-demo/actions/runs/1" }],
-  "provenance": { "generatedAt": "2026-08-01T09:00:00+08:00", "syncedAt": "2026-08-01T09:00:00+08:00", "sourceSha": "1111111111111111111111111111111111111111" },
+  "summary": {
+    "effortLevel": "low",
+    "coverage": "1",
+    "quality": "good",
+    "comment": "Synthetic"
+  },
+  "productAreas": [
+    {
+      "id": "policy",
+      "name": "Policy",
+      "effortLevel": "low",
+      "executionState": "complete",
+      "coverage": "1",
+      "targetCoverage": "1",
+      "quality": "good",
+      "comment": "Synthetic",
+      "evidenceLinks": ["/run-records"]
+    }
+  ],
+  "gates": [
+    {
+      "id": "G3",
+      "title": "Fixture execution",
+      "note": "Synthetic test fixture; not real execution evidence",
+      "state": "complete"
+    },
+    {
+      "id": "G6",
+      "title": "Fixture approval",
+      "note": "Synthetic test fixture; not a real release approval",
+      "state": "complete"
+    }
+  ],
+  "runs": [
+    {
+      "runId": "stale-run-1",
+      "executedAt": "2026-08-01T08:30:00+08:00",
+      "evidenceUrl": "https://github.com/sanyoii/stale-demo/actions/runs/1"
+    }
+  ],
+  "provenance": {
+    "generatedAt": "2026-08-01T09:00:00+08:00",
+    "syncedAt": "2026-08-01T09:00:00+08:00",
+    "sourceSha": "1111111111111111111111111111111111111111"
+  },
   "dataStatus": "fresh",
   "publicDisclosure": "public"
 }

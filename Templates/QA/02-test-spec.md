@@ -1,6 +1,6 @@
 ---
 type: test-spec
-templateVersion: 0.1.0
+templateVersion: 0.2.0
 status: draft
 specId:
 repository:
@@ -51,6 +51,22 @@ tags:
 | Product Area | Related risk | Target coverage | Test type | Approach | Evidence output | Owner |
 |---|---|---|---|---|---|---|
 | | | | Functional / Non-Functional / Change-related | automated / manual / exploratory / inspection / live | | |
+
+## Test design decisions
+
+> 先用 risk／failure mode、規格特徵及可觀察性限制選擇 technique，再由 human reviewer 核准。不要用案例數量代替 coverage，也不要讓模型補完未定義的 expected behavior。
+
+| Target risk／failure mode | Spec characteristic | Observability／environment constraint | Selected technique | Technique parameters | Oracle／source | Coverage claim | Exclusions／residual risk | Reviewer |
+|---|---|---|---|---|---|---|---|---|
+| | | | | | | | | |
+
+### Oracle and testability rules
+
+- Oracle hierarchy：approved requirement／AC → approved business rule／API or schema contract → reviewed domain decision → current behavior as characterization evidence → `Assumption` → `Unknown／needs-clarification`。
+- Observability／testability gap：<!-- UI, API response, event, log, database state or external side effect that cannot be observed or controlled -->
+- Test data／dependency constraint：
+- Stopping rule：<!-- the risk-based condition that ends design or execution; not a target number of cases -->
+- Run／Defect／Escape feedback：<!-- how later evidence will confirm or revise technique, parameters, coverage claim and residual risk -->
 
 ## Entry, suspension and exit
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteHref } from "../../_site";
+import { DecisionReplay } from "./_decision-replay";
 import { pageLanguageData, T } from "../../_i18n";
 
 export const dynamic = "force-static";
@@ -46,6 +47,8 @@ export default function FailedRunDemo() {
         <strong><T en="This is a synthetic demo, not a current product test result." zh="這是合成示範，不是目前產品的測試結果。" /></strong>
         <span><T en="It shows the human-readable information a public page should provide when a Test Case fails." zh="用途是展示 Test Case Fail 時，公開頁應提供哪些人類可讀資訊。" /></span>
       </aside>
+
+      <DecisionReplay />
 
       <section className="section" aria-labelledby="fail-decision-title">
         <div className="fail-decision-heading">

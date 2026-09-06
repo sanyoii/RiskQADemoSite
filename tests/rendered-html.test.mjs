@@ -49,22 +49,59 @@ test("server-renders a bilingual not-found page", async () => {
   assert.match(html, /class="qa-language-toggle"/);
 });
 
+test("English page content has no untranslated Chinese, including collapsed evidence", async () => {
+  for (const route of ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"]) {
+    const html = await (await render(route)).text();
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
+    assert.ok(main, `missing main content: ${route}`);
+    const text = main.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "").replace(/<[^>]*>/g, "");
+    assert.doesNotMatch(text, /\p{Script=Han}/u, `untranslated English content: ${route}`);
+  }
+});
+
 test("server-rendering fails closed and separates current state from historical approvals", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
-  for (const text of ["QA Decision Desk", "Repository Quality Dashboard", "0 / 2 currently ready", "cex-market-data-quality-lab", "sanyoii.github.io",
-    "CLOCK_UNCONFIRMED", "RELEASE_EVIDENCE_REQUIRED", "What prevents a current Go?", "Owner", "Historical decision replay", "Original validity boundary",
+  for (const text of ["QA Decision Desk", "Release overview", "2 repositories", "cex-market-data-quality-lab", "sanyoii.github.io",
+    "CLOCK_UNCONFIRMED", "What prevents a current Go?", "Owner", "Historical decision replay", "Original validity boundary",
     "Source SHA", "SHA-256", "Coverage", "Target", "Unreachable", "不是產品故障", "Sanitized public projection"]) {
     assert.ok(html.includes(text), `missing ${text}`);
   }
   assert.equal((html.match(/class="decision-current" data-status="unknown"/g) ?? []).length, 2);
-  assert.equal((html.match(/class="decision-repo"/g) ?? []).length, 2);
+  assert.equal((html.match(/class="decision-repo" data-status="unknown"/g) ?? []).length, 2);
+  assert.equal((html.match(/class="decision-status-icon" aria-hidden="true"/g) ?? []).length, 2);
+  assert.match(html, /data-en="Unknown" data-zh="待確認"/);
+  assert.match(html, /Last recorded test/);
+  const cards = html.split('<article class="decision-repo"').slice(1);
+  for (const card of cards) {
+    const [overview, details] = card.split('<details class="decision-details">');
+    assert.doesNotMatch(overview, /decision-actions|CLOCK_UNCONFIRMED|RELEASE_EVIDENCE_REQUIRED|Historical decision replay/);
+    assert.match(overview, /class="decision-next-action"/);
+    assert.match(overview, /data-en="Next step" data-zh="建議處理"/);
+    assert.ok(details?.includes('class="decision-actions"'), "required actions remain in collapsed evidence");
+  }
+  assert.doesNotMatch(html, /<details class="decision-details" open/);
   for (const href of ["/run-records/", "/run-records/fail-demo/", "/dashboard-demo/"]) assert.ok(html.includes(`href="${href}"`));
   assert.doesNotMatch(html, /2 releases ready|st-merged|effort-bars|142 Total Bugs|92%|85\/100/);
   assert.ok(!html.split('<details class="decision-details">')[0].includes("17 fresh cases passed"));
   assert.doesNotMatch(html, /test-records\/pilot-0|current-status\.json|authorityRef|internalNotes/);
-  assert.match(html, /actions\/runs\/32241879480/);
+  assert.match(html, /run-records\/#RUN-20260906-/);
+});
+
+test("current record links resolve and retain the blocked Portfolio attempt", async () => {
+  const html = await (await render("/run-records")).text();
+  const records = JSON.parse(await readFile(new URL("../data/release-records.json", import.meta.url), "utf8"));
+  for (const record of records) for (const run of record.runs) {
+    assert.ok(html.includes(`id="${run.id}"`), run.id);
+    assert.ok(html.includes(run.rawJUnitSha256));
+    assert.equal(run.tests.length, run.total);
+  }
+  assert.match(html, /Owner self-review/);
+  assert.match(html, /Post-fix execution — Historical/);
+  assert.match(html, /RUN-20260906-portfolio-chromium-initial/);
+  assert.match(html, /Blocked/);
+  assert.doesNotMatch(html, /Abao-ThinkPadX1|C:\\\\Users|D:\\\\Codex|authorityRef/);
 });
 
 test("server-renders human-readable Test Case and Run records", async () => {
@@ -159,6 +196,8 @@ test("design evolution is secondary and contains no duplicated current status", 
   const html = await response.text();
   for (const value of ["Design evolution", "Objective Cards", "Release Gate Flow", "Repo Portfolio Matrix", "retired as live dashboards"]) assert.ok(html.includes(value));
   assert.doesNotMatch(html, /cex-market-data-quality-lab|Formal Go approved|aria-label="Coverage: Level 2/);
+  assert.match(html,/Six synthetic scenarios/);
+  assert.equal((html.match(/class="decision-next-action"/g) ?? []).length,6);
 });
 
 test("legacy A+C URL remains compatible without a duplicate dashboard", async () => {

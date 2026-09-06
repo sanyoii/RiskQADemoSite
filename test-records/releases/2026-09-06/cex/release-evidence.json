@@ -1,0 +1,153 @@
+{
+  "version": "1.0.0",
+  "classification": "real",
+  "subject": {
+    "repository": "https://github.com/sanyoii/cex-market-data-quality-lab",
+    "sha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+    "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+    "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+    "dirty": false
+  },
+  "requirements": [
+    {
+      "id": "REQ-cex",
+      "sourcePath": "sources/docs--requirements.md",
+      "digest": "afff7955818cfce520336a9ad2c0c3f57d3f5a60940121f49ddbb24d33deca0a"
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-deterministic",
+      "required": true,
+      "requirementIds": [
+        "REQ-cex"
+      ]
+    },
+    {
+      "id": "RISK-live",
+      "required": true,
+      "requirementIds": [
+        "REQ-cex"
+      ]
+    }
+  ],
+  "designs": [
+    {
+      "id": "DESIGN-deterministic",
+      "riskIds": [
+        "RISK-deterministic"
+      ],
+      "method": "Existing versioned automated suite and boundary assertions",
+      "parameters": "python -m pytest tests/unit tests/contract tests/meta -v -p no:cacheprovider",
+      "coverageClaim": "All 40 parametrized checks in this named suite executed; not all possible product behaviors",
+      "exclusions": [
+        "Human manual testing",
+        "Authenticated accounts, orders and funds",
+        "Production trading-system certification",
+        "Load and production reconnect testing"
+      ],
+      "oracle": {
+        "status": "approved",
+        "reference": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f:docs/requirements.md; owner-approved scoped automated acceptance on 2026-09-06",
+        "sourcePath": "sources/docs--requirements.md",
+        "sourceDigest": "afff7955818cfce520336a9ad2c0c3f57d3f5a60940121f49ddbb24d33deca0a"
+      }
+    },
+    {
+      "id": "DESIGN-live",
+      "riskIds": [
+        "RISK-live"
+      ],
+      "method": "Existing versioned automated suite and boundary assertions",
+      "parameters": "python -m pytest tests/live -v -m live -p no:cacheprovider",
+      "coverageClaim": "All 5 parametrized checks in this named suite executed; not all possible product behaviors",
+      "exclusions": [
+        "Human manual testing",
+        "Authenticated accounts, orders and funds",
+        "Production trading-system certification",
+        "Load and production reconnect testing"
+      ],
+      "oracle": {
+        "status": "approved",
+        "reference": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f:docs/requirements.md; owner-approved scoped automated acceptance on 2026-09-06",
+        "sourcePath": "sources/docs--requirements.md",
+        "sourceDigest": "afff7955818cfce520336a9ad2c0c3f57d3f5a60940121f49ddbb24d33deca0a"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "CASE-deterministic",
+      "designId": "DESIGN-deterministic",
+      "required": true,
+      "note": "Suite-level case grouping; individual test results are retained in the execution artifact."
+    },
+    {
+      "id": "CASE-live",
+      "designId": "DESIGN-live",
+      "required": true,
+      "note": "Suite-level case grouping; individual test results are retained in the execution artifact."
+    }
+  ],
+  "runs": [
+    {
+      "id": "RUN-20260906-cex-deterministic-1",
+      "caseId": "CASE-deterministic",
+      "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+      "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+      "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+      "kind": "deterministic",
+      "status": "Pass",
+      "executedAt": "2026-09-06T12:40:02.275Z",
+      "validUntil": "2026-09-07T20:40:00+08:00",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "artifacts/RUN-20260906-cex-deterministic-1.json",
+        "sha256": "c2da2d5797207f5302763627f3adb0493ea322d161b64c7243b999874c1d31e8"
+      }
+    },
+    {
+      "id": "RUN-20260906-cex-live-1",
+      "caseId": "CASE-live",
+      "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+      "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+      "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+      "kind": "live",
+      "status": "Pass",
+      "executedAt": "2026-09-06T12:40:37.272Z",
+      "validUntil": "2026-09-07T20:40:00+08:00",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "artifacts/RUN-20260906-cex-live-1.json",
+        "sha256": "f29b82e6eaddf62fd905fb17bd087c81e6995c827d43c8ba23b4ed070e0edfa4"
+      }
+    }
+  ],
+  "waivers": [],
+  "events": [
+    {
+      "id": "OWNER-SCOPED-GO-cex",
+      "at": "2026-09-06T12:51:34.447Z",
+      "type": "owner-scoped-approval-recorded",
+      "reason": "Owner accepted the named automated scope, exclusions, expiry and self-review arrangement in this task; no independent review or deployment authorization.",
+      "previousEventIds": [],
+      "runIds": [
+        "RUN-20260906-cex-deterministic-1",
+        "RUN-20260906-cex-live-1"
+      ]
+    }
+  ],
+  "review": {
+    "status": "approved",
+    "decision": "Go",
+    "decisionOwner": "William",
+    "reviewer": "William",
+    "roleOverlapDisclosed": true,
+    "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+    "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+    "decidedAt": "2026-09-06T12:51:34.447Z",
+    "expiresAt": "2026-09-07T20:40:00+08:00",
+    "authorityRef": "owner-approval.md",
+    "inputDigest": "30b71b41e6b67b376544f89a542cf1edfdd4a57a8463fc845ed722c2716b0033"
+  }
+}

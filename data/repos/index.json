@@ -1,7 +1,7 @@
 {
   "contractVersion": "1.0.0",
   "repositories": [
-    { "url": "https://github.com/sanyoii/cex-market-data-quality-lab", "snapshot": "sanyoii--cex-market-data-quality-lab.json" },
-    { "url": "https://github.com/sanyoii/sanyoii.github.io", "snapshot": "sanyoii--sanyoii.github.io.json" }
+    { "url": "https://github.com/sanyoii/cex-market-data-quality-lab", "snapshot": "cex-20260906-owner-reviewed.json", "releaseEvidence": "../../test-records/releases/2026-09-06/cex/release-evidence.json", "authority": "../authority/cex-owner.json" },
+    { "url": "https://github.com/sanyoii/sanyoii.github.io", "snapshot": "portfolio-20260906-owner-reviewed.json", "releaseEvidence": "../../test-records/releases/2026-09-06/portfolio/release-evidence.json", "authority": "../authority/portfolio-owner.json" }
   ]
 }

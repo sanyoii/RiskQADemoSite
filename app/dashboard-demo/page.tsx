@@ -1,5 +1,14 @@
 import { siteHref } from "../_site";
 import { pageLanguageData, T } from "../_i18n";
+import { suggestedAction } from "../../lib/decision-actions.mjs";
+const actionExamples = [
+  { id: "expired", status: "unknown", dataStatus: "stale", codes: ["EVIDENCE_STALE"], icon: "?", title: {en:"Unknown · Evidence expired",zh:"待確認 · 證據到期"} },
+  { id: "approval", status: "unknown", dataStatus: "fresh", codes: ["RELEASE_EVIDENCE_REQUIRED"], icon: "?", title: {en:"Unknown · Approval pending",zh:"待確認 · 核准待完成"} },
+  { id: "unreachable", status: "unknown", dataStatus: "unreachable", codes: ["DATA_NOT_FRESH"], icon: "?", title: {en:"Unknown · Source unreachable",zh:"待確認 · 無法取得來源"} },
+  { id: "both", status: "unknown", dataStatus: "stale", codes: ["EVIDENCE_STALE","RELEASE_EVIDENCE_REQUIRED"], icon: "?", title: {en:"Unknown · Evidence and review needed",zh:"待確認 · 缺少有效證據與審查"} },
+  { id: "blocked", status: "blocked", dataStatus: "fresh", codes: [], icon: "×", title: {en:"No-Go · Blocking issue",zh:"不可發布 · 存在阻擋問題"} },
+  { id: "risk", status: "at-risk", dataStatus: "fresh", codes: [], icon: "!", title: {en:"At Risk · Residual risk",zh:"有風險 · 存在剩餘風險"} },
+];
 export const dynamic = "force-static";
 export default function DesignEvolution() {
   return <main className="shell design-history" {...pageLanguageData(
@@ -14,6 +23,18 @@ export default function DesignEvolution() {
       <li><strong>C · Repo Portfolio Matrix</strong><p><T en="Kept the per-repository overview; replaced fixed Level 2+ decoration with data-driven coverage in details." zh="保留逐 Repo 總覽；將固定 Level 2+ 圖示改為明細中的資料驅動覆蓋。" /></p></li>
       <li><strong><T en="Decision Desk" zh="決策台" /></strong><p><T en="One policy supplies the current verdict, evidence gap, owner and next action. Replay preserves the distinction between observed history and synthetic teaching scenarios." zh="同一套規則提供目前判定、證據缺口、負責人與下一步。回放清楚區分實際歷史與合成教學情境。" /></p></li>
     </ol>
+    <section className="decision-dashboard" id="next-action-examples" aria-labelledby="action-examples-title">
+      <h2 id="action-examples-title"><T en="Next-step examples" zh="建議處理方式範例" /></h2>
+      <p className="notice"><T en="Six synthetic scenarios, not actual repository statuses. The same suggestion rules are used on the Dashboard; Ready has no remediation prompt." zh="六個合成情境，不代表實際 Repo 狀態。與 Dashboard 使用同一套建議規則；Ready 不顯示處理提示。" /></p>
+      <div className="decision-repositories">{actionExamples.map(example => {
+        const action = suggestedAction({...example,reasons:example.codes.map(code=>({code}))});
+        return <article className="decision-repo" data-status={example.status} key={example.id}>
+          <div className="decision-repo-top"><h3><span aria-hidden="true">{example.icon} </span><T {...example.title} /></h3>
+            {action && <p className="decision-next-action"><strong><T en="Next step" zh="建議處理" /></strong><T {...action} /></p>}
+          </div>
+        </article>;
+      })}</div>
+    </section>
     <nav className="decision-nav"><a href={siteHref("/dashboard-demo/ac")}>A+C</a><a href={siteHref("/dashboard-demo/abc")}>A+B+C</a><a href={siteHref("/run-records/fail-demo")}><T en="Explore decision replay" zh="查看決定回放" /></a></nav>
   </main>;
 }

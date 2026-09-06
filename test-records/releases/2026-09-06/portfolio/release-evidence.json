@@ -1,0 +1,121 @@
+{
+  "version": "1.0.0",
+  "classification": "real",
+  "subject": {
+    "repository": "https://github.com/sanyoii/sanyoii.github.io",
+    "sha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+    "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+    "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+    "dirty": false
+  },
+  "requirements": [
+    {
+      "id": "REQ-portfolio",
+      "sourcePath": "sources/TESTPLAN.md",
+      "digest": "ea257c9769cbf4e868208b40faf827650a24384328da048356019ff2408d74af"
+    }
+  ],
+  "risks": [
+    {
+      "id": "RISK-chromium",
+      "required": true,
+      "requirementIds": [
+        "REQ-portfolio"
+      ]
+    }
+  ],
+  "designs": [
+    {
+      "id": "DESIGN-chromium",
+      "riskIds": [
+        "RISK-chromium"
+      ],
+      "method": "Existing versioned automated suite and boundary assertions",
+      "parameters": "python -m pytest tests -v -p no:cacheprovider (elevated browser execution)",
+      "coverageClaim": "All 22 parametrized checks in this named suite executed; not all possible product behaviors",
+      "exclusions": [
+        "Fresh production-site verification",
+        "Browsers other than Chromium",
+        "Performance testing",
+        "Full accessibility conformance certification"
+      ],
+      "oracle": {
+        "status": "approved",
+        "reference": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b:TESTPLAN.md; owner-approved scoped automated acceptance on 2026-09-06",
+        "sourcePath": "sources/TESTPLAN.md",
+        "sourceDigest": "ea257c9769cbf4e868208b40faf827650a24384328da048356019ff2408d74af"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "id": "CASE-chromium",
+      "designId": "DESIGN-chromium",
+      "required": true,
+      "note": "Suite-level case grouping; individual test results are retained in the execution artifact."
+    }
+  ],
+  "runs": [
+    {
+      "id": "RUN-20260906-portfolio-chromium-initial",
+      "caseId": "CASE-chromium",
+      "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+      "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+      "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+      "kind": "live",
+      "status": "Blocked",
+      "executedAt": "2026-09-06T12:40:06.379Z",
+      "validUntil": "2026-09-13T20:40:00+08:00",
+      "previousAttemptIds": [],
+      "artifact": {
+        "path": "artifacts/RUN-20260906-portfolio-chromium-initial.json",
+        "sha256": "4cccf120f27b2cec258db92ad5e71ef3ca5046f71d1c35f3505283b8f6425d6b"
+      }
+    },
+    {
+      "id": "RUN-20260906-portfolio-chromium-retry",
+      "caseId": "CASE-chromium",
+      "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+      "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+      "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+      "kind": "live",
+      "status": "Pass",
+      "executedAt": "2026-09-06T12:41:05.513Z",
+      "validUntil": "2026-09-13T20:40:00+08:00",
+      "previousAttemptIds": [
+        "RUN-20260906-portfolio-chromium-initial"
+      ],
+      "artifact": {
+        "path": "artifacts/RUN-20260906-portfolio-chromium-retry.json",
+        "sha256": "8d9e23993d56e0c8f5e5f88dd29e4f311623585f5c69625a77230860b60f4991"
+      }
+    }
+  ],
+  "waivers": [],
+  "events": [
+    {
+      "id": "OWNER-SCOPED-GO-portfolio",
+      "at": "2026-09-06T12:51:34.447Z",
+      "type": "owner-scoped-approval-recorded",
+      "reason": "Owner accepted the named automated scope, exclusions, expiry and self-review arrangement in this task; no independent review or deployment authorization.",
+      "previousEventIds": [],
+      "runIds": [
+        "RUN-20260906-portfolio-chromium-initial",
+        "RUN-20260906-portfolio-chromium-retry"
+      ]
+    }
+  ],
+  "review": {
+    "status": "approved",
+    "decision": "Go",
+    "decisionOwner": "William",
+    "reviewer": "William",
+    "roleOverlapDisclosed": true,
+    "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+    "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+    "decidedAt": "2026-09-06T12:51:34.447Z",
+    "expiresAt": "2026-09-13T20:40:00+08:00",
+    "authorityRef": "owner-approval.md",
+    "inputDigest": "5ff7e3e3cc32f5b1a54b221819ea0a04f695fb33e58923a2a8a2cb0ed7987d7e"
+  }
+}

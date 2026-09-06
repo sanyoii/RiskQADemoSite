@@ -2,10 +2,50 @@ import assert from "node:assert/strict";
 import { mkdtemp, readFile, writeFile, rm } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
 import { checkReleaseFile, checkRegistryRelease } from "../lib/release-files.mjs";
+import { decisionView } from "../lib/decision-policy.mjs";
+import { suggestedAction } from "../lib/decision-actions.mjs";
+
+test("approved owner packets bind artifacts and expire without rewriting historical Pass", async () => {
+  const registryPath = fileURLToPath(new URL("../data/repos/index.json", import.meta.url));
+  const registry = JSON.parse(await readFile(registryPath,"utf8"));
+  const publicRecords = JSON.parse(await readFile(new URL("../data/release-records.json",import.meta.url),"utf8"));
+  for (const entry of registry.repositories) {
+    const snapshot = JSON.parse(await readFile(resolve(dirname(registryPath),entry.snapshot),"utf8"));
+    const packet = JSON.parse(await readFile(resolve(dirname(registryPath),entry.releaseEvidence),"utf8"));
+    const now = new Date(Date.parse(snapshot.releaseAssessment.decidedAt) + 1000);
+    const review = await checkRegistryRelease(entry,registryPath,snapshot,{now});
+    assert.equal(review.eligible,true,JSON.stringify(review.codes));
+    assert.equal(packet.review.reviewer,packet.review.decisionOwner);
+    assert.equal(packet.review.roleOverlapDisclosed,true);
+    const published = publicRecords.find(record => record.repository === snapshot.repository.name);
+    assert.equal(published.subjectSha,packet.subject.sha);
+    assert.equal(published.expiresAt,packet.review.expiresAt);
+    for (const run of packet.runs) {
+      const artifactPath = resolve(dirname(resolve(dirname(registryPath),entry.releaseEvidence)),run.artifact.path);
+      const artifact = JSON.parse(await readFile(artifactPath,"utf8"));
+      const {artifactSha256,...reported} = published.runs.find(item=>item.id===run.id);
+      assert.equal(artifactSha256,run.artifact.sha256);
+      assert.deepEqual(reported,artifact,"public results must match the verified artifact");
+    }
+    const ready = decisionView(snapshot,{now,enforceReview:true,releaseReview:review});
+    assert.equal(ready.status,"ready");
+    assert.equal(suggestedAction(ready),null);
+    const expired = decisionView(snapshot,{now:new Date(snapshot.releaseAssessment.expiresAt),enforceReview:true,releaseReview:review});
+    assert.equal(expired.status,"unknown");
+    assert.equal(expired.historicalStatus,"ready");
+    assert.match(suggestedAction(expired).en,/Refresh evidence|Rerun/);
+    assert.equal((await checkRegistryRelease(entry,registryPath,snapshot,{now:new Date(snapshot.releaseAssessment.expiresAt)})).eligible,false);
+    if (snapshot.repository.name === "sanyoii.github.io") {
+      assert.deepEqual(packet.runs.map(r=>r.status),["Blocked","Pass"]);
+      assert.deepEqual(packet.runs[1].previousAttemptIds,[packet.runs[0].id]);
+    }
+  }
+});
 
 test("artifact file verification rejects tampering and paths outside packet", async () => {
   const dir = await mkdtemp(join(tmpdir(), "qa-release-"));

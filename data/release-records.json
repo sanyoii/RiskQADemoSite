@@ -1,0 +1,568 @@
+[
+  {
+    "repository": "cex-market-data-quality-lab",
+    "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+    "scope": [
+      "Unit and REST/WebSocket contract checks",
+      "Documentation consistency",
+      "Public market-data live integration"
+    ],
+    "excluded": [
+      "Human manual testing",
+      "Authenticated accounts, orders and funds",
+      "Production trading-system certification",
+      "Load and production reconnect testing"
+    ],
+    "expiresAt": "2026-09-07T20:40:00+08:00",
+    "decidedAt": "2026-09-06T12:51:34.447Z",
+    "reviewMode": "Owner self-review; overlapping roles disclosed",
+    "runs": [
+      {
+        "id": "RUN-20260906-cex-deterministic-1",
+        "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+        "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+        "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+        "command": "python -m pytest tests/unit tests/contract tests/meta -v -p no:cacheprovider",
+        "startedAt": "2026-09-06T12:40:01.994Z",
+        "executedAt": "2026-09-06T12:40:02.275Z",
+        "status": "Pass",
+        "total": 40,
+        "passed": 40,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "rawJUnitSha256": "b836c589694947da419047afc22539819568ec1df7aa9ec423b888623420253e",
+        "tests": [
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.unit.test_order_book",
+            "group": "tests.unit.test_order_book",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_rest_contract",
+            "group": "tests.contract.test_rest_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.contract.test_websocket_contract",
+            "group": "tests.contract.test_websocket_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.meta.test_documentation_contract",
+            "group": "tests.meta.test_documentation_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.meta.test_documentation_contract",
+            "group": "tests.meta.test_documentation_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.meta.test_documentation_contract",
+            "group": "tests.meta.test_documentation_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.meta.test_documentation_contract",
+            "group": "tests.meta.test_documentation_contract",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.meta.test_documentation_contract",
+            "group": "tests.meta.test_documentation_contract",
+            "status": "Pass"
+          }
+        ],
+        "note": "Recorded execution; not a new run or independent review.",
+        "artifactSha256": "c2da2d5797207f5302763627f3adb0493ea322d161b64c7243b999874c1d31e8"
+      },
+      {
+        "id": "RUN-20260906-cex-live-1",
+        "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+        "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+        "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+        "command": "python -m pytest tests/live -v -m live -p no:cacheprovider",
+        "startedAt": "2026-09-06T12:40:18.965Z",
+        "executedAt": "2026-09-06T12:40:37.272Z",
+        "status": "Pass",
+        "total": 5,
+        "passed": 5,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "rawJUnitSha256": "4530c5f35881149d0075137960bd0fc62854f1a46c133c952a862f198f02c50c",
+        "tests": [
+          {
+            "name": "tests.live.test_rest_live",
+            "group": "tests.live.test_rest_live",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.live.test_rest_live",
+            "group": "tests.live.test_rest_live",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.live.test_rest_live",
+            "group": "tests.live.test_rest_live",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.live.test_websocket_live",
+            "group": "tests.live.test_websocket_live",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.live.test_websocket_live",
+            "group": "tests.live.test_websocket_live",
+            "status": "Pass"
+          }
+        ],
+        "note": "Recorded execution; not a new run or independent review.",
+        "artifactSha256": "f29b82e6eaddf62fd905fb17bd087c81e6995c827d43c8ba23b4ed070e0edfa4"
+      }
+    ]
+  },
+  {
+    "repository": "sanyoii.github.io",
+    "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+    "scope": [
+      "Static content and document checks",
+      "English and Traditional Chinese behavior",
+      "Responsive Chromium layouts",
+      "Reduced motion and 404 behavior"
+    ],
+    "excluded": [
+      "Fresh production-site verification",
+      "Browsers other than Chromium",
+      "Performance testing",
+      "Full accessibility conformance certification"
+    ],
+    "expiresAt": "2026-09-13T20:40:00+08:00",
+    "decidedAt": "2026-09-06T12:51:34.447Z",
+    "reviewMode": "Owner self-review; overlapping roles disclosed",
+    "runs": [
+      {
+        "id": "RUN-20260906-portfolio-chromium-initial",
+        "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+        "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+        "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+        "command": "python -m pytest tests -v -p no:cacheprovider",
+        "startedAt": "2026-09-06T12:40:03.270Z",
+        "executedAt": "2026-09-06T12:40:06.379Z",
+        "status": "Blocked",
+        "total": 22,
+        "passed": 9,
+        "errors": 13,
+        "failures": 0,
+        "skipped": 0,
+        "rawJUnitSha256": "0eacce992cc5313ba590fc34724c9cf83c5c3d89c6ef72eef658214348c430a0",
+        "tests": [
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Blocked"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          }
+        ],
+        "note": "Chromium launch blocked by spawn EPERM. Retained before the elevated retry.",
+        "artifactSha256": "4cccf120f27b2cec258db92ad5e71ef3ca5046f71d1c35f3505283b8f6425d6b"
+      },
+      {
+        "id": "RUN-20260906-portfolio-chromium-retry",
+        "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+        "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+        "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+        "command": "python -m pytest tests -v -p no:cacheprovider (elevated browser execution)",
+        "startedAt": "2026-09-06T12:40:54.846Z",
+        "executedAt": "2026-09-06T12:41:05.513Z",
+        "status": "Pass",
+        "total": 22,
+        "passed": 22,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0,
+        "rawJUnitSha256": "7df49109c2efdd1cb32d7bb86ac2726ba9bd8463cc68a018fc52f229b504d1e1",
+        "tests": [
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_runtime",
+            "group": "tests.test_runtime",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          },
+          {
+            "name": "tests.test_static",
+            "group": "tests.test_static",
+            "status": "Pass"
+          }
+        ],
+        "note": "Elevated retry; original blocked attempt retained.",
+        "artifactSha256": "8d9e23993d56e0c8f5e5f88dd29e4f311623585f5c69625a77230860b60f4991"
+      }
+    ]
+  }
+]

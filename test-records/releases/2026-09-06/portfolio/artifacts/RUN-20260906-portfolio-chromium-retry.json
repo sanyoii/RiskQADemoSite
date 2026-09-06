@@ -1,0 +1,129 @@
+{
+  "id": "RUN-20260906-portfolio-chromium-retry",
+  "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+  "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+  "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+  "command": "python -m pytest tests -v -p no:cacheprovider (elevated browser execution)",
+  "startedAt": "2026-09-06T12:40:54.846Z",
+  "executedAt": "2026-09-06T12:41:05.513Z",
+  "status": "Pass",
+  "total": 22,
+  "passed": 22,
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "rawJUnitSha256": "7df49109c2efdd1cb32d7bb86ac2726ba9bd8463cc68a018fc52f229b504d1e1",
+  "tests": [
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    }
+  ],
+  "note": "Elevated retry; original blocked attempt retained."
+}

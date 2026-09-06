@@ -1,15 +1,16 @@
 import { siteHref } from "../_site";
 import { pageLanguageData, T } from "../_i18n";
 import { caseGroupTitlesEn, caseTextEn, deterministicGroups, liveGroups, manualGroups, type TestCaseGroup } from "./cases";
+import releaseRecords from "../../data/release-records.json";
 
 export const dynamic = "force-static";
 
 const runGroups = [
   {
-    title: "修正後執行 — 目前採用",
-    titleEn: "Post-fix execution — Current",
-    note: "這組 Run 目前用來支持 Decision Desk 的發布判斷。",
-    noteEn: "These Runs currently support the Decision Desk release decision.",
+    title: "修正後執行 — 歷史記錄",
+    titleEn: "Post-fix execution — Historical",
+    note: "這組 Run 保留當時版本的結果，不用來核准目前版本。",
+    noteEn: "These Runs retain results for the historical version, not approval of the current version.",
     records: [
       { runId: "RUN-20260817T015452830Z-8fd5081254b5-DETERMINISTIC", label: "自動化測試", labelEn: "Automated tests", summary: "39 個自動化檢查，涵蓋 34 個 logical Test Case IDs", summaryEn: "39 automated checks covering 34 logical Test Case IDs", time: "2026/08/17 09:57（台灣時間）", timeEn: "2026/08/17 09:57 (Taiwan time)", groups: deterministicGroups },
       { runId: "RUN-20260817T015452830Z-8fd5081254b5-LIVE", label: "Live market-data 測試", labelEn: "Live market-data tests", summary: "5 個 Live market-data 檢查", summaryEn: "5 Live market-data checks", time: "2026/08/17 09:58（台灣時間）", timeEn: "2026/08/17 09:58 (Taiwan time)", groups: liveGroups },
@@ -72,8 +73,36 @@ export default function RunRecords() {
         <a href={siteHref("/")}><T en="Back to Decision Desk" zh="回到 Decision Desk" /></a>
       </header>
 
+      <section className="section" aria-labelledby="reviewed-runs-title">
+        <h2 id="reviewed-runs-title"><T en="Owner-reviewed runs · September 6" zh="負責人已審查的執行記錄 · 9 月 6 日" /></h2>
+        <p className="notice"><T en="Scoped automated acceptance for a personal portfolio. Owner self-review, not independent review or production certification. See the Dashboard for current validity; expiry does not erase recorded test results." zh="個人作品集限定範圍的自動化驗收。負責人自我審查，不是獨立審查或正式產品認證。目前有效性請看 Dashboard；到期不會抹除已記錄的測試結果。" /></p>
+        {releaseRecords.map(record => <article className="run-record" key={record.repository}>
+          <h3>{record.repository}</h3>
+          <dl className="technical-list">
+            <dt><T en="Tested version" zh="受測版本" /></dt><dd><code>{record.subjectSha}</code></dd>
+            <dt><T en="Review" zh="審查" /></dt><dd><T en="William · Owner self-review; overlapping roles disclosed" zh="William · 負責人自我審查；已揭露角色重疊" /></dd>
+            <dt><T en="Decision recorded" zh="決定記錄時間" /></dt><dd>{record.decidedAt}</dd>
+            <dt><T en="Approval expiry" zh="核准到期時間" /></dt><dd>{record.expiresAt}</dd>
+            <dt><T en="In scope" zh="驗收範圍" /></dt><dd>{record.scope.join(" · ")}</dd>
+            <dt><T en="Excluded" zh="排除範圍" /></dt><dd>{record.excluded.join(" · ")}</dd>
+          </dl>
+          {record.runs.map(run => <details className="case-group" id={run.id} key={run.id}>
+            <summary>{run.id} · {run.status} · <T en={`${run.passed}/${run.total} passed`} zh={`${run.passed}/${run.total} 通過`} /></summary>
+            <dl className="technical-list">
+              <dt><T en="Executed at" zh="執行時間" /></dt><dd>{run.executedAt}</dd>
+              <dt><T en="Environment" zh="環境" /></dt><dd>{run.environment}</dd>
+              <dt><T en="Command" zh="指令" /></dt><dd><code>{run.command}</code></dd>
+              <dt><T en="Execution note" zh="執行備註" /></dt><dd>{run.note}</dd>
+              <dt><T en="Original JUnit SHA-256" zh="原始 JUnit SHA-256" /></dt><dd><code>{run.rawJUnitSha256}</code></dd>
+            </dl>
+            <p><T en="Sanitized per-test results derived from the original JUnit artifact; raw environment output is not published." zh="逐項結果由原始 JUnit 產生並去敏；不公開原始環境輸出。" /></p>
+            <div className="case-table-wrap"><table className="case-table"><thead><tr><th>Test</th><th><T en="Result" zh="結果" /></th></tr></thead><tbody>{run.tests.map((item,i) => <tr key={`${item.group}-${item.name}-${i}`}><td>{item.group}::{item.name}</td><td>{item.status}</td></tr>)}</tbody></table></div>
+          </details>)}
+        </article>)}
+      </section>
+
       <section className="section record-intro" aria-labelledby="records-title">
-        <h2 id="records-title"><T en="What did this round test?" zh="這一輪測了什麼？" /></h2>
+        <h2 id="records-title"><T en="Historical pilot · August 17" zh="歷史 Pilot · 8 月 17 日" /></h2>
         <p><T en="Each Run ID links to its included Test Cases. The page shows the tested version, checks, and expected results so readers can understand scope without reading JSON." zh="每個 Run ID 都連到它收錄的 Test Cases。頁面顯示受測版本、檢查內容與預期結果，讓人不用閱讀 JSON 就能了解測試範圍。" /></p>
         <p className="notice"><strong><T en="These are sanitized Run records without per-case raw output." zh="這是 sanitized Run 記錄，沒有逐項 raw output。" /></strong><T en=" The available data confirms each Run's overall result and included Test Cases. Raw JUnit and manual-check files are not public and are not presented as downloadable results." zh="現有資料只足以確認 Run 的整體結果與當時收錄的 Test Cases；原始 JUnit／人工檢查檔目前不在公開頁，也不會假裝成可下載的結果。" /></p>
         <div className="record-demo-link">

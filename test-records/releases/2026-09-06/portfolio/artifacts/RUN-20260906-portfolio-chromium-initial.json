@@ -1,0 +1,129 @@
+{
+  "id": "RUN-20260906-portfolio-chromium-initial",
+  "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+  "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+  "configDigest": "d010a5add84d63027817831403468c626b9ed1ea0ba492d7ad07e31243f82185",
+  "command": "python -m pytest tests -v -p no:cacheprovider",
+  "startedAt": "2026-09-06T12:40:03.270Z",
+  "executedAt": "2026-09-06T12:40:06.379Z",
+  "status": "Blocked",
+  "total": 22,
+  "passed": 9,
+  "errors": 13,
+  "failures": 0,
+  "skipped": 0,
+  "rawJUnitSha256": "0eacce992cc5313ba590fc34724c9cf83c5c3d89c6ef72eef658214348c430a0",
+  "tests": [
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_runtime",
+      "group": "tests.test_runtime",
+      "status": "Blocked"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.test_static",
+      "group": "tests.test_static",
+      "status": "Pass"
+    }
+  ],
+  "note": "Chromium launch blocked by spawn EPERM. Retained before the elevated retry."
+}

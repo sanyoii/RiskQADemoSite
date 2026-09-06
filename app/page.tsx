@@ -9,7 +9,7 @@ export default function Home() {
     { en: "Current release readiness, missing evidence and accountable next actions.", zh: "目前發布就緒度、缺少的證據與負責人的下一步。" },
   )}>
     <a className="vs-skip" href="#formal-dashboard"><T en="Skip to Repository Quality Dashboard" zh="跳到 Repository Quality Dashboard" /></a>
-    <header className="masthead decision-masthead"><div><p className="eyebrow"><T en="Risk-Based QA · Read-only portfolio" zh="風險導向 QA · 唯讀作品集" /></p><h1>QA Decision Desk</h1><p><T en="Can we release? What is missing? Who decides?" zh="能不能發？缺什麼？誰來決定？" /></p></div></header>
+    <header className="masthead decision-masthead"><div><p className="eyebrow"><T en="Risk-Based QA · Read-only portfolio" zh="風險導向 QA · 唯讀作品集" /></p><h1>QA Decision Desk</h1><p><T en="Status first. Evidence when you need it." zh="先看狀態，需要時再看證據。" /></p></div></header>
     <nav className="decision-nav" aria-label="Primary navigation" data-aria-label-en="Primary navigation" data-aria-label-zh="主要導覽">
       <span aria-current="page">Dashboard</span>
       <a href={siteHref("/run-records")}><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></a>

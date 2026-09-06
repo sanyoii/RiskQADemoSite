@@ -3,9 +3,30 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import { policyErrors, decisionView, safeEvidenceUrl } from "../lib/decision-policy.mjs";
 import { replayDecision } from "../lib/replay-policy.mjs";
+import { suggestedAction } from "../lib/decision-actions.mjs";
 
 const base = JSON.parse(readFileSync(new URL("../fixtures/valid-status.json", import.meta.url)));
 const now = new Date("2026-08-20T00:00:00Z");
+test("non-Ready suggestions reflect the cause without changing the decision", () => {
+  const view = (status, codes = [], dataStatus = "fresh") => ({ status, dataStatus, reasons: codes.map(code => ({code})) });
+  assert.equal(suggestedAction(view("ready")), null);
+  for (const [state, expected] of [
+    [view("unknown", ["EVIDENCE_STALE"]), /Rerun time-sensitive/],
+    [view("unknown", ["RELEASE_EVIDENCE_REQUIRED"]), /owner review/],
+    [view("unknown", ["DATA_NOT_FRESH", "RELEASE_REVIEW_INVALID"]), /Refresh evidence/],
+    [view("unknown", ["DATA_NOT_FRESH"], "unreachable"), /Restore the evidence source/],
+    [view("blocked"), /release blockers/], [view("at-risk"), /remaining risk/],
+    [view("unknown", ["CLOCK_UNCONFIRMED"]), /Verify the current version/],
+  ]) {
+    const before = structuredClone(state);
+    const result = suggestedAction(state);
+    assert.match(result.en, expected);
+    assert.match(result.zh, /\p{Script=Han}/u);
+    assert.deepEqual(state, before);
+  }
+  const corrective = {en:"Correct the unsafe evidence link.",zh:"修正不安全的證據連結。"};
+  assert.deepEqual(suggestedAction({status:"unknown",reasons:[{code:"DATA_NOT_FRESH"},{code:"EVIDENCE_URL_UNSAFE",action:corrective}]}), corrective);
+});
 test("dashboard requires a reviewed packet even when legacy snapshot says Ready", () => {
   const view = decisionView(base, { now, enforceReview: true });
   assert.equal(view.status, "unknown");

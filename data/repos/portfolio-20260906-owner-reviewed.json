@@ -1,0 +1,94 @@
+{
+  "contractVersion": "1.0.0",
+  "snapshotId": "portfolio-643b017-20260906-owner-reviewed",
+  "repository": {
+    "name": "sanyoii.github.io",
+    "url": "https://github.com/sanyoii/sanyoii.github.io",
+    "releaseTarget": "Personal portfolio demo - scoped automated acceptance",
+    "branch": "main",
+    "fullSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b"
+  },
+  "objective": "Scoped automated acceptance",
+  "environment": "Windows; Python 3.14.2; local HTTP server; Chromium via Playwright; not production",
+  "testedScope": [
+    "Static content and document checks",
+    "English and Traditional Chinese behavior",
+    "Responsive Chromium layouts",
+    "Reduced motion and 404 behavior"
+  ],
+  "excludedScope": [
+    "Fresh production-site verification",
+    "Browsers other than Chromium",
+    "Performance testing",
+    "Full accessibility conformance certification"
+  ],
+  "releaseAssessment": {
+    "status": "ready",
+    "rationale": "Owner-approved automated portfolio scope; William self-reviewed with role overlap disclosed. Not independent review, production certification or a new deployment.",
+    "decidedAt": "2026-09-06T12:51:34.447Z",
+    "expiresAt": "2026-09-13T20:40:00+08:00",
+    "qaOwner": "William",
+    "reviewer": "William",
+    "decisionOwner": "William"
+  },
+  "summary": {
+    "effortLevel": "medium",
+    "coverage": "2",
+    "quality": "good",
+    "comment": "Existing named suites passed; no percentage or exhaustive coverage claim."
+  },
+  "productAreas": [
+    {
+      "id": "chromium",
+      "name": "Local static and Chromium checks",
+      "effortLevel": "medium",
+      "executionState": "complete",
+      "coverage": "2",
+      "targetCoverage": "2",
+      "quality": "good",
+      "comment": "22 checks passed in the final named suite attempt; limited to approved automated scope.",
+      "evidenceLinks": [
+        "/run-records/#RUN-20260906-portfolio-chromium-retry"
+      ]
+    }
+  ],
+  "gates": [
+    {
+      "id": "G1",
+      "title": "Automated scope accepted",
+      "state": "complete",
+      "note": "Explicit exclusions retained"
+    },
+    {
+      "id": "G3",
+      "title": "Required automated suites passed",
+      "state": "complete",
+      "note": "Earlier blocked attempt retained where applicable"
+    },
+    {
+      "id": "G6",
+      "title": "Owner self-review recorded",
+      "state": "complete",
+      "note": "William; overlapping roles disclosed; not independent review"
+    }
+  ],
+  "runs": [
+    {
+      "runId": "RUN-20260906-portfolio-chromium-initial",
+      "executedAt": "2026-09-06T12:40:06.379Z",
+      "evidenceUrl": "/run-records/#RUN-20260906-portfolio-chromium-initial"
+    },
+    {
+      "runId": "RUN-20260906-portfolio-chromium-retry",
+      "executedAt": "2026-09-06T12:41:05.513Z",
+      "evidenceUrl": "/run-records/#RUN-20260906-portfolio-chromium-retry"
+    }
+  ],
+  "provenance": {
+    "generatedAt": "2026-09-06T12:51:34.447Z",
+    "syncedAt": "2026-09-06T12:51:34.447Z",
+    "sourceSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b"
+  },
+  "dataStatus": "fresh",
+  "publicDisclosure": "public"
+}

@@ -4,7 +4,7 @@
     {
       "snapshot": {
         "contractVersion": "1.0.0",
-        "snapshotId": "cex-0.1.0-8fd5081-20260819",
+        "snapshotId": "cex-0.1.0-8fd5081-20260831-stale",
         "repository": {
           "name": "cex-market-data-quality-lab",
           "url": "https://github.com/sanyoii/cex-market-data-quality-lab",
@@ -30,19 +30,19 @@
           "load testing"
         ],
         "releaseAssessment": {
-          "status": "ready",
-          "rationale": "Deterministic, live and required manual evidence passed; formal Go was recorded.",
-          "decidedAt": "2026-08-17T10:00:00+08:00",
-          "expiresAt": "2026-08-24T10:00:00+08:00",
+          "status": "unknown",
+          "rationale": "The previous Ready assessment expired. Historical runs remain available, but no current release decision is claimed until fresh evidence is reviewed.",
+          "decidedAt": "2026-08-31T23:56:31+08:00",
+          "expiresAt": "2026-09-07T23:56:31+08:00",
           "qaOwner": "William",
-          "reviewer": "External portfolio review",
+          "reviewer": "Freshness gate review",
           "decisionOwner": "William"
         },
         "summary": {
           "effortLevel": "high",
           "coverage": "2+",
-          "quality": "good",
-          "comment": "正式 Go 已核准"
+          "quality": "warning",
+          "comment": "Historical runs are retained; the current release assessment is Unknown because the evidence expired."
         },
         "productAreas": [
           {
@@ -125,9 +125,9 @@
           },
           {
             "id": "Release",
-            "title": "Ready",
-            "note": "可以發布",
-            "state": "complete"
+            "title": "Unknown",
+            "note": "Fresh evidence review required",
+            "state": "unknown"
           }
         ],
         "runs": [
@@ -148,11 +148,11 @@
           }
         ],
         "provenance": {
-          "generatedAt": "2026-08-19T09:53:42Z",
-          "syncedAt": "2026-08-19T09:53:42Z",
+          "generatedAt": "2026-08-31T15:56:31Z",
+          "syncedAt": "2026-08-31T15:56:31Z",
           "sourceSha": "8fd5081254b5429e480ec20a56ef09bcc6f5ab9e"
         },
-        "dataStatus": "fresh",
+        "dataStatus": "stale",
         "publicDisclosure": "public"
       },
       "releaseReview": {
@@ -161,12 +161,12 @@
           "RELEASE_EVIDENCE_REQUIRED"
         ]
       },
-      "snapshotDigest": "ae7d462e0f8d5733ff9fe5ccec8fd03de1831834f036f7c5f0a4411bfd38ac9b"
+      "snapshotDigest": "9ef148554d042dca3cc8e80c3d1bcd42804ed3fee1418c52c5110e01ac9369cf"
     },
     {
       "snapshot": {
         "contractVersion": "1.0.0",
-        "snapshotId": "portfolio-pages-fd337bd-20260819",
+        "snapshotId": "portfolio-pages-fd337bd-20260831-stale",
         "repository": {
           "name": "sanyoii.github.io",
           "url": "https://github.com/sanyoii/sanyoii.github.io",
@@ -191,19 +191,19 @@
           "analytics"
         ],
         "releaseAssessment": {
-          "status": "ready",
-          "rationale": "The test-gated workflow passed 17 portfolio checks plus Dashboard contract, rendered, lint and export checks before deployment.",
-          "decidedAt": "2026-08-19T18:18:29+08:00",
-          "expiresAt": "2026-08-26T18:18:29+08:00",
+          "status": "unknown",
+          "rationale": "The previous Ready assessment expired. Historical runs remain available, but no current release decision is claimed until fresh evidence is reviewed.",
+          "decidedAt": "2026-08-31T23:56:31+08:00",
+          "expiresAt": "2026-09-07T23:56:31+08:00",
           "qaOwner": "William",
-          "reviewer": "GitHub Actions",
+          "reviewer": "Freshness gate review",
           "decisionOwner": "William"
         },
         "summary": {
           "effortLevel": "medium",
           "coverage": "2+",
-          "quality": "good",
-          "comment": "17 fresh cases passed"
+          "quality": "warning",
+          "comment": "Historical runs are retained; the current release assessment is Unknown because the evidence expired."
         },
         "productAreas": [
           {
@@ -286,9 +286,9 @@
           },
           {
             "id": "Release",
-            "title": "Released",
-            "note": "Production verified",
-            "state": "complete"
+            "title": "Unknown",
+            "note": "Fresh evidence review required",
+            "state": "unknown"
           }
         ],
         "runs": [
@@ -304,11 +304,11 @@
           }
         ],
         "provenance": {
-          "generatedAt": "2026-08-19T10:20:03Z",
-          "syncedAt": "2026-08-19T10:20:03Z",
+          "generatedAt": "2026-08-31T15:56:31Z",
+          "syncedAt": "2026-08-31T15:56:31Z",
           "sourceSha": "fd337bd45bba4a10c370da1364b1e37a7ef5732f"
         },
-        "dataStatus": "fresh",
+        "dataStatus": "stale",
         "publicDisclosure": "public"
       },
       "releaseReview": {
@@ -317,7 +317,7 @@
           "RELEASE_EVIDENCE_REQUIRED"
         ]
       },
-      "snapshotDigest": "821862de7ef6ac37fc3b860d34591b0d41acb7ddbe1f81ddafdbf1451c1b0710"
+      "snapshotDigest": "5b04e568c7d94ad6e41a56b349d9173af15a8ec7269283e75b8ee8e1322b82be"
     }
   ]
 }

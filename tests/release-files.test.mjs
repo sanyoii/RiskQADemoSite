@@ -52,13 +52,19 @@ test("failed sync retains immutable last-known-good and publishes a failure rece
   } finally { await rm(dir, { recursive: true, force: true }); }
 });
 
-test("current release and archive validation are separate contracts", () => {
+test("current release and archive validation are separate contracts", async () => {
   const cwd = new URL("../", import.meta.url);
   const run = flags => spawnSync(process.execPath, ["scripts/validate-registry.mjs", "data/repos/index.json", ...flags], { cwd, encoding: "utf8" });
   assert.equal(run(["--historical"]).status, 0);
   assert.equal(run(["--release", "--now", "2026-09-06T12:00:00Z"]).status, 1);
   assert.equal(run(["--release", "--historical"]).status, 2);
-  const freshButLegacy = run(["--release", "--now", "2026-08-20T00:00:00Z"]);
-  assert.equal(freshButLegacy.status, 1);
-  assert.match(freshButLegacy.stderr, /RELEASE_EVIDENCE_REQUIRED/);
+  const dir = await mkdtemp(join(tmpdir(), "qa-legacy-registry-"));
+  try {
+    const fixture = JSON.parse(await readFile(new URL("../fixtures/valid-status.json", import.meta.url), "utf8"));
+    await writeFile(join(dir, "snapshot.json"), JSON.stringify(fixture));
+    await writeFile(join(dir, "index.json"), JSON.stringify({ contractVersion: "1.0.0", repositories: [{ url: fixture.repository.url, snapshot: "snapshot.json" }] }));
+    const freshButLegacy = spawnSync(process.execPath, ["scripts/validate-registry.mjs", join(dir, "index.json"), "--release", "--now", fixture.provenance.syncedAt], { cwd, encoding: "utf8" });
+    assert.equal(freshButLegacy.status, 1);
+    assert.match(freshButLegacy.stderr, /RELEASE_EVIDENCE_REQUIRED/);
+  } finally { await rm(dir, { recursive: true, force: true }); }
 });

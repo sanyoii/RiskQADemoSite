@@ -25,3 +25,13 @@ The hosting repository `sanyoii/sanyoii.github.io` workflow `.github/workflows/p
 Proposed correction: add `--exclude '/test-status/'` to the existing artifact-assembly `rsync` command so the maintained Dashboard builds into a new directory. This avoids deleting tracked legacy artifacts and leaves Portfolio source content unchanged. Deployment-infrastructure edits require separate confirmation under the user's standing rules; no workflow change or deployment is included in this preflight.
 
 After approval: integrate remote main without losing its downgrade, rerun validation, publish source main, apply the scoped hosting-workflow correction, and verify source CI, Pages CI and the actual public routes and bilingual behavior. Until then, the feature-branch push must not be described as a live deployment.
+
+## Approved integration preflight
+
+The user subsequently approved the scoped Pages workflow correction and completion of publication. Remote `main` downgrade `481ee31` was integrated: all four original approved/public snapshot files retain the remote Unknown/Stale values; the newer decision-first UI replaces the superseded presentation.
+
+The first integration run (`artifacts/2026-09-06T10-28-11-629Z/receipt.json`) failed one contract assertion: a test used an August 20 clock against subsequently updated real snapshots (`EVIDENCE_FROM_FUTURE`). The missing-release-packet test now uses an isolated valid fixture instead of mutable repository evidence. This failure remains recorded.
+
+Rerun `npm run verify:workflow`, receipt `artifacts/2026-09-06T10-28-57-381Z/receipt.json`: all 64 tests, 14 fixtures, archive validation, lint, typecheck, Pages build and fresh-directory export passed. Product release gate remains Fail (`DATA_NOT_FRESH:dataStatus`) because the preserved snapshots are Stale. No evidence validity or human review was fabricated.
+
+The hosting change is exactly one rsync exclusion. No local rsync executable is available; actual Linux artifact assembly will be verified by the existing Pages CI before deployment. A failed build must not deploy. Rollback, if a deployed route or language interaction regresses, is a traceable revert of the offending source/workflow commit followed by a verified Pages run; do not rewrite Git history or extend product evidence validity.

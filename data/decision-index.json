@@ -4,7 +4,7 @@
     {
       "snapshot": {
         "contractVersion": "1.0.0",
-        "snapshotId": "cex-fc1e060-20260906-owner-reviewed",
+        "snapshotId": "cex-fc1e060-20260907-owner-reviewed",
         "repository": {
           "name": "cex-market-data-quality-lab",
           "url": "https://github.com/sanyoii/cex-market-data-quality-lab",
@@ -28,8 +28,8 @@
         "releaseAssessment": {
           "status": "ready",
           "rationale": "Owner-approved automated portfolio scope; William self-reviewed with role overlap disclosed. Not independent review, production certification or a new deployment.",
-          "decidedAt": "2026-09-06T12:51:34.447Z",
-          "expiresAt": "2026-09-07T20:40:00+08:00",
+          "decidedAt": "2026-09-07T15:11:54.526Z",
+          "expiresAt": "2026-09-08T23:59:00+08:00",
           "qaOwner": "William",
           "reviewer": "William",
           "decisionOwner": "William"
@@ -51,7 +51,7 @@
             "quality": "good",
             "comment": "40 checks passed in the final named suite attempt; limited to approved automated scope.",
             "evidenceLinks": [
-              "/run-records/#RUN-20260906-cex-deterministic-1"
+              "/run-records/#RUN-20260907-cex-deterministic-1"
             ]
           },
           {
@@ -64,7 +64,7 @@
             "quality": "good",
             "comment": "5 checks passed in the final named suite attempt; limited to approved automated scope.",
             "evidenceLinks": [
-              "/run-records/#RUN-20260906-cex-live-1"
+              "/run-records/#RUN-20260907-cex-live-1"
             ]
           }
         ],
@@ -98,11 +98,21 @@
             "runId": "RUN-20260906-cex-live-1",
             "executedAt": "2026-09-06T12:40:37.272Z",
             "evidenceUrl": "/run-records/#RUN-20260906-cex-live-1"
+          },
+          {
+            "runId": "RUN-20260907-cex-deterministic-1",
+            "executedAt": "2026-09-07T15:09:50.847Z",
+            "evidenceUrl": "/run-records/#RUN-20260907-cex-deterministic-1"
+          },
+          {
+            "runId": "RUN-20260907-cex-live-1",
+            "executedAt": "2026-09-07T15:10:26.443Z",
+            "evidenceUrl": "/run-records/#RUN-20260907-cex-live-1"
           }
         ],
         "provenance": {
-          "generatedAt": "2026-09-06T12:51:34.447Z",
-          "syncedAt": "2026-09-06T12:51:34.447Z",
+          "generatedAt": "2026-09-07T15:11:54.526Z",
+          "syncedAt": "2026-09-07T15:11:54.526Z",
           "sourceSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f"
         },
         "dataStatus": "fresh",
@@ -112,11 +122,11 @@
         "eligible": true,
         "codes": [],
         "policyVersion": "2.0.0",
-        "inputDigest": "30b71b41e6b67b376544f89a542cf1edfdd4a57a8463fc845ed722c2716b0033",
+        "inputDigest": "c3766a1063a53f06210816083ae45a314549dd86ab0ce9fb4db76520c0562223",
         "sourceSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
-        "expiresAt": "2026-09-07T20:40:00+08:00"
+        "expiresAt": "2026-09-08T23:59:00+08:00"
       },
-      "snapshotDigest": "24920dffea63c7c7c5a939a133b57a28474ce36ba4a5d8723ca93baa69e96d96"
+      "snapshotDigest": "76535a0e4f17792c02d253160e4c978ebd46a7daeec14dd19bdddcd17be88e4f"
     },
     {
       "snapshot": {

@@ -1,0 +1,44 @@
+{
+  "id": "RUN-20260907-cex-live-1",
+  "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+  "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+  "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+  "command": ".venv/Scripts/python.exe -m pytest tests/live -v -m live -p no:cacheprovider --junitxml=D:/Codex/RiskQADemoSite/test-records/releases/2026-09-07/cex/raw/live.xml",
+  "startedAt": "2026-09-07T15:10:02.540Z",
+  "executedAt": "2026-09-07T15:10:26.443Z",
+  "status": "Pass",
+  "total": 5,
+  "passed": 5,
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "rawJUnitSha256": "4ac2bb8b66cdeae5e2584583734f8c6ab856f83cc336d49eb8cdb2fcb67ca28b",
+  "tests": [
+    {
+      "name": "tests.live.test_rest_live",
+      "group": "tests.live.test_rest_live",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.live.test_rest_live",
+      "group": "tests.live.test_rest_live",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.live.test_rest_live",
+      "group": "tests.live.test_rest_live",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.live.test_websocket_live",
+      "group": "tests.live.test_websocket_live",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.live.test_websocket_live",
+      "group": "tests.live.test_websocket_live",
+      "status": "Pass"
+    }
+  ],
+  "note": "Fresh execution on 2026-09-07 for the owner-authorized scoped renewal; not independent review."
+}

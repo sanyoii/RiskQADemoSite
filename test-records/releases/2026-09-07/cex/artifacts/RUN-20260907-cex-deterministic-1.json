@@ -1,0 +1,219 @@
+{
+  "id": "RUN-20260907-cex-deterministic-1",
+  "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+  "environment": "Windows; Python 3.14.2; public Binance market-data endpoints; automated checks only",
+  "configDigest": "dded0d992068a92aaafe325f0163f34daccef6da4903eaf2ac68f04aa6ba1132",
+  "command": ".venv/Scripts/python.exe -m pytest tests/unit tests/contract tests/meta -v -p no:cacheprovider --junitxml=D:/Codex/RiskQADemoSite/test-records/releases/2026-09-07/cex/raw/deterministic.xml",
+  "startedAt": "2026-09-07T15:09:50.064Z",
+  "executedAt": "2026-09-07T15:09:50.847Z",
+  "status": "Pass",
+  "total": 40,
+  "passed": 40,
+  "errors": 0,
+  "failures": 0,
+  "skipped": 0,
+  "rawJUnitSha256": "ba95af23b5c22d8a190e7d6121e8dd740cbd639f84a7e2dfebd1bdc1fd063249",
+  "tests": [
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.unit.test_order_book",
+      "group": "tests.unit.test_order_book",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_rest_contract",
+      "group": "tests.contract.test_rest_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.contract.test_websocket_contract",
+      "group": "tests.contract.test_websocket_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.meta.test_documentation_contract",
+      "group": "tests.meta.test_documentation_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.meta.test_documentation_contract",
+      "group": "tests.meta.test_documentation_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.meta.test_documentation_contract",
+      "group": "tests.meta.test_documentation_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.meta.test_documentation_contract",
+      "group": "tests.meta.test_documentation_contract",
+      "status": "Pass"
+    },
+    {
+      "name": "tests.meta.test_documentation_contract",
+      "group": "tests.meta.test_documentation_contract",
+      "status": "Pass"
+    }
+  ],
+  "note": "Fresh execution on 2026-09-07 for the owner-authorized scoped renewal; not independent review."
+}

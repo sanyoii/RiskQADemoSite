@@ -25,6 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Test reviewed artifact checks
+        run: python3 -m unittest discover -s tests -p test_static_artifact.py -v
+
       - name: Test and lint
         run: |
           npm test

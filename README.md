@@ -189,3 +189,5 @@ npm run lint
 `npm run verify:workflow` 另外記錄 lint、typecheck、Pages build/export 與 release gate；每次執行輸出新的實際 logs、SHA-256 和 source/worktree digest。Raw artifacts 留在忽略的本機資料夾，不打包進公開 UI。`release-gate` 結果獨立保存，軟體 Pass 不掩蓋產品 release Fail。
 
 Pages export 要指定新的 output directory；不再自動遞迴刪除既有目錄。Cloudflare/Sites 仍支援目前本機 preview 與 rendered-test runtime，沒有新增 production dependency，也沒有修改 hosted deployment 設定。
+
+Codex接續commit／push、測試或獲授權的網站上傳時，請讀[產物檢查與Codex操作交接](docs/reviewed-pages-artifact.md#codex-操作交接)。Git推送、CI成功與網站發布分開回報；只有實際準備上傳時才執行固定產物比對，失敗即停止上傳。

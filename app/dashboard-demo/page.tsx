@@ -144,35 +144,44 @@ export default function DesignEvolution() {
       <div id="next-action-examples">
         <div className="ct-matrix-panel" style={{ marginBottom: "14px" }}>
           <div className="ct-matrix-scroll">
-            <table className="ct-sig-table">
+            <table className="ct-sig-table ct-policy-matrix-table">
               <thead>
                 <tr>
                   <th><T en="Scenario State" zh="情境狀態" /></th>
                   <th><T en="Data Freshness" zh="資料新鮮度" /></th>
                   <th><T en="Reason Codes" zh="觸發原因碼 (Reason Codes)" /></th>
                   <th><T en="Trigger Condition" zh="觸發條件說明" /></th>
+                  <th><T en="Deterministic Next Step" zh="決定論下一步行動 (建議處理)" /></th>
                   <th><T en="Engine Verdict" zh="引擎裁決" /></th>
                 </tr>
               </thead>
               <tbody>
-                {actionExamples.map(example => (
-                  <tr key={example.id} className={example.status === "blocked" ? "ct-hold-row" : ""}>
-                    <td><strong><T {...example.title} /></strong></td>
-                    <td><code>{example.dataStatus.toUpperCase()}</code></td>
-                    <td><code>{example.codes.length ? example.codes.join(" + ") : "GATE_EVALUATED"}</code></td>
-                    <td><T en={example.triggerEn} zh={example.triggerZh} /></td>
-                    <td>
-                      <span className={`ct-cell-pill ${example.status === "blocked" ? "ct-c-fail" : "ct-c-warn"}`}>
-                        {example.badge}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {actionExamples.map(example => {
+                  const action = suggestedAction({ ...example, reasons: example.codes.map(code => ({ code })) });
+                  return (
+                    <tr key={example.id} className={example.status === "blocked" ? "ct-hold-row" : ""}>
+                      <td><strong><T {...example.title} /></strong></td>
+                      <td><code>{example.dataStatus.toUpperCase()}</code></td>
+                      <td><code>{example.codes.length ? example.codes.join(" + ") : "GATE_EVALUATED"}</code></td>
+                      <td><T en={example.triggerEn} zh={example.triggerZh} /></td>
+                      <td>{action ? <T {...action} /> : "—"}</td>
+                      <td>
+                        <span className={`ct-cell-pill ${example.status === "blocked" ? "ct-c-fail" : "ct-c-warn"}`}>
+                          {example.badge}
+                        </span>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         </div>
+      </div>
 
+      <div className="ct-sr-compat" aria-hidden="true">
+        <h2 id="action-examples-title"><T en="Next-step examples" zh="建議處理方式範例" /></h2>
+        <p className="notice"><T en="Six synthetic scenarios, not actual repository statuses. The same suggestion rules are used on the Dashboard; Ready has no remediation prompt." zh="六個合成情境，不代表實際 Repo 狀態。與 Dashboard 使用同一套建議規則；Ready 不顯示處理提示。" /></p>
         <div className="decision-repositories ct-policy-cards-grid">
           {actionExamples.map(example => {
             const action = suggestedAction({ ...example, reasons: example.codes.map(code => ({ code })) });
@@ -189,11 +198,6 @@ export default function DesignEvolution() {
             );
           })}
         </div>
-      </div>
-
-      <div className="ct-sr-compat" aria-hidden="true">
-        <h2 id="action-examples-title"><T en="Next-step examples" zh="建議處理方式範例" /></h2>
-        <p className="notice"><T en="Six synthetic scenarios, not actual repository statuses. The same suggestion rules are used on the Dashboard; Ready has no remediation prompt." zh="六個合成情境，不代表實際 Repo 狀態。與 Dashboard 使用同一套建議規則；Ready 不顯示處理提示。" /></p>
         <a href={siteHref("/dashboard-demo/ac")}>A+C</a>
         <a href={siteHref("/dashboard-demo/abc")}>A+B+C</a>
       </div>

@@ -241,15 +241,19 @@ test("removes starter-only files and keeps public metadata complete", async () =
 });
 
 test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board, signal matrix, and portfolio back-links", async () => {
-  const [homeHtml, recordsHtml, failDemoHtml] = await Promise.all([
+  const [homeHtml, recordsHtml, failDemoHtml, evolutionHtml] = await Promise.all([
     render("/").then(r => r.text()),
     render("/run-records").then(r => r.text()),
     render("/run-records/fail-demo").then(r => r.text()),
+    render("/dashboard-demo").then(r => r.text()),
   ]);
 
-  for (const html of [homeHtml, recordsHtml, failDemoHtml]) {
+  for (const html of [homeHtml, recordsHtml, failDemoHtml, evolutionHtml]) {
     assert.match(html, /href="https:\/\/sanyoii\.github\.io\/"/);
+    assert.match(html, /class="decision-nav ct-nav ct-hybrid-nav"/);
   }
+
+  assert.ok(!recordsHtml.includes("D:\\Codex"), "local Windows path must be sanitized from /run-records");
 
   for (const snippet of [
     "B+C HYBRID · CONTROL TOWER",
@@ -261,6 +265,7 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
     "STAGE 03 · TRIAGE &amp; GATE",
     "STAGE 04 · DECISION",
     "PART 2 · CROSS-REPO SIGNAL &amp; COVERAGE MATRIX",
+    "PART 3 · DEEP-DIVE EVIDENCE &amp; POLICY WORKBENCH",
     "Pinned Snapshot: Ready (45/45 Pass)",
     "Pinned Snapshot: Ready (22/22 Pass)",
     "Counterfactual Hold (DEMO-RUN-FAIL-001)",
@@ -272,8 +277,10 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
     "SECTION 01 · PINNED SNAPSHOT RUNS",
     "SECTION 02 · COUNTERFACTUAL HOLD DEMO",
     "SECTION 03 · LOGICAL TEST CASE CATALOG",
+    "PART 1 · PINNED RELEASE RUN TELEMETRY MATRIX",
+    "PART 2 · INTERACTIVE CANONICAL TEST CASE WORKBENCH",
   ]) {
-    assert.ok(recordsHtml.includes(snippet), `missing chronology index snippet on /run-records: ${snippet}`);
+    assert.ok(recordsHtml.includes(snippet), `missing chronology/workbench snippet on /run-records: ${snippet}`);
   }
 });
 

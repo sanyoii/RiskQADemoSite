@@ -1,6 +1,7 @@
 import { siteHref } from "./_site";
 import { pageLanguageData, T } from "./_i18n";
 import { DecisionDashboard } from "./_dashboard";
+import { ControlTowerNav } from "./_shared-nav";
 
 export const dynamic = "force-static";
 export default function Home() {
@@ -33,12 +34,7 @@ export default function Home() {
       </div>
       <p className="ct-masthead-sub"><T en="Status first. Traceability from risk to evidence, plus counterfactual Hold verification." zh="先看狀態。從風險到證據的四步可追溯看板，並附反事實 Hold 攔截對照。" /></p>
     </header>
-    <nav className="decision-nav ct-nav" aria-label="Primary navigation" data-aria-label-en="Primary navigation" data-aria-label-zh="主要導覽">
-      <span aria-current="page"><T en="Dashboard" zh="決策控制台" /></span>
-      <a href={siteHref("/run-records")}><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></a>
-      <a href={siteHref("/run-records/fail-demo")}><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></a>
-      <a href={siteHref("/dashboard-demo")}><T en="Design evolution" zh="設計演進" /></a>
-    </nav>
+    <ControlTowerNav active="dashboard" />
     <div id="formal-dashboard"><DecisionDashboard /></div>
     <div className="ct-legacy-ssr-contract" aria-hidden="true">
       <details className="decision-boundary"><summary><T en="Reading rules and limitations" zh="閱讀規則與限制" /></summary>

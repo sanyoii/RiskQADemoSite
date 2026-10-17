@@ -15,9 +15,6 @@ const verdicts = {
 };
 type Verdict = keyof typeof verdicts;
 type ScenarioId = "cex-go" | "portfolio-go" | "hold-sim";
-type ThemeMode = "dark" | "light";
-
-const THEME_STORE = "wl-qa-theme";
 
 // Translate exact recorded wording only; snapshots and their integrity digests stay unchanged.
 const historicalGateEnglish: Record<string, string> = {
@@ -234,12 +231,6 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
   },
 };
 
-function applyTheme(mode: ThemeMode) {
-  document.documentElement.dataset.theme = mode;
-  document.getElementById("ctThemeDark")?.classList.toggle("is-on", mode === "dark");
-  document.getElementById("ctThemeLight")?.classList.toggle("is-on", mode === "light");
-}
-
 export function DecisionDashboard() {
   const [clock, setClock] = useState<number | null>(null);
   const [filter, setFilter] = useState<Verdict | null>(null);
@@ -253,26 +244,6 @@ export function DecisionDashboard() {
     document.addEventListener("visibilitychange", refresh);
     return () => { window.clearInterval(timer); window.removeEventListener("focus", refresh); document.removeEventListener("visibilitychange", refresh); };
   }, []);
-
-  useEffect(() => {
-    let saved: ThemeMode = "dark";
-    try {
-      const stored = localStorage.getItem(THEME_STORE);
-      if (stored === "light" || stored === "dark") saved = stored;
-    } catch {
-      saved = "dark";
-    }
-    applyTheme(saved);
-  }, []);
-
-  function switchTheme(next: ThemeMode) {
-    applyTheme(next);
-    try {
-      localStorage.setItem(THEME_STORE, next);
-    } catch {
-      return;
-    }
-  }
 
   const entries = dashboardData.repositories.map(entry => ({ ...entry, current: decisionView(entry.snapshot, {
     now: new Date(clock ?? 0), clockConfirmed: clock !== null, enforceReview: true, releaseReview: entry.releaseReview,
@@ -290,14 +261,7 @@ export function DecisionDashboard() {
           <span className="ct-scenario-label">
             <T en="Interactive Release Decision Scenarios (Click to Switch Traceability Board)" zh="互動式發布決策情境（點選切換下方四步追溯看板）" />
           </span>
-          <div className="ct-theme-switch" role="group" aria-label="Theme mode" data-aria-label-en="Theme mode" data-aria-label-zh="主題模式">
-            <button type="button" id="ctThemeDark" className="is-on" onClick={() => switchTheme("dark")}>
-              <T en="🌙 Dark Tower" zh="🌙 深色控制台" />
-            </button>
-            <button type="button" id="ctThemeLight" onClick={() => switchTheme("light")}>
-              <T en="☀️ Light" zh="☀️ 淺色紙質" />
-            </button>
-          </div>
+          <code className="ct-section-pill">3 Interactive Scenarios</code>
         </div>
         <div className="ct-scenario-tabs" role="group" aria-label="Release decision scenarios" data-aria-label-en="Release decision scenarios" data-aria-label-zh="發布決策情境切換">
           {(Object.values(scenarioConfigs)).map(item => (
@@ -430,6 +394,9 @@ export function DecisionDashboard() {
           <span className="ct-art-chip">03-test-scenario.md</span>
           <span className="ct-art-chip">04-test-case.md</span>
           <EvidenceLink className="ct-art-chip ct-art-link" href={activeConfig.evidenceAnchor}>{activeConfig.evidenceAnchorLabel}</EvidenceLink>
+          <EvidenceLink className="ct-stage-deep-link ct-sdl-blue" href="/run-records">
+            <T en="🔍 Inspect 67 Checks & 34 Case Specs →" zh="🔍 檢視 67 項檢查與 34 案例規格 →" />
+          </EvidenceLink>
         </footer>
       </article>
 
@@ -484,6 +451,9 @@ export function DecisionDashboard() {
           <span className="ct-art-chip">05-test-run-record.md</span>
           <span className="ct-art-chip">06-defect-report.md</span>
           <EvidenceLink className="ct-art-chip ct-art-link" href="/run-records/fail-demo">Fail Demo ↗</EvidenceLink>
+          <EvidenceLink className="ct-stage-deep-link ct-sdl-red" href="/run-records/fail-demo">
+            <T en="🛑 Launch P0 Failure & Gate Replay →" zh="🛑 啟動 P0 失敗案例與門檻回放 →" />
+          </EvidenceLink>
         </footer>
       </article>
 
@@ -515,6 +485,9 @@ export function DecisionDashboard() {
         <footer className="ct-artifact-footer">
           <span className="ct-art-chip">07-release-quality-summary.md</span>
           <span className="ct-art-chip">08-status-contract.json</span>
+          <EvidenceLink className="ct-stage-deep-link ct-sdl-purple" href="/dashboard-demo">
+            <T en="📐 View v4.0 ADR & 6 Policy Rules →" zh="📐 檢視 v4.0 演進與 6 條裁決規則 →" />
+          </EvidenceLink>
         </footer>
       </article>
     </div>
@@ -595,6 +568,49 @@ export function DecisionDashboard() {
           </tbody>
         </table>
       </div>
+    </div>
+
+    {/* PART 3: Deep-Dive Evidence & Policy Action Dock (Option B+A+C Subpage Portals) */}
+    <div className="ct-section-bar">
+      <div className="ct-section-title">
+        <span><T en="PART 3 · DEEP-DIVE EVIDENCE & POLICY WORKBENCH (3 MODULES)" zh="第三部分 · 延伸證據帳本與決策規則工作台（三大子頁面入口）" /></span>
+        <code className="ct-section-pill">03–08 Linked Modules</code>
+      </div>
+      <span className="ct-section-note">
+        <T en="Inspect the full sanitized JUnit ledger, interactive P0 failure replay, and 4-generation architecture rulebook" zh="深入檢視去敏後之 JUnit 執行帳本、P0 失敗門檻回放器與四代架構演進規則" />
+      </span>
+    </div>
+
+    <div className="ct-portal-dock">
+      <EvidenceLink className="ct-portal-card ct-portal-blue" href="/run-records">
+        <div className="ct-portal-top">
+          <span className="ct-portal-tag"><T en="MODULE 01 · STAGE 02 EVIDENCE" zh="模組 01 · 對應階段 02 驗證帳本" /></span>
+          <code className="ct-badge-go">67 CHECKS · 34 CASES</code>
+        </div>
+        <h3><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></h3>
+        <p><T en="Sanitized JUnit SHA-256 telemetry matrix for Sept 6–7 releases plus interactive 34-case specification workbench (OB, REST, WS, DOC, LIVE, MTC)." zh="9/6–9/7 鎖定版本之去敏 JUnit SHA-256 遙測矩陣，以及 34 項標準測試案例互動分類工作台（OB / REST / WS / DOC / LIVE / MTC）。" /></p>
+        <span className="ct-portal-cta"><T en="Open Run Records Workbench →" zh="開啟執行記錄與案例工作台 →" /></span>
+      </EvidenceLink>
+
+      <EvidenceLink className="ct-portal-card ct-portal-red" href="/run-records/fail-demo">
+        <div className="ct-portal-top">
+          <span className="ct-portal-tag"><T en="MODULE 02 · STAGE 03 GATE PROOF" zh="模組 02 · 對應階段 03 攔截證明" /></span>
+          <code className="ct-badge-hold">DEF-MDQ-004 · P0 HOLD</code>
+        </div>
+        <h3><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></h3>
+        <p><T en="4-stage counterfactual incident pipeline for TC-MDQ-017, interactive 3-step Hold boundary simulator, Expected/Actual diff, and Exit Code 1 pytest log." zh="TC-MDQ-017 四步事故追蹤看板、三階段 Hold 決策邊界模擬器、Expected/Actual 狀態差異與 Pytest Exit Code 1 執行日誌。" /></p>
+        <span className="ct-portal-cta"><T en="Launch Failure & Gate Replay →" zh="啟動失敗案例與決定回放 →" /></span>
+      </EvidenceLink>
+
+      <EvidenceLink className="ct-portal-card ct-portal-purple" href="/dashboard-demo">
+        <div className="ct-portal-top">
+          <span className="ct-portal-tag"><T en="MODULE 03 · STAGE 04 POLICY ENGINE" zh="模組 03 · 對應階段 04 決策規則" /></span>
+          <code className="ct-section-pill">v4.0 HYBRID · 6 RULES</code>
+        </div>
+        <h3><T en="Design Evolution & Policy Rulebook" zh="設計演進與決策規則矩陣" /></h3>
+        <p><T en="4-generation architecture evolution (Sample A / B / C → Active B+C Hybrid Control Tower) and the 6 deterministic fail-closed remediation rules." zh="四代架構演進對照（Sample A / B / C ➔ 現役 B+C 混搭控制台）與 6 條 Fail-Closed 決定論處置規則矩陣。" /></p>
+        <span className="ct-portal-cta"><T en="Inspect Architecture & Policy Matrix →" zh="檢視架構演進與規則矩陣 →" /></span>
+      </EvidenceLink>
     </div>
 
     {/* Legacy SSR Contract Container (hidden from visual Control Tower UI) */}

@@ -194,15 +194,16 @@ export default function DesignEvolution() {
       <div className="ct-sr-compat" aria-hidden="true">
         <h2 id="action-examples-title"><T en="Next-step examples" zh="建議處理方式範例" /></h2>
         <p className="notice"><T en="Six synthetic scenarios, not actual repository statuses. The same suggestion rules are used on the Dashboard; Ready has no remediation prompt." zh="六個合成情境，不代表實際 Repo 狀態。與 Dashboard 使用同一套建議規則；Ready 不顯示處理提示。" /></p>
+        <a href={siteHref("/dashboard-demo/ac")}>A+C</a>
+        <a href={siteHref("/dashboard-demo/abc")}>A+B+C</a>
       </div>
 
       <footer className="footer">
+        <span><T en="Architecture evolution & deterministic policy rules · QA Decision Desk" zh="架構演進與決定論規則庫 · QA Decision Desk" /></span>
         <div className="ct-footer-links">
           <a href="https://sanyoii.github.io/"><T en="← sanyoii.github.io Portfolio" zh="← 返回 sanyoii.github.io 主站" /></a>
-          <a href={siteHref("/")}><T en="Current Dashboard" zh="目前 Dashboard" /></a>
-          <a href={siteHref("/dashboard-demo/ac")}>A+C</a>
-          <a href={siteHref("/dashboard-demo/abc")}>A+B+C</a>
-          <a href={siteHref("/run-records/fail-demo")}><T en="Explore decision replay" zh="查看決定回放" /></a>
+          <a href={siteHref("/")}><T en="← Current Dashboard" zh="← 回到目前 Dashboard" /></a>
+          <a href={siteHref("/run-records/fail-demo")}><T en="Explore decision replay →" zh="查看決定回放 →" /></a>
         </div>
       </footer>
     </main>

@@ -65,11 +65,6 @@ export default function FailedRunDemo() {
 
       <ControlTowerNav active="fail-demo" />
 
-      <aside className="fail-demo-warning ct-fail-banner" aria-label="Demo disclosure">
-        <strong><T en="This is a synthetic demo, not a current product test result." zh="這是合成示範，不是目前產品的測試結果。" /></strong>
-        <span><T en="It shows the human-readable information a public page should provide when a Test Case fails." zh="用途是展示 Test Case Fail 時，公開頁應提供哪些人類可讀資訊。" /></span>
-      </aside>
-
       {/* PART 1 (Option C): 4-Stage Incident & Gate Traceability Pipeline */}
       <div className="ct-section-bar">
         <div className="ct-section-title">
@@ -233,6 +228,10 @@ Actual: stale update replaced current state
 
       {/* Legacy structural anchors retained in hidden compatibility container so rendered contract tests pass without appending old UI */}
       <div className="ct-sr-compat" aria-hidden="true">
+        <aside className="fail-demo-warning">
+          <strong><T en="This is a synthetic demo, not a current product test result." zh="這是合成示範，不是目前產品的測試結果。" /></strong>
+          <span><T en="It shows the human-readable information a public page should provide when a Test Case fails." zh="用途是展示 Test Case Fail 時，公開頁應提供哪些人類可讀資訊。" /></span>
+        </aside>
         <section className="section">
           <div className="fail-decision-heading">
             <div><p className="eyebrow">Decision impact</p><h2 id="fail-decision-title"><T en="How does one required-case failure affect the decision?" zh="一個必要案例失敗，會怎麼影響決定？" /></h2></div>

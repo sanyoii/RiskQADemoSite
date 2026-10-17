@@ -1892,4 +1892,21 @@ html:not([data-theme="light"]) .defect-record dl > div {
   color: var(--ct-blue);
 }
 
+.ct-sr-compat {
+  display: none !important;
+}
+
+.ct-telemetry-table td.ct-cmd-cell,
+.ct-telemetry-table td:nth-child(2) {
+  white-space: normal !important;
+  max-width: 19rem;
+}
+.ct-telemetry-table td.ct-cmd-cell code {
+  white-space: normal !important;
+  word-break: break-word;
+  display: inline-block;
+  line-height: 1.35;
+}
+
+
 

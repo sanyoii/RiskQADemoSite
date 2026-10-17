@@ -253,7 +253,7 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
     assert.match(html, /class="decision-nav ct-nav ct-hybrid-nav"/);
   }
 
-  assert.ok(!recordsHtml.includes("D:\\Codex"), "local Windows path must be sanitized from /run-records");
+  assert.ok(!recordsHtml.includes("D:\\Codex") && !recordsHtml.includes("D:/Codex") && !recordsHtml.includes(".venv/Scripts"), "local Windows path must be sanitized from /run-records");
 
   for (const snippet of [
     "B+C HYBRID · CONTROL TOWER",

@@ -1876,16 +1876,38 @@ html[data-theme="light"] .ct-run-details .case-table th {
 
 /* Subpage 3: ADR Evolution Board & Policy Cards Grid */
 .ct-adr-board {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.85rem !important;
   list-style: none;
-  padding: 0;
-  margin: 0 0 1.25rem;
-  border-left: 0;
+  padding: 0 !important;
+  margin: 0 0 1.25rem !important;
+  border-left: 0 !important;
+}
+@media (max-width: 68rem) {
+  .ct-adr-board {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (max-width: 42rem) {
+  .ct-adr-board {
+    grid-template-columns: 1fr !important;
+  }
 }
 .ct-adr-board > li {
   margin: 0;
+  display: flex !important;
 }
 .ct-adr-board > li::before {
   display: none;
+}
+.ct-policy-matrix-table th,
+.ct-policy-matrix-table td {
+  white-space: normal !important;
+}
+.ct-policy-matrix-table td:nth-child(2),
+.ct-policy-matrix-table td:last-child {
+  white-space: nowrap !important;
 }
 .ct-policy-cards-grid {
   display: grid;
@@ -1932,6 +1954,7 @@ html[data-theme="light"] .ct-run-details .case-table th {
   display: inline-block;
   line-height: 1.35;
 }
+
 
 
 

@@ -119,12 +119,69 @@
         "publicDisclosure": "public"
       },
       "releaseReview": {
-        "eligible": true,
-        "codes": [],
+        "eligible": false,
+        "codes": [
+          "RUN_STALE",
+          "REVIEW_TIME_INVALID"
+        ],
         "policyVersion": "2.0.0",
         "inputDigest": "c3766a1063a53f06210816083ae45a314549dd86ab0ce9fb4db76520c0562223",
         "sourceSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
         "expiresAt": "2026-09-08T23:59:00+08:00"
+      },
+      "runMetrics": {
+        "subjectSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
+        "totalRuns": 4,
+        "passingRuns": 4,
+        "blockedRuns": 0,
+        "latestChecksPassed": 45,
+        "latestChecksTotal": 45,
+        "runs": [
+          {
+            "id": "RUN-20260906-cex-deterministic-1",
+            "status": "Pass",
+            "passed": 40,
+            "total": 40,
+            "failures": 0,
+            "errors": 0,
+            "executedAt": "2026-09-06T12:40:02.275Z",
+            "rawJUnitSha256": "b836c589694947da419047afc22539819568ec1df7aa9ec423b888623420253e",
+            "anchorUrl": "/run-records/#RUN-20260906-cex-deterministic-1"
+          },
+          {
+            "id": "RUN-20260906-cex-live-1",
+            "status": "Pass",
+            "passed": 5,
+            "total": 5,
+            "failures": 0,
+            "errors": 0,
+            "executedAt": "2026-09-06T12:40:37.272Z",
+            "rawJUnitSha256": "4530c5f35881149d0075137960bd0fc62854f1a46c133c952a862f198f02c50c",
+            "anchorUrl": "/run-records/#RUN-20260906-cex-live-1"
+          },
+          {
+            "id": "RUN-20260907-cex-deterministic-1",
+            "status": "Pass",
+            "passed": 40,
+            "total": 40,
+            "failures": 0,
+            "errors": 0,
+            "executedAt": "2026-09-07T15:09:50.847Z",
+            "rawJUnitSha256": "ba95af23b5c22d8a190e7d6121e8dd740cbd639f84a7e2dfebd1bdc1fd063249",
+            "anchorUrl": "/run-records/#RUN-20260907-cex-deterministic-1"
+          },
+          {
+            "id": "RUN-20260907-cex-live-1",
+            "status": "Pass",
+            "passed": 5,
+            "total": 5,
+            "failures": 0,
+            "errors": 0,
+            "executedAt": "2026-09-07T15:10:26.443Z",
+            "rawJUnitSha256": "4ac2bb8b66cdeae5e2584583734f8c6ab856f83cc336d49eb8cdb2fcb67ca28b",
+            "anchorUrl": "/run-records/#RUN-20260907-cex-live-1"
+          }
+        ]
       },
       "snapshotDigest": "76535a0e4f17792c02d253160e4c978ebd46a7daeec14dd19bdddcd17be88e4f"
     },
@@ -224,12 +281,47 @@
         "publicDisclosure": "public"
       },
       "releaseReview": {
-        "eligible": true,
-        "codes": [],
+        "eligible": false,
+        "codes": [
+          "RUN_STALE",
+          "REVIEW_TIME_INVALID"
+        ],
         "policyVersion": "2.0.0",
         "inputDigest": "5ff7e3e3cc32f5b1a54b221819ea0a04f695fb33e58923a2a8a2cb0ed7987d7e",
         "sourceSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
         "expiresAt": "2026-09-13T20:40:00+08:00"
+      },
+      "runMetrics": {
+        "subjectSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
+        "totalRuns": 2,
+        "passingRuns": 1,
+        "blockedRuns": 1,
+        "latestChecksPassed": 22,
+        "latestChecksTotal": 22,
+        "runs": [
+          {
+            "id": "RUN-20260906-portfolio-chromium-initial",
+            "status": "Blocked",
+            "passed": 9,
+            "total": 22,
+            "failures": 0,
+            "errors": 13,
+            "executedAt": "2026-09-06T12:40:06.379Z",
+            "rawJUnitSha256": "0eacce992cc5313ba590fc34724c9cf83c5c3d89c6ef72eef658214348c430a0",
+            "anchorUrl": "/run-records/#RUN-20260906-portfolio-chromium-initial"
+          },
+          {
+            "id": "RUN-20260906-portfolio-chromium-retry",
+            "status": "Pass",
+            "passed": 22,
+            "total": 22,
+            "failures": 0,
+            "errors": 0,
+            "executedAt": "2026-09-06T12:41:05.513Z",
+            "rawJUnitSha256": "7df49109c2efdd1cb32d7bb86ac2726ba9bd8463cc68a018fc52f229b504d1e1",
+            "anchorUrl": "/run-records/#RUN-20260906-portfolio-chromium-retry"
+          }
+        ]
       },
       "snapshotDigest": "e4f38feb9414105b43bd3bb44f08b88f050877187060b801e8eb3f0a380f064c"
     }

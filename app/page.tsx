@@ -4,16 +4,40 @@ import { DecisionDashboard } from "./_dashboard";
 
 export const dynamic = "force-static";
 export default function Home() {
-  return <main className="shell decision-desk" {...pageLanguageData(
+  return <main className="shell decision-desk ct-shell" {...pageLanguageData(
     { en: "QA Decision Desk — Risk-Based QA Records", zh: "QA 決策台 — 風險導向 QA 記錄" },
     { en: "Current release readiness, missing evidence and accountable next actions.", zh: "目前發布就緒度、缺少的證據與負責人的下一步。" },
   )}>
     <a className="vs-skip" href="#formal-dashboard"><T en="Skip to Repository Quality Dashboard" zh="跳到 Repository Quality Dashboard" /></a>
-    <header className="masthead decision-masthead"><div><p className="eyebrow"><T en="Risk-Based QA · Read-only portfolio" zh="風險導向 QA · 唯讀作品集" /></p><h1>QA Decision Desk</h1><p><T en="Status first. Evidence when you need it." zh="先看狀態，需要時再看證據。" /></p></div></header>
-    <nav className="decision-nav" aria-label="Primary navigation" data-aria-label-en="Primary navigation" data-aria-label-zh="主要導覽">
-      <span aria-current="page">Dashboard</span>
+    <header className="masthead decision-masthead ct-topbar">
+      <div className="ct-topbar-main">
+        <div className="ct-topbar-left">
+          <a className="ct-back-btn" href="https://sanyoii.github.io/">
+            <T en="← sanyoii.github.io Portfolio" zh="← 返回 sanyoii.github.io 主站" />
+          </a>
+          <div className="ct-brand">
+            <span className="ct-brand-dot" aria-hidden="true" />
+            <div>
+              <p className="eyebrow"><T en="Risk-Based QA · Read-only portfolio" zh="風險導向 QA · 唯讀作品集" /></p>
+              <h1>QA Decision Desk</h1>
+            </div>
+            <span className="ct-brand-tag"><T en="B+C HYBRID · CONTROL TOWER" zh="B+C 混搭黃金版 · 風險決策控制台" /></span>
+          </div>
+        </div>
+        <div className="ct-topbar-right">
+          <div className="ct-snapshot-pill">
+            <span aria-hidden="true">📌</span>
+            <T en="Pinned Snapshot: 2026-09-07 · SHA fc1e060 & 643b017 · Historical Go Preserved" zh="鎖定快照：2026-09-07 · SHA fc1e060 & 643b017 · 保留歷史 Go 證據" />
+          </div>
+        </div>
+      </div>
+      <p className="ct-masthead-sub"><T en="Status first. Traceability from risk to evidence, plus counterfactual Hold verification." zh="先看狀態。從風險到證據的四步可追溯看板，並附反事實 Hold 攔截對照。" /></p>
+    </header>
+    <nav className="decision-nav ct-nav" aria-label="Primary navigation" data-aria-label-en="Primary navigation" data-aria-label-zh="主要導覽">
+      <span aria-current="page"><T en="Dashboard" zh="決策控制台" /></span>
       <a href={siteHref("/run-records")}><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></a>
       <a href={siteHref("/run-records/fail-demo")}><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></a>
+      <a href={siteHref("/dashboard-demo")}><T en="Design evolution" zh="設計演進" /></a>
     </nav>
     <div id="formal-dashboard"><DecisionDashboard /></div>
     <details className="decision-boundary"><summary><T en="Reading rules and limitations" zh="閱讀規則與限制" /></summary>
@@ -21,6 +45,12 @@ export default function Home() {
       <p><T en="Unknown means the evidence does not support a current decision; Unreachable does not mean product failure. This is not real-time monitoring." zh="Unknown 表示證據不足以支持目前判斷；Unreachable 不是產品故障，也不是即時監控。" /></p>
       <p><T en="No metric without measurement. Coverage levels describe the stated scope, not a percentage or quality guarantee. Automated review validates consistency, not oracle correctness or reviewer identity." zh="未量測就不顯示數字。覆蓋等級只描述已聲明的範圍，不是百分比或品質保證。自動審查驗證一致性，不證明 oracle 正確或審查者身分。" /></p>
     </details>
-    <footer className="footer"><span><T en="Sanitized public projection · original evidence retained" zh="去敏後的公開呈現 · 原始證據保留" /></span><a href={siteHref("/dashboard-demo")}><T en="Design evolution" zh="設計演進" /></a></footer>
+    <footer className="footer">
+      <span><T en="Sanitized public projection · original evidence retained" zh="去敏後的公開呈現 · 原始證據保留" /></span>
+      <div className="ct-footer-links">
+        <a href="https://sanyoii.github.io/"><T en="← Back to Main Portfolio" zh="← 返回個人主作品集" /></a>
+        <a href={siteHref("/dashboard-demo")}><T en="Design evolution" zh="設計演進" /></a>
+      </div>
+    </footer>
   </main>;
 }

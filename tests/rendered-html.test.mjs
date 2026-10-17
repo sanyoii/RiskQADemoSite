@@ -239,3 +239,41 @@ test("removes starter-only files and keeps public metadata complete", async () =
   await access(new URL("../.openai/hosting.json", import.meta.url));
   await access(projectRoot);
 });
+
+test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board, signal matrix, and portfolio back-links", async () => {
+  const [homeHtml, recordsHtml, failDemoHtml] = await Promise.all([
+    render("/").then(r => r.text()),
+    render("/run-records").then(r => r.text()),
+    render("/run-records/fail-demo").then(r => r.text()),
+  ]);
+
+  for (const html of [homeHtml, recordsHtml, failDemoHtml]) {
+    assert.match(html, /href="https:\/\/sanyoii\.github\.io\/"/);
+  }
+
+  for (const snippet of [
+    "B+C HYBRID · CONTROL TOWER",
+    "2 GO / 1 HOLD",
+    "67 / 67 PASS",
+    "00–08 Linked",
+    "STAGE 01 · CHARTER &amp; RISK",
+    "STAGE 02 · VERIFICATION",
+    "STAGE 03 · TRIAGE &amp; GATE",
+    "STAGE 04 · DECISION",
+    "PART 2 · CROSS-REPO SIGNAL &amp; COVERAGE MATRIX",
+    "Pinned Snapshot: Ready (45/45 Pass)",
+    "Pinned Snapshot: Ready (22/22 Pass)",
+    "Counterfactual Hold (DEMO-RUN-FAIL-001)",
+  ]) {
+    assert.ok(homeHtml.includes(snippet), `missing B+C hybrid snippet on /: ${snippet}`);
+  }
+
+  for (const snippet of [
+    "SECTION 01 · PINNED SNAPSHOT RUNS",
+    "SECTION 02 · COUNTERFACTUAL HOLD DEMO",
+    "SECTION 03 · LOGICAL TEST CASE CATALOG",
+  ]) {
+    assert.ok(recordsHtml.includes(snippet), `missing chronology index snippet on /run-records: ${snippet}`);
+  }
+});
+

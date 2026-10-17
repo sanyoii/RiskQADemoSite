@@ -1735,6 +1735,7 @@ html:not([data-theme="light"]) .defect-record dl > div {
   grid-template-columns: 1.05fr 1.15fr;
   gap: 1rem;
   align-items: start;
+  margin-bottom: 1.25rem;
 }
 .ct-inspector-left {
   display: grid;
@@ -1742,6 +1743,110 @@ html:not([data-theme="light"]) .defect-record dl > div {
 }
 .ct-inspector-right {
   margin: 0 !important;
+}
+.ct-diff-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.ct-diff-card {
+  border-radius: 10px;
+  padding: 0.9rem 1rem !important;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.ct-diff-expected {
+  background: var(--ct-surface) !important;
+  border: 1px solid var(--ct-green-border) !important;
+  color: var(--ct-text) !important;
+}
+.ct-diff-expected p {
+  color: var(--ct-green) !important;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+.ct-diff-expected strong {
+  color: var(--ct-heading) !important;
+  font-size: 0.92rem;
+}
+.ct-diff-expected span {
+  color: var(--ct-muted) !important;
+  font-size: 0.8rem;
+}
+.ct-diff-actual {
+  background: var(--ct-red-bg) !important;
+  border: 1px solid var(--ct-red-border) !important;
+  color: var(--ct-text) !important;
+}
+.ct-diff-actual p {
+  color: var(--ct-red) !important;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+.ct-diff-actual strong {
+  color: var(--ct-heading) !important;
+  font-size: 0.92rem;
+}
+.ct-diff-actual span {
+  color: var(--ct-text) !important;
+  font-size: 0.8rem;
+}
+.ct-impact-cards article {
+  background: var(--ct-surface) !important;
+  border: 1px solid var(--ct-border) !important;
+  border-radius: 8px;
+  padding: 0.65rem 0.8rem !important;
+}
+.ct-impact-cards article p {
+  color: var(--ct-muted) !important;
+  font-size: 0.68rem;
+  margin: 0 0 0.2rem;
+}
+.ct-impact-cards article strong {
+  color: var(--ct-heading) !important;
+  font-size: 0.82rem;
+}
+.ct-defect-card {
+  background: var(--ct-surface) !important;
+  border: 1px solid var(--ct-red-border) !important;
+  border-radius: 10px;
+  padding: 0.95rem 1.05rem !important;
+}
+.ct-defect-card h3 {
+  color: var(--ct-heading) !important;
+  font-size: 0.95rem;
+  margin: 0.15rem 0 0.65rem;
+}
+.ct-defect-dl {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 0.55rem !important;
+  margin: 0 !important;
+}
+.ct-defect-dl > div {
+  background: var(--ct-surface-2) !important;
+  border: 1px solid var(--ct-border) !important;
+  border-radius: 6px;
+  padding: 0.5rem 0.65rem !important;
+}
+.ct-defect-dl > div:last-child {
+  grid-column: 1 / -1;
+}
+.ct-defect-dl dt {
+  color: var(--ct-muted) !important;
+  font-size: 0.66rem;
+  text-transform: uppercase;
+}
+.ct-defect-dl dd {
+  color: var(--ct-heading) !important;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin: 0.15rem 0 0;
 }
 
 /* Subpage 3: ADR Evolution Board & Policy Cards Grid */
@@ -1766,7 +1871,7 @@ html:not([data-theme="light"]) .defect-record dl > div {
   .ct-policy-cards-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 42rem) {
-  .ct-policy-cards-grid, .ct-replay-stepper { grid-template-columns: 1fr; }
+  .ct-policy-cards-grid, .ct-replay-stepper, .ct-diff-pair { grid-template-columns: 1fr; }
 }
 .ct-policy-card {
   padding: 0.8rem 0.95rem;
@@ -1786,4 +1891,5 @@ html:not([data-theme="light"]) .defect-record dl > div {
   font-size: 0.65rem;
   color: var(--ct-blue);
 }
+
 

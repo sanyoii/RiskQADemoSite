@@ -10,17 +10,17 @@ const allCanonicalGroups: TestCaseGroup[] = [
 ];
 
 const filterTabs: Array<{ id: string; en: string; zh: string; badge: string }> = [
-  { id: "all", en: "All Canonical Cases", zh: "全部標準測試案例", badge: "41 Cases" },
   { id: "order-book", en: "Order Book (OB)", zh: "Order Book 帳本 (OB)", badge: "9 Cases" },
   { id: "rest-contract", en: "REST Contract", zh: "REST 契約檢查", badge: "9 Cases" },
   { id: "websocket-contract", en: "WebSocket Stream", zh: "WebSocket 串流", badge: "12 Cases" },
   { id: "documentation-contract", en: "Documentation (DOC)", zh: "文件一致性 (DOC)", badge: "4 Cases" },
   { id: "live-market-data", en: "Live Binance Feed", zh: "Live 行情驗證", badge: "5 Cases" },
   { id: "manual-checks", en: "Manual Safety (MTC)", zh: "人工安全與紀錄 (MTC)", badge: "2 Cases" },
+  { id: "all", en: "All Canonical Cases", zh: "全部展開檢視", badge: "41 Cases" },
 ];
 
 export function RecordsWorkbench() {
-  const [selectedGroup, setSelectedGroup] = useState<string>("all");
+  const [selectedGroup, setSelectedGroup] = useState<string>("order-book");
   const visibleGroups = selectedGroup === "all"
     ? allCanonicalGroups
     : allCanonicalGroups.filter(g => g.id === selectedGroup);

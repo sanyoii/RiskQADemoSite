@@ -40,7 +40,11 @@ export default function FailedRunDemo() {
           <div className="eyebrow">Synthetic scenario / Not current CEX evidence</div>
           <h1>Test Case Fail Demo</h1>
         </div>
-        <a href={siteHref("/run-records")}><T en="Back to Run Records" zh="回到執行記錄" /></a>
+        <div className="ct-subpage-nav">
+          <a className="ct-back-btn" href="https://sanyoii.github.io/"><T en="← sanyoii.github.io Portfolio" zh="← 返回 sanyoii.github.io 主站" /></a>
+          <a className="ct-back-btn" href={siteHref("/")}><T en="Decision Desk" zh="回到決策台" /></a>
+          <a className="ct-back-btn" href={siteHref("/run-records")}><T en="Back to Run Records" zh="回到執行記錄" /></a>
+        </div>
       </header>
 
       <aside className="fail-demo-warning" aria-label="Demo disclosure">

@@ -70,8 +70,26 @@ export default function RunRecords() {
           <div className="eyebrow">Risk-based QA records / Pilot 0 / Portfolio demo</div>
           <h1><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></h1>
         </div>
-        <a href={siteHref("/")}><T en="Back to Decision Desk" zh="回到 Decision Desk" /></a>
+        <div className="ct-subpage-nav"><a className="ct-back-btn" href="https://sanyoii.github.io/"><T en="← sanyoii.github.io Portfolio" zh="← 返回 sanyoii.github.io 主站" /></a><a className="ct-back-btn" href={siteHref("/")}><T en="Back to Decision Desk" zh="回到 Decision Desk" /></a></div>
       </header>
+
+      <nav className="ct-chronology-index" aria-label="Record sections index" data-aria-label-en="Record sections index" data-aria-label-zh="執行記錄區段索引">
+        <a className="ct-chrono-card" href="#reviewed-runs-title">
+          <span className="ct-chrono-step"><T en="SECTION 01 · PINNED SNAPSHOT RUNS" zh="第一區 · 鎖定快照正式執行記錄" /></span>
+          <strong>cex-market-data-quality-lab <code>@fc1e060</code> &amp; sanyoii.github.io <code>@643b017</code></strong>
+          <small><T en="Sept 6–7 owner-reviewed runs (45/45 CEX Pass + 22/22 Portfolio Pass after 1 Blocked retry)" zh="9/6–9/7 負責人已審查之執行（45/45 CEX 通過 + 22/22 主站重跑通過）" /></small>
+        </a>
+        <a className="ct-chrono-card ct-chrono-hold" href="#DEMO-RUN-FAIL-001">
+          <span className="ct-chrono-step"><T en="SECTION 02 · COUNTERFACTUAL HOLD DEMO" zh="第二區 · 反事實失敗攔截示範" /></span>
+          <strong>DEMO-RUN-FAIL-001 · <code>TC-MDQ-017</code> → <code>DEF-MDQ-004</code></strong>
+          <small><T en="Synthetic P0 failure showing Expected vs. Actual and No-Go release impact" zh="合成 P0 失敗案例，展示 Expected vs. Actual 與 No-Go 攔截影響" /></small>
+        </a>
+        <a className="ct-chrono-card" href="#records-title">
+          <span className="ct-chrono-step"><T en="SECTION 03 · LOGICAL TEST CASE CATALOG" zh="第三區 · 34 個 Logical Test Case 定義表" /></span>
+          <strong>cex-market-data-quality-lab <code>@8fd5081</code> (Aug 17 Pilot)</strong>
+          <small><T en="Human-readable check & expected-result tables for OB, REST, WS, DOC, LIVE & MTC" zh="人類可讀之檢查內容與預期結果表（OB / REST / WS / DOC / LIVE / MTC）" /></small>
+        </a>
+      </nav>
 
       <section className="section" aria-labelledby="reviewed-runs-title">
         <h2 id="reviewed-runs-title"><T en="Owner-reviewed runs · September 6" zh="負責人已審查的執行記錄 · 9 月 6 日" /></h2>

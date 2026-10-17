@@ -141,10 +141,7 @@ export default function DesignEvolution() {
         </span>
       </div>
 
-      <section className="decision-dashboard ct-dark-section" id="next-action-examples" aria-labelledby="action-examples-title">
-        <h2 id="action-examples-title"><T en="Next-step examples" zh="建議處理方式範例" /></h2>
-        <p className="notice"><T en="Six synthetic scenarios, not actual repository statuses. The same suggestion rules are used on the Dashboard; Ready has no remediation prompt." zh="六個合成情境，不代表實際 Repo 狀態。與 Dashboard 使用同一套建議規則；Ready 不顯示處理提示。" /></p>
-
+      <div id="next-action-examples">
         <div className="ct-matrix-panel" style={{ marginBottom: "14px" }}>
           <div className="ct-matrix-scroll">
             <table className="ct-sig-table">
@@ -192,7 +189,12 @@ export default function DesignEvolution() {
             );
           })}
         </div>
-      </section>
+      </div>
+
+      <div className="ct-sr-compat" aria-hidden="true">
+        <h2 id="action-examples-title"><T en="Next-step examples" zh="建議處理方式範例" /></h2>
+        <p className="notice"><T en="Six synthetic scenarios, not actual repository statuses. The same suggestion rules are used on the Dashboard; Ready has no remediation prompt." zh="六個合成情境，不代表實際 Repo 狀態。與 Dashboard 使用同一套建議規則；Ready 不顯示處理提示。" /></p>
+      </div>
 
       <footer className="footer">
         <div className="ct-footer-links">

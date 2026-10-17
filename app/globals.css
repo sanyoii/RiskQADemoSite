@@ -517,6 +517,11 @@ html[data-theme="light"] {
   width: min(86rem, calc(100% - 2rem));
   padding-top: 3.5rem;
 }
+.ct-shell,
+.ct-shell * {
+  overflow-wrap: break-word;
+  word-break: normal;
+}
 
 /* Top Control Bar */
 .ct-topbar {
@@ -1126,47 +1131,61 @@ html[data-theme="light"] {
   border: 1px solid var(--ct-border);
   border-radius: 10px;
   padding: 0.75rem 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 .ct-matrix-scroll {
   overflow-x: auto;
 }
 table.ct-sig-table {
   width: 100%;
-  min-width: 60rem;
+  min-width: 48rem;
   border-collapse: separate;
   border-spacing: 0 6px;
+  table-layout: auto;
+}
+.ct-sig-table td {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 .ct-sig-table th {
   text-align: left;
-  font-size: 0.66rem;
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   color: var(--ct-muted);
-  padding: 0.35rem 0.55rem;
+  padding: 0.35rem 0.35rem;
   border: 0;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: keep-all;
+  line-height: 1.3;
 }
 .ct-sig-table td {
   background: var(--ct-surface-2);
   border-top: 1px solid var(--ct-border);
   border-bottom: 1px solid var(--ct-border);
-  padding: 0.6rem 0.55rem;
-  font-size: 0.74rem;
+  padding: 0.55rem 0.35rem;
+  font-size: 0.72rem;
   vertical-align: middle;
+}
+.ct-sig-table th:first-child,
+.ct-sig-table tr td:first-child {
+  min-width: 12.5rem;
 }
 .ct-sig-table tr td:first-child {
   border-left: 1px solid var(--ct-border);
   border-top-left-radius: 7px;
   border-bottom-left-radius: 7px;
-  padding-left: 0.85rem;
+  padding-left: 0.7rem;
 }
 .ct-sig-table tr td:last-child {
   border-right: 1px solid var(--ct-border);
   border-top-right-radius: 7px;
   border-bottom-right-radius: 7px;
   text-align: right;
-  padding-right: 0.85rem;
+  padding-right: 0.7rem;
 }
 .ct-sig-table tr.ct-hold-row td {
   background: var(--ct-red-bg);
@@ -1174,23 +1193,26 @@ table.ct-sig-table {
 }
 .ct-repo-cell-title {
   font-weight: 700;
+  font-size: 0.73rem;
   color: var(--ct-heading);
+  white-space: nowrap;
 }
 .ct-repo-cell-title code {
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--ct-blue);
 }
 .ct-repo-cell-sub {
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   color: var(--ct-muted);
+  white-space: nowrap;
 }
 .ct-cell-pill {
   display: inline-flex;
   align-items: center;
   font-family: "JetBrains Mono", Consolas, monospace;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 600;
-  padding: 0.2rem 0.48rem;
+  padding: 0.16rem 0.38rem;
   border-radius: 4px;
   white-space: nowrap;
 }
@@ -1202,12 +1224,12 @@ table.ct-sig-table {
 .ct-inspect-link {
   display: inline-block;
   font-family: "JetBrains Mono", Consolas, monospace;
-  font-size: 0.68rem;
+  font-size: 0.64rem;
   font-weight: 600;
   color: var(--ct-blue);
   background: var(--ct-blue-bg);
   border: 1px solid var(--ct-blue-border);
-  padding: 0.25rem 0.55rem;
+  padding: 0.2rem 0.45rem;
   border-radius: 5px;
   text-decoration: none;
   white-space: nowrap;
@@ -1218,7 +1240,9 @@ table.ct-sig-table {
   border-color: var(--ct-red-border);
 }
 
-/* PART 3: Dual-Layer Cards Overrides in Dark Mode */
+.ct-legacy-ssr-contract {
+  display: none !important;
+}
 .ct-part3-sub {
   margin: 0.25rem 0 0;
   font-size: 0.8rem;

@@ -597,7 +597,8 @@ export function DecisionDashboard() {
       </div>
     </div>
 
-    {/* PART 3: Per-Repository Live Policy Gate & Historical Evidence Audit */}
+    {/* Legacy SSR Contract Container (hidden from visual Control Tower UI) */}
+    <div className="ct-legacy-ssr-contract" aria-hidden="true">
     <header className="decision-heading">
       <div>
         <h2 id="repo-quality-title"><T en="Release overview" zh="目前發布狀態" /></h2>
@@ -686,5 +687,6 @@ export function DecisionDashboard() {
     </div>
     {!visible.length && <p className="decision-empty" role="status"><T en="No repositories in this state." zh="此狀態目前沒有 Repo。" /></p>}
     <details className="decision-policy-note"><summary><T en="How is status determined?" zh="狀態如何判定？" /></summary><p>Policy {POLICY_VERSION}</p><p className="decision-clock"><T en="Clock rechecked every 30 seconds and when returning to this page. Browser time is advisory; the CLI release gate is authoritative." zh="每 30 秒及返回頁面時重新檢查時間。瀏覽器時間僅供參考；發布時以 CLI gate 為準。" /></p></details>
+    </div>
   </section>;
 }

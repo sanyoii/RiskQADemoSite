@@ -9,8 +9,13 @@ export const dynamic = "force-static";
 
 function sanitizeCommand(raw: string): string {
   return raw
-    .replace(/^[A-Za-z]:\\[^\s"]*?python(?:\.exe)?\b/i, "python")
-    .replace(/^\/[^\s"]*?\/python(?:\d+(?:\.\d+)?)?\b/i, "python");
+    .replace(/^(?:[A-Za-z]:[\\/][^\s"]*?|\.?venv[\\/][^\s"]*?)python(?:\.exe)?\b/i, "python")
+    .replace(/^\/[^\s"]*?\/python(?:\d+(?:\.\d+)?)?\b/i, "python")
+    .replace(/--junitxml=[A-Za-z]:[\\/][^\s"]*?[\\/]([^\\/\s"]+\.xml)/gi, "--junitxml=raw/$1");
+}
+
+function formatRunTime(iso: string): string {
+  return iso.replace("T", " ").replace(/\.\d+Z$/, " UTC").replace(/Z$/, " UTC");
 }
 
 const runGroups = [
@@ -124,7 +129,7 @@ export default function RunRecords() {
       <div className="ct-section-bar" id="reviewed-runs-title">
         <div className="ct-section-title">
           <span><T en="PART 1 · PINNED RELEASE RUN TELEMETRY MATRIX (SEPT 6–7 JUNIT ARTIFACTS)" zh="第一部分 · 鎖定版本執行遙測矩陣（9/6–9/7 JUnit 雜湊與去敏指令）" /></span>
-          <code className="ct-section-pill">4 Reviewed Runs · 67 Checks</code>
+          <code className="ct-section-pill">6 Reviewed Runs · 67 Active Checks</code>
         </div>
         <span className="ct-section-note">
           <T en="Sanitized command strings and SHA-256 digests bound to data/release-records.json" zh="指令已正規化去敏，並綁定原始 JUnit SHA-256 雜湊" />
@@ -133,7 +138,7 @@ export default function RunRecords() {
 
       <div className="ct-matrix-panel">
         <div className="ct-matrix-scroll">
-          <table className="ct-sig-table">
+          <table className="ct-sig-table ct-telemetry-table">
             <thead>
               <tr>
                 <th><T en="Run ID (Jump)" zh="執行編號（點擊展開）" /></th>
@@ -155,14 +160,14 @@ export default function RunRecords() {
                       <div className="ct-repo-cell-title">{record.repository} <code>{`@${record.subjectSha.slice(0, 7)}`}</code></div>
                       <div className="ct-repo-cell-sub">{run.environment}</div>
                     </td>
-                    <td><code>{run.executedAt}</code></td>
-                    <td><code>{sanitizeCommand(run.command)}</code></td>
+                    <td><code>{formatRunTime(run.executedAt)}</code></td>
+                    <td className="ct-cmd-cell"><code>{sanitizeCommand(run.command)}</code></td>
                     <td>
                       <span className={`ct-cell-pill ${run.status === "Pass" ? "ct-c-pass" : "ct-c-warn"}`}>
                         {run.status === "Pass" ? `● ${run.passed}/${run.total} PASS` : `▲ ${run.status.toUpperCase()} (${run.passed}/${run.total})`}
                       </span>
                     </td>
-                    <td><code>{`${run.rawJUnitSha256.slice(0, 12)}…${run.rawJUnitSha256.slice(-6)}`}</code></td>
+                    <td><code>{`${run.rawJUnitSha256.slice(0, 10)}…${run.rawJUnitSha256.slice(-6)}`}</code></td>
                   </tr>
                 ))
               )}

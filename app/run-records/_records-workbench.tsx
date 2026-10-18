@@ -56,7 +56,7 @@ export function RecordsWorkbench() {
                     <th scope="col">Test Case ID</th>
                     <th scope="col"><T en="Priority" zh="優先級" /></th>
                     <th scope="col"><T en="Verification Check" zh="檢查內容" /></th>
-                    <th scope="col"><T en="Expected Oracle Result" zh="預期結果" /></th>
+                    <th scope="col"><T en="Expected Result" zh="預期結果" /></th>
                   </tr>
                 </thead>
                 <tbody>

@@ -96,12 +96,12 @@ export default function RunRecords() {
           <div className="ct-topbar-right">
             <div className="ct-snapshot-pill">
               <span aria-hidden="true">🧪</span>
-              <T en="Sanitized JUnit Digest + 34 Canonical Test Cases · Local Paths Stripped" zh="去敏 JUnit 雜湊 ＋ 34 項標準案例規格 · 已移除本機路徑" />
+              <T en="Sanitized JUnit Digest + 34 Canonical Test Cases · Local Paths Stripped" zh="公開版 JUnit 雜湊 ＋ 34 項標準案例規格 · 已移除本機路徑" />
             </div>
           </div>
         </div>
         <p className="ct-masthead-sub">
-          <T en="Evidence ledger backing the Low-Tech Whiteboard: 6 pinned JUnit run receipts (67 checks) and the 34 canonical test case specifications." zh="支撐主控白板評估結論的底層證據帳本：收錄 6 筆鎖定版本之去敏 JUnit 執行收據（67 項檢查）與 34 項標準測試案例規格。" />
+          <T en="Evidence ledger backing the Low-Tech Whiteboard: 6 pinned JUnit run receipts (67 checks) and the 34 canonical test case specifications." zh="支撐主控白板評估結論的底層證據帳本：收錄 6 筆鎖定版本之公開版 JUnit 執行收據（67 項檢查，已移除本機路徑）與 34 項標準測試案例規格。" />
         </p>
       </header>
 
@@ -117,7 +117,7 @@ export default function RunRecords() {
           <strong>OB · REST · WS · DOC · LIVE · MTC</strong>
         </a>
         <a className="ct-chrono-card ct-chrono-hold" href={siteHref("/run-records/fail-demo")}>
-          <span className="ct-chrono-step"><T en="SECTION 03 · COUNTERFACTUAL HOLD DEMO" zh="第三區 · 反事實失敗攔截示範" /></span>
+          <span className="ct-chrono-step"><T en="SECTION 03 · COUNTERFACTUAL HOLD DEMO" zh="第三區 · 模擬 P0 失敗攔截演練" /></span>
           <strong>DEMO-RUN-FAIL-001 · <code>TC-MDQ-017</code> → <code>DEF-MDQ-004</code></strong>
         </a>
       </nav>
@@ -125,11 +125,11 @@ export default function RunRecords() {
       {/* PART 1 (Option B): Pinned Release Run Telemetry Matrix + Expandable JUnit Per-Test Ledger */}
       <div className="ct-section-bar" id="reviewed-runs-title">
         <div className="ct-section-title">
-          <span><T en="PART 1 · PINNED RELEASE RUN TELEMETRY MATRIX (SEPT 6–7 JUNIT ARTIFACTS)" zh="第一部分 · 鎖定版本執行遙測矩陣（9/6–9/7 JUnit 雜湊與去敏指令）" /></span>
+          <span><T en="PART 1 · PINNED RELEASE RUN TELEMETRY MATRIX (SEPT 6–7 JUNIT ARTIFACTS)" zh="第一部分 · 鎖定版本正式執行紀錄總表（9/6–9/7 JUnit 雜湊與執行指令）" /></span>
           <code className="ct-section-pill">6 Reviewed Runs · 67 Active Checks</code>
         </div>
         <span className="ct-section-note">
-          <T en="Click any Run ID to jump to its per-test JUnit breakdown below" zh="點選任一執行編號可跳轉展開下方逐項 JUnit 測試明細" />
+          <T en="Click any Run ID to jump to its per-test JUnit breakdown below" zh="點選任一執行編號，即可跳至下方展開逐項 JUnit 測試明細" />
         </span>
       </div>
 
@@ -141,7 +141,7 @@ export default function RunRecords() {
                 <th><T en="Run ID (Jump)" zh="執行編號（點擊展開）" /></th>
                 <th><T en="Repository & Tested SHA" zh="受測專案與版本 SHA" /></th>
                 <th><T en="Executed At" zh="執行時間 (UTC)" /></th>
-                <th><T en="Sanitized Command" zh="去敏後執行指令" /></th>
+                <th><T en="Sanitized Command" zh="執行指令（已移除本機路徑）" /></th>
                 <th><T en="Result" zh="執行結果" /></th>
                 <th><T en="Original JUnit SHA-256" zh="原始 JUnit SHA-256" /></th>
               </tr>
@@ -207,7 +207,7 @@ export default function RunRecords() {
               <dt><T en="Execution note" zh="執行備註" /></dt><dd>{run.note}</dd>
               <dt><T en="Original JUnit SHA-256" zh="原始 JUnit SHA-256" /></dt><dd><code>{run.rawJUnitSha256}</code></dd>
             </dl>
-            <p><T en="Sanitized per-test results derived from the original JUnit artifact; raw environment output is not published." zh="逐項結果由原始 JUnit 產生並去敏；不公開原始環境輸出。" /></p>
+            <p><T en="Sanitized per-test results derived from the original JUnit artifact; raw environment output is not published." zh="逐項測試結果取自原始 JUnit 檔案並已移除本機敏感路徑；不公開原始環境輸出。" /></p>
             <div className="case-table-wrap"><table className="case-table"><thead><tr><th>Test</th><th><T en="Result" zh="結果" /></th></tr></thead><tbody>{run.tests.map((item,i) => <tr key={`${item.group}-${item.name}-${i}`}><td>{item.group}::{item.name}</td><td>{item.status}</td></tr>)}</tbody></table></div>
           </details>)}
         </article>)}
@@ -216,7 +216,7 @@ export default function RunRecords() {
       {/* PART 2 (Option A): Interactive Deduplicated Test Case Specification Workbench */}
       <div className="ct-section-bar" id="canonical-workbench-title">
         <div className="ct-section-title">
-          <span><T en="PART 2 · INTERACTIVE CANONICAL TEST CASE WORKBENCH (SINGLE DEDUPLICATED CATALOG)" zh="第二部分 · 互動式標準 Test Cases 規格工作台（單一去重權威目錄）" /></span>
+          <span><T en="PART 2 · INTERACTIVE CANONICAL TEST CASE WORKBENCH (SINGLE DEDUPLICATED CATALOG)" zh="第二部分 · 互動式標準 Test Cases 規格工作台（整合後不重複的標準案例表）" /></span>
           <code className="ct-section-pill">OB · REST · WS · DOC · LIVE · MTC</code>
         </div>
         <span className="ct-section-note">

@@ -54,7 +54,7 @@ export default function FailedRunDemo() {
           <div className="ct-topbar-right">
             <div className="ct-snapshot-pill ct-snapshot-pill-red">
               <span aria-hidden="true">🛑</span>
-              <T en="Counterfactual Run: DEMO-RUN-FAIL-001 · P0 Blocker DEF-MDQ-004 · Verdict: HOLD / NO-GO" zh="反事實執行：DEMO-RUN-FAIL-001 · P0 阻擋缺陷 DEF-MDQ-004 · 裁決：HOLD / NO-GO" />
+              <T en="Counterfactual Run: DEMO-RUN-FAIL-001 · P0 Blocker DEF-MDQ-004 · Verdict: HOLD / NO-GO" zh="模擬失敗演練：DEMO-RUN-FAIL-001 · P0 阻擋缺陷 DEF-MDQ-004 · 裁決：HOLD / NO-GO" />
             </div>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function FailedRunDemo() {
           <code className="ct-badge-hold">TC-MDQ-017 · Exit Code 1</code>
         </div>
         <span className="ct-section-note">
-          <T en="Side-by-side comparison of expected contract vs. actual stale state overwrite and sanitized pytest trace" zh="並列檢視預期規格、實際過期覆蓋異常與去敏後之 pytest 失敗輸出" />
+          <T en="Side-by-side comparison of expected contract vs. actual stale state overwrite and sanitized pytest trace" zh="並列檢視預期規格、實際過期覆蓋異常與已移除本機路徑之 pytest 失敗輸出" />
         </span>
       </div>
 

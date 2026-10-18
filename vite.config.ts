@@ -41,7 +41,12 @@ export default defineConfig(async () => {
   process.env.MINIFLARE_REGISTRY_PATH ??= ".wrangler/registry";
 
   if (process.env.GITHUB_PAGES === "true") {
-    return { plugins: [vinext()] };
+    return {
+      define: {
+        "process.env.GITHUB_PAGES": JSON.stringify("true"),
+      },
+      plugins: [vinext()],
+    };
   }
 
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.

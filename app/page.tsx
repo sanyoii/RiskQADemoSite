@@ -19,10 +19,11 @@ export default function Home() {
           <div className="ct-brand">
             <span className="ct-brand-dot" aria-hidden="true" />
             <div>
-              <p className="eyebrow"><T en="Risk-Based QA · Read-only portfolio" zh="風險導向 QA · 唯讀作品集" /></p>
+              <p className="eyebrow"><T en="Risk-Based QA · Read-only portfolio · Low-Tech Testing Dashboard" zh="風險導向 QA · 唯讀作品集 · Low-Tech Testing Dashboard" /></p>
               <h1>QA Decision Desk</h1>
             </div>
-            <span className="ct-brand-tag"><T en="B+C HYBRID · CONTROL TOWER" zh="B+C 混搭黃金版 · 風險決策控制台" /></span>
+            <span className="ct-dne-badge"><T en="📌 DO NOT ERASE · LOW-TECH BOARD" zh="📌 DO NOT ERASE · 低科技決策白板" /></span>
+            <span className="ct-brand-tag ct-sr-compat"><T en="B+C HYBRID · CONTROL TOWER" zh="B+C 混搭黃金版 · 風險決策控制台" /></span>
           </div>
         </div>
         <div className="ct-topbar-right">
@@ -32,7 +33,7 @@ export default function Home() {
           </div>
         </div>
       </div>
-      <p className="ct-masthead-sub"><T en="Status first. Traceability from risk to evidence, plus counterfactual Hold verification." zh="先看狀態。從風險到證據的四步可追溯看板，並附反事實 Hold 攔截對照。" /></p>
+      <p className="ct-masthead-sub"><T en="Inspired by James Bach (1997): Do not count vanity numbers — make evidence-based assessments with 3-stage plain-language coverage milestones." zh="源自 James Bach (1997) Low-Tech Testing Dashboard：「不計算虛榮數字，而是基於證據做出主觀評估」——以三階段白話里程碑呈現測試深度與風險邊界。" /></p>
     </header>
     <ControlTowerNav active="dashboard" />
     <div id="formal-dashboard"><DecisionDashboard /></div>

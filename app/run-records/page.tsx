@@ -101,27 +101,24 @@ export default function RunRecords() {
           </div>
         </div>
         <p className="ct-masthead-sub">
-          <T en="Part B Telemetry Matrix for Sept 6–7 pinned runs + Part A Interactive Workbench for the deduplicated test case catalog." zh="結合 B 版「9/6–9/7 鎖定執行遙測矩陣」與 A 版「互動式測試案例分類工作台」，消除重複表格與本機路徑外洩。" />
+          <T en="Evidence ledger backing the Low-Tech Whiteboard: 6 pinned JUnit run receipts (67 checks) and the 34 canonical test case specifications." zh="支撐主控白板評估結論的底層證據帳本：收錄 6 筆鎖定版本之去敏 JUnit 執行收據（67 項檢查）與 34 項標準測試案例規格。" />
         </p>
       </header>
 
       <ControlTowerNav active="run-records" />
 
-      <nav className="ct-chronology-index" aria-label="Record sections index" data-aria-label-en="Record sections index" data-aria-label-zh="執行記錄區段索引">
+      <nav className="ct-chronology-index ct-chrono-slim" aria-label="Record sections index" data-aria-label-en="Record sections index" data-aria-label-zh="執行記錄區段索引">
         <a className="ct-chrono-card" href="#reviewed-runs-title">
           <span className="ct-chrono-step"><T en="SECTION 01 · PINNED SNAPSHOT RUNS" zh="第一區 · 鎖定快照正式執行記錄" /></span>
           <strong>cex-market-data-quality-lab <code>@fc1e060</code> &amp; sanyoii.github.io <code>@643b017</code></strong>
-          <small><T en="Sept 6–7 owner-reviewed runs (45/45 CEX Pass + 22/22 Portfolio Pass after 1 Blocked retry)" zh="9/6–9/7 負責人已審查之執行（45/45 CEX 通過 + 22/22 主站重跑通過）" /></small>
         </a>
         <a className="ct-chrono-card" href="#canonical-workbench-title">
           <span className="ct-chrono-step"><T en="SECTION 02 · LOGICAL TEST CASE CATALOG" zh="第二區 · 34 個 Logical Test Case 定義表" /></span>
-          <strong>cex-market-data-quality-lab <code>@fc1e060 / @8fd5081</code></strong>
-          <small><T en="Interactive filter workbench for OB, REST, WS, DOC, LIVE & MTC test specifications" zh="互動式篩選工作台（OB / REST / WS / DOC / LIVE / MTC 檢查內容與預期結果）" /></small>
+          <strong>OB · REST · WS · DOC · LIVE · MTC</strong>
         </a>
         <a className="ct-chrono-card ct-chrono-hold" href={siteHref("/run-records/fail-demo")}>
           <span className="ct-chrono-step"><T en="SECTION 03 · COUNTERFACTUAL HOLD DEMO" zh="第三區 · 反事實失敗攔截示範" /></span>
           <strong>DEMO-RUN-FAIL-001 · <code>TC-MDQ-017</code> → <code>DEF-MDQ-004</code></strong>
-          <small><T en="Open Failure & Decision Replay for Expected vs. Actual diff and pytest log" zh="前往失敗案例與決定回放查看 Expected vs. Actual 差異與 pytest log" /></small>
         </a>
       </nav>
 
@@ -132,7 +129,7 @@ export default function RunRecords() {
           <code className="ct-section-pill">6 Reviewed Runs · 67 Active Checks</code>
         </div>
         <span className="ct-section-note">
-          <T en="Sanitized command strings and SHA-256 digests bound to data/release-records.json" zh="指令已正規化去敏，並綁定原始 JUnit SHA-256 雜湊" />
+          <T en="Click any Run ID to jump to its per-test JUnit breakdown below" zh="點選任一執行編號可跳轉展開下方逐項 JUnit 測試明細" />
         </span>
       </div>
 
@@ -182,14 +179,22 @@ export default function RunRecords() {
             <h3>{record.repository}</h3>
             <code className="ct-badge-go">{`SHA ${record.subjectSha.slice(0, 12)}`}</code>
           </div>
-          <dl className="technical-list">
-            <dt><T en="Tested version" zh="受測版本" /></dt><dd><code>{record.subjectSha}</code></dd>
-            <dt><T en="Review" zh="審查" /></dt><dd><T en="William · Owner self-review; overlapping roles disclosed" zh="William · 負責人自我審查；已揭露角色重疊" /></dd>
-            <dt><T en="Decision recorded" zh="決定記錄時間" /></dt><dd>{record.decidedAt}</dd>
-            <dt><T en="Approval expiry" zh="核准到期時間" /></dt><dd>{record.expiresAt}</dd>
-            <dt><T en="In scope" zh="驗收範圍" /></dt><dd>{record.scope.join(" · ")}</dd>
-            <dt><T en="Excluded" zh="排除範圍" /></dt><dd>{record.excluded.join(" · ")}</dd>
-          </dl>
+          <details className="lt-rc-details" style={{ marginBottom: "0.65rem" }}>
+            <summary>
+              <span><T en="▸ Expand Tested Scope, Exclusions & Review Metadata" zh="▸ 展開受測範圍、排除邊界與審查宣告" /></span>
+              <code><T en="Metadata" zh="詳細範圍" /></code>
+            </summary>
+            <div className="lt-rc-details-body">
+              <dl className="technical-list">
+                <dt><T en="Tested version" zh="受測版本" /></dt><dd><code>{record.subjectSha}</code></dd>
+                <dt><T en="Review" zh="審查" /></dt><dd><T en="William · Owner self-review; overlapping roles disclosed" zh="William · 負責人自我審查；已揭露角色重疊" /></dd>
+                <dt><T en="Decision recorded" zh="決定記錄時間" /></dt><dd>{record.decidedAt}</dd>
+                <dt><T en="Approval expiry" zh="核准到期時間" /></dt><dd>{record.expiresAt}</dd>
+                <dt><T en="In scope" zh="驗收範圍" /></dt><dd>{record.scope.join(" · ")}</dd>
+                <dt><T en="Excluded" zh="排除範圍" /></dt><dd>{record.excluded.join(" · ")}</dd>
+              </dl>
+            </div>
+          </details>
           {record.runs.map(run => <details className="case-group ct-run-details" id={run.id} key={run.id}>
             <summary>
               <span>{run.id} · {run.status}</span>

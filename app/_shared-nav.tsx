@@ -36,10 +36,10 @@ export function ControlTowerThemeSwitch() {
   return (
     <div className="ct-theme-switch" role="group" aria-label="Theme mode" data-aria-label-en="Theme mode" data-aria-label-zh="主題模式">
       <button type="button" id="ctThemeDark" className="ct-theme-dark-btn is-on" onClick={() => switchTheme("dark")}>
-        <T en="🌙 Dark Tower" zh="🌙 深色控制台" />
+        <T en="🌙 Dark" zh="🌙 深色模式" />
       </button>
       <button type="button" id="ctThemeLight" className="ct-theme-light-btn" onClick={() => switchTheme("light")}>
-        <T en="☀️ Light" zh="☀️ 淺色紙質" />
+        <T en="☀️ Whiteboard" zh="☀️ 淺色白板" />
       </button>
     </div>
   );
@@ -54,13 +54,13 @@ export function ControlTowerNav({ active }: { active: ActivePageId }) {
         {active === "dashboard" ? (
           <span className="ct-nav-pill is-active" aria-current="page">
             <span className="ct-nav-step">00</span>
-            <strong><T en="Dashboard" zh="決策控制台" /></strong>
+            <strong><T en="Low-Tech Board" zh="主控白板" /></strong>
             <code className="ct-nav-badge ct-nb-blue">2 GO · 1 HOLD</code>
           </span>
         ) : (
           <a className="ct-nav-pill" href={siteHref("/")}>
             <span className="ct-nav-step">00</span>
-            <strong><T en="Dashboard" zh="決策控制台" /></strong>
+            <strong><T en="Low-Tech Board" zh="主控白板" /></strong>
             <code className="ct-nav-badge ct-nb-blue">2 GO · 1 HOLD</code>
           </a>
         )}
@@ -97,7 +97,7 @@ export function ControlTowerNav({ active }: { active: ActivePageId }) {
           <span className="ct-nav-pill is-active" aria-current="page">
             <span className="ct-nav-step">03</span>
             <strong><T en="Design evolution" zh="設計演進" /></strong>
-            <code className="ct-nav-badge ct-nb-purple">v4.0 Hybrid · 6 Rules</code>
+            <code className="ct-nav-badge ct-nb-purple">Low-Tech v3 · 6 Rules</code>
           </span>
         ) : (
           <a className="ct-nav-pill" href={siteHref("/dashboard-demo")}>

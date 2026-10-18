@@ -38,7 +38,7 @@ export default function DesignEvolution() {
           <div className="ct-topbar-right">
             <div className="ct-snapshot-pill">
               <span aria-hidden="true">📐</span>
-              <T en="4 Generations (Sample A / B / C → Active B+C Hybrid) · 6 Deterministic Fail-Closed Rules" zh="四代架構演進（Sample A / B / C ➔ 現役 B+C 混搭）· 6 條決定論規則" />
+              <T en="Evolution to Low-Tech Whiteboard v3 (James Bach 1997) · 6 Deterministic Fail-Closed Rules" zh="演進至 Low-Tech 五欄決策白板 v3 (James Bach 1997) · 6 條決定論規則" />
             </div>
           </div>
         </div>
@@ -49,14 +49,14 @@ export default function DesignEvolution() {
 
       <ControlTowerNav active="dashboard-demo" />
 
-      {/* PART 1 (Option C): 4-Generation Architecture Evolution Board */}
+      {/* PART 1: Architecture Evolution Board */}
       <div className="ct-section-bar">
         <div className="ct-section-title">
-          <span><T en="PART 1 · 4-GENERATION ARCHITECTURE EVOLUTION BOARD (SAMPLE A / B / C → ACTIVE HYBRID)" zh="第一部分 · 四代架構演進看板（從早期視覺樣板走向 B+C 混搭證據控制台）" /></span>
-          <code className="ct-section-pill">ADR Evolution</code>
+          <span><T en="PART 1 · ARCHITECTURE EVOLUTION TO LOW-TECH TESTING DASHBOARD v3" zh="第一部分 · 架構演進看板（從早期視覺樣板、高密度戰情室走向 Low-Tech 減法白板 v3）" /></span>
+          <code className="ct-section-pill">James Bach (1997) Philosophy</code>
         </div>
         <span className="ct-section-note">
-          <T en="What we kept from each prototype and what we eliminated to prevent unverified quality claims" zh="每一代原型保留了什麼核心價值、又剔除了哪些沒有證據支撐的視覺裝飾" />
+          <T en="Why we stripped away duplicate tables and cryptic 0–3 codes in favor of a 30-second Low-Tech Whiteboard" zh="為何我們砍除重複矩陣與難懂的 0~3 代號，回歸 30 秒一眼抓到重點的 Low-Tech 五欄白板" />
         </span>
       </div>
 
@@ -69,12 +69,12 @@ export default function DesignEvolution() {
               <p><T en="Executive summary cards prototype" zh="高階主管目標卡片原型" /></p>
             </header>
             <div className="ct-card-block">
-              <p><T en="Kept the clear management questions; removed repeated Ready claims and effort bars from the first screen." zh="保留清楚的管理問題；首頁移除重複的 Ready 主張與測試力度條。" /></p>
+              <p><T en="Kept the clear management questions (Q1–Q3); removed repeated Ready claims and effort bars from the first screen." zh="保留清楚的管理三問（Q1–Q3）；首頁移除重複的 Ready 主張與百分比進度條。" /></p>
             </div>
           </div>
           <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">Kept: Management Q&A</span>
-            <span className="ct-art-chip">Dropped: Effort % Bars</span>
+            <span className="ct-art-chip">Kept: Management Q1–Q3</span>
+            <span className="ct-art-chip">Dropped: Vanity % Bars</span>
           </footer>
         </li>
 
@@ -86,46 +86,46 @@ export default function DesignEvolution() {
               <p><T en="Sequential G1–G6 checkpoint prototype" zh="G1–G6 順序門檻流程原型" /></p>
             </header>
             <div className="ct-card-block">
-              <p><T en="Kept traceability; gates are now explicitly historical, separated from today's eligibility." zh="保留可追溯性；Gate 明確標為歷史記錄，與今天是否有效分開。" /></p>
+              <p><T en="Kept traceability; gates are now explicitly historical and moved into the secondary Engineering Evidence view." zh="保留可追溯性；將 G1–G6 與 00–08 模板收納至第二視角「工程證據模式」，不干擾首屏閱讀。" /></p>
             </div>
           </div>
           <footer className="ct-artifact-footer">
             <span className="ct-art-chip">Kept: Gate Traceability</span>
-            <span className="ct-art-chip">Fixed: Historical vs TTL</span>
+            <span className="ct-art-chip">Moved: 2nd Mode Toggle</span>
           </footer>
         </li>
 
         <li className="ct-stage-col">
           <div>
             <header className="ct-stage-head">
-              <div className="ct-stage-step"><span>GEN 03 · SAMPLE C</span><code>RETIRED</code></div>
+              <div className="ct-stage-step"><span>GEN 03 · SAMPLE C &amp; B+C</span><code>RETIRED</code></div>
               <strong>C · Repo Portfolio Matrix</strong>
-              <p><T en="Multi-repository status table prototype" zh="跨專案品質矩陣原型" /></p>
+              <p><T en="Multi-table Control Tower prototype" zh="跨專案大矩陣與多表堆疊原型" /></p>
             </header>
             <div className="ct-card-block">
-              <p><T en="Kept the per-repository overview; replaced fixed Level 2+ decoration with data-driven coverage in details." zh="保留逐 Repo 總覽；將固定 Level 2+ 圖示改為明細中的資料驅動覆蓋。" /></p>
+              <p><T en="Stacking 4-stage cards + 9-column matrix + cryptic 0,1,1+,2,2+,3 codes caused cognitive overload and triple duplication." zh="同時堆疊四步看板＋九欄矩陣＋0,1,1+,2,2+,3 密碼表造成資訊過載與三次重複，偏離低科技白板本意。" /></p>
             </div>
           </div>
           <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">Kept: Cross-Repo Matrix</span>
-            <span className="ct-art-chip">Fixed: SHA-Bound Proof</span>
+            <span className="ct-art-chip">Lesson: Too Much Info</span>
+            <span className="ct-art-chip">Dropped: Cryptic 0–3 Scale</span>
           </footer>
         </li>
 
         <li className="ct-stage-col ct-verdict-col">
           <div>
             <header className="ct-stage-head">
-              <div className="ct-stage-step"><span>GEN 04 · ACTIVE HYBRID</span><code>ACTIVE v4.0</code></div>
-              <strong><T en="Decision Desk" zh="決策台" /></strong>
-              <p><T en="Option B+C Control Tower × Traceability Board" zh="現役 B+C 混搭戰情室 × 四步追溯看板" /></p>
+              <div className="ct-stage-step"><span>GEN 04 · ACTIVE LOW-TECH v3</span><code>ACTIVE</code></div>
+              <strong><T en="Low-Tech Whiteboard v3" zh="Low-Tech 五欄決策白板 v3" /></strong>
+              <p><T en="5-Column Board × 3-Stage Milestones × Progressive Disclosure" zh="五欄評估表 × 三階段白話里程碑 × 預設收合漸進揭露" /></p>
             </header>
             <div className="ct-card-block">
-              <p><T en="One policy supplies the current verdict, evidence gap, owner and next action. Replay preserves the distinction between observed history and synthetic teaching scenarios." zh="同一套規則提供目前判定、證據缺口、負責人與下一步。回放清楚區分實際歷史與合成教學情境。" /></p>
+              <p><T en="Inspired by James Bach (1997), The Liberators & QA Sphere: collapsible Q1–Q3 headers, 3-stage plain-language coverage milestones, and 1-click switch to raw JUnit receipts." zh="融合 James Bach (1997)、The Liberators 與 QA Sphere：頂部與左欄長文預設收合、三格白話里程碑取代代號，並支援一鍵切換工程證據。" /></p>
             </div>
           </div>
           <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">00–08 Traceability</span>
-            <a className="ct-art-chip ct-art-link" href={siteHref("/")}><T en="Current Dashboard ↗" zh="目前 Dashboard ↗" /></a>
+            <span className="ct-art-chip">3-Stage Milestones</span>
+            <a className="ct-art-chip ct-art-link" href={siteHref("/")}><T en="Current Whiteboard ↗" zh="回到主控白板 ↗" /></a>
           </footer>
         </li>
       </ol>

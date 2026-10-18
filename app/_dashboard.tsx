@@ -15,6 +15,8 @@ const verdicts = {
 };
 type Verdict = keyof typeof verdicts;
 type ScenarioId = "cex-go" | "portfolio-go" | "hold-sim";
+type BoardViewMode = "whiteboard" | "evidence" | "hold-preview";
+type RepoFilterId = "all" | "cex" | "portfolio";
 
 // Translate exact recorded wording only; snapshots and their integrity digests stay unchanged.
 const historicalGateEnglish: Record<string, string> = {
@@ -37,6 +39,178 @@ function Label({ value }: { value: string }) {
 function EvidenceLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
   return safeEvidenceUrl(href) ? <a className={className} href={href.startsWith("/") ? siteHref(href) : href}>{children}</a> : <span><T en="Link withheld" zh="連結已隱藏" /></span>;
 }
+
+interface MilestoneChip {
+  label: LocalizedText;
+  tone: "pass" | "warn" | "fail" | "off" | "oos-span";
+}
+
+interface WhiteboardAreaRow {
+  id: string;
+  repoGroup: "cex" | "portfolio" | "shared";
+  areaTitle: LocalizedText;
+  areaRisk: LocalizedText;
+  effortLabel: string;
+  effortTone: "high" | "med" | "low" | "oos";
+  milestones: MilestoneChip[];
+  holdMilestones?: MilestoneChip[];
+  qualityLabel: LocalizedText;
+  qualityTone: "good" | "warn" | "bad" | "oos";
+  holdQualityLabel?: LocalizedText;
+  holdQualityTone?: "good" | "warn" | "bad" | "oos";
+  comment: LocalizedText;
+  holdComment?: LocalizedText;
+  evidenceHref: string;
+  evidenceLabel: string;
+  holdEvidenceHref?: string;
+  holdEvidenceLabel?: string;
+}
+
+const whiteboardRows: WhiteboardAreaRow[] = [
+  {
+    id: "cex-orderbook",
+    repoGroup: "cex",
+    areaTitle: { en: "CEX · Order Book Sequence & State", zh: "CEX · Order Book 序號與狀態" },
+    areaRisk: { en: "P0 Core Risk · Prevent stale sequence overwriting latest state", zh: "P0 核心風險 · 防止舊序號覆蓋最新帳本" },
+    effortLabel: "High · Done",
+    effortTone: "high",
+    milestones: [
+      { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
+      { label: { en: "✓ Edge & Negative", zh: "✓ 異常與邊界" }, tone: "pass" },
+      { label: { en: "◌ Stress Excluded", zh: "◌ 壓測未測" }, tone: "off" },
+    ],
+    holdMilestones: [
+      { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
+      { label: { en: "× Stale Seq Failed", zh: "× 亂序拒絕失敗" }, tone: "fail" },
+      { label: { en: "◌ Stress Excluded", zh: "◌ 壓測未測" }, tone: "off" },
+    ],
+    qualityLabel: { en: "● Good", zh: "● Good 良好" },
+    qualityTone: "good",
+    holdQualityLabel: { en: "× Bad (Blocked)", zh: "× Bad 阻擋" },
+    holdQualityTone: "bad",
+    comment: {
+      en: "Sequential updates, out-of-order rejection, and reconnect snapshot recovery all pass (TC-017 failure triggers immediate Hold).",
+      zh: "遞增、亂序拒絕與斷線重連快照皆通過（TC-017 失敗即觸發攔截）",
+    },
+    holdComment: {
+      en: "BLOCKER DEF-MDQ-004: TC-MDQ-017 failed — stale sequence 103 overwrote newer sequence 104. Release gate locked at NO-GO.",
+      zh: "阻擋缺陷 DEF-MDQ-004：TC-MDQ-017 失敗，舊序號 103 覆蓋最新序號 104，看板立即轉紅燈攔截！",
+    },
+    evidenceHref: "/run-records/#RUN-20260907-cex-deterministic-1",
+    evidenceLabel: "12 cases ↗",
+    holdEvidenceHref: "/run-records/fail-demo",
+    holdEvidenceLabel: "Fail Log ↗",
+  },
+  {
+    id: "cex-contracts",
+    repoGroup: "cex",
+    areaTitle: { en: "CEX · REST & WebSocket Contracts", zh: "CEX · REST & WebSocket 契約" },
+    areaRisk: { en: "P0 Core Risk · Schema types, Heartbeat & malformed payload guards", zh: "P0 核心風險 · 欄位型別、Heartbeat 與防呆" },
+    effortLabel: "High · Done",
+    effortTone: "high",
+    milestones: [
+      { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
+      { label: { en: "✓ Edge & Negative", zh: "✓ 異常與邊界" }, tone: "pass" },
+      { label: { en: "◌ Stress Excluded", zh: "◌ 壓測未測" }, tone: "off" },
+    ],
+    qualityLabel: { en: "● Good", zh: "● Good 良好" },
+    qualityTone: "good",
+    comment: {
+      en: "Offline deterministic checks verify normal subscriptions, HTTP error codes, and malformed payload guards.",
+      zh: "離線 Deterministic 驗證正常訂閱、異常 HTTP 狀態與錯誤 payload 防呆",
+    },
+    evidenceHref: "/run-records/#RUN-20260907-cex-deterministic-1",
+    evidenceLabel: "23 cases ↗",
+  },
+  {
+    id: "cex-live",
+    repoGroup: "cex",
+    areaTitle: { en: "CEX · Binance Public Live Feed", zh: "CEX · Binance 公開即時行情 (Live)" },
+    areaRisk: { en: "P1 External Dependency · Live exchange public endpoint handshake", zh: "P1 外部依賴 · 真實交易所公開端點握手" },
+    effortLabel: "Med · Done",
+    effortTone: "med",
+    milestones: [
+      { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
+      { label: { en: "▲ Public Feed Only", zh: "▲ 僅公開端點" }, tone: "warn" },
+      { label: { en: "◌ Chaos Excluded", zh: "◌ 混沌未測" }, tone: "off" },
+    ],
+    qualityLabel: { en: "▲ Warning (Bounded)", zh: "▲ Warning 受限" },
+    qualityTone: "warn",
+    comment: {
+      en: "Live BTCUSDT REST/WS handshake passed; subject to external network & exchange rate limits (no offline guarantee).",
+      zh: "BTCUSDT 即時連線正常；受外部網路與交易所限流影響，不作離線保證",
+    },
+    evidenceHref: "/run-records/#RUN-20260907-cex-live-1",
+    evidenceLabel: "5 live ↗",
+  },
+  {
+    id: "portfolio-rwd",
+    repoGroup: "portfolio",
+    areaTitle: { en: "Portfolio · Bilingual & Chromium RWD", zh: "Portfolio · 雙語內容與 Chromium RWD" },
+    areaRisk: { en: "P0 Presentation Risk · EN/ZH parity & desktop/mobile viewports", zh: "P0 呈現風險 · EN/ZH 對齊與桌機/手機視窗" },
+    effortLabel: "Med · Done",
+    effortTone: "med",
+    milestones: [
+      { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
+      { label: { en: "✓ EN/ZH & RWD", zh: "✓ 雙語與 RWD" }, tone: "pass" },
+      { label: { en: "◌ Safari Excluded", zh: "◌ Safari 未測" }, tone: "off" },
+    ],
+    qualityLabel: { en: "● Good", zh: "● Good 良好" },
+    qualityTone: "good",
+    comment: {
+      en: "Static HTML + Playwright runtime checks pass; honestly retains Attempt 1 environment-blocked record.",
+      zh: "靜態結構與執行期檢查全過；誠實保留首次環境受阻（Blocked）紀錄",
+    },
+    evidenceHref: "/run-records/#RUN-20260906-portfolio-chromium-retry",
+    evidenceLabel: "22 checks ↗",
+  },
+  {
+    id: "shared-doc-integrity",
+    repoGroup: "shared",
+    areaTitle: { en: "Cross-Repo · Claim & Evidence Integrity", zh: "跨專案 · 文件主張與證據鏈對齊" },
+    areaRisk: { en: "P1 Governance Risk · Prevent README claims exceeding tested scope", zh: "P1 治理風險 · 防止 README 宣稱超出實測範圍" },
+    effortLabel: "Low · Done",
+    effortTone: "low",
+    milestones: [
+      { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
+      { label: { en: "✓ Digest Audit", zh: "✓ 防篡改核對" }, tone: "pass" },
+      { label: { en: "◌ —", zh: "◌ —" }, tone: "off" },
+    ],
+    qualityLabel: { en: "● Good", zh: "● Good 良好" },
+    qualityTone: "good",
+    holdQualityLabel: { en: "▲ Hold at G6", zh: "▲ G6 攔截生效" },
+    holdQualityTone: "warn",
+    comment: {
+      en: "All public claims are pinned to Git SHAs and sanitized JUnit SHA-256 digests without inflated percentages.",
+      zh: "所有公開數字皆綁定 Git SHA 與 JUnit 收據，無誇大覆蓋率",
+    },
+    holdComment: {
+      en: "Fail-Closed Policy G6: Even if a developer reruns tests to green, status stays at HOLD until owner sign-off.",
+      zh: "Fail-Closed 規則 G6：即使工程師修完重跑全綠，在負責人完成人工覆核前強制維持 HOLD",
+    },
+    evidenceHref: "/run-records",
+    evidenceLabel: "5 checks ↗",
+  },
+  {
+    id: "explicit-exclusions",
+    repoGroup: "shared",
+    areaTitle: { en: "Explicit Exclusions · Private Keys / Load / Safari", zh: "明確排除 · 私密下單／高併發壓測／Safari" },
+    areaRisk: { en: "Honest Boundary (Explicit Out-of-Scope · Never claimed as tested)", zh: "誠實邊界 (Explicit Out-of-Scope · 不冒充已測)" },
+    effortLabel: "None · OOS",
+    effortTone: "oos",
+    milestones: [
+      { label: { en: "🚫 Explicitly Excluded (Untested · Not a Zero-Risk Claim)", zh: "🚫 明確排除（未測 · 不冒充零風險）" }, tone: "oos-span" },
+    ],
+    qualityLabel: { en: "◌ Untested (Disclosed)", zh: "◌ 未測 (誠實揭露)" },
+    qualityTone: "oos",
+    comment: {
+      en: "Intentionally excludes live fund orders and production load testing; green checks elsewhere never imply full-system zero risk.",
+      zh: "刻意排除真實資金交易與壓測；不因其他項目全綠而宣稱全系統零風險",
+    },
+    evidenceHref: "/dashboard-demo",
+    evidenceLabel: "Scope G1 ↗",
+  },
+];
 
 interface ScenarioConfig {
   id: ScenarioId;
@@ -110,7 +284,7 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
       { label: { en: "Prior Sept 6 Baseline Runs Retained", zh: "保留 9/6 前置執行歷史紀錄" }, result: { en: "4 Runs Linked", zh: "4 筆 Run 已連結" }, tone: "warn" },
     ],
     verdictBig: { en: "✓ GO — SCOPED RELEASE APPROVED", zh: "✓ GO — 限定範圍驗收通過" },
-    verdictSub: { en: "Pinned SHA fc1e060 · Verified 2026-09-07 · Coverage Level 2", zh: "鎖定 SHA fc1e060 · 2026-09-07 驗證 · 覆蓋等級 Level 2" },
+    verdictSub: { en: "Pinned SHA fc1e060 · Verified 2026-09-07 · Core & Edge Covered", zh: "鎖定 SHA fc1e060 · 2026-09-07 驗證 · 核心與異常邊界已覆蓋" },
     verdictTone: "go",
     criteriaCount: "4/4 Met",
     criteria: [
@@ -164,7 +338,7 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
       { label: { en: "Initial Blocked Run Retained (Not Erased)", zh: "初始 Blocked 紀錄完整保留（未抹除）" }, result: { en: "1 Retained", zh: "保留 1 筆" }, tone: "warn" },
     ],
     verdictBig: { en: "✓ GO — SCOPED RELEASE APPROVED", zh: "✓ GO — 限定範圍驗收通過" },
-    verdictSub: { en: "Pinned SHA 643b017 · Verified 2026-09-06 · Coverage Level 2", zh: "鎖定 SHA 643b017 · 2026-09-06 驗證 · 覆蓋等級 Level 2" },
+    verdictSub: { en: "Pinned SHA 643b017 · Verified 2026-09-06 · Core & Edge Covered", zh: "鎖定 SHA 643b017 · 2026-09-06 驗證 · 核心與異常邊界已覆蓋" },
     verdictTone: "go",
     criteriaCount: "4/4 Met",
     criteria: [
@@ -235,6 +409,8 @@ export function DecisionDashboard() {
   const [clock, setClock] = useState<number | null>(null);
   const [filter, setFilter] = useState<Verdict | null>(null);
   const [activeScenario, setActiveScenario] = useState<ScenarioId>("cex-go");
+  const [viewMode, setViewMode] = useState<BoardViewMode>("whiteboard");
+  const [repoFilter, setRepoFilter] = useState<RepoFilterId>("all");
 
   useEffect(() => {
     const refresh = () => setClock(Date.now());
@@ -253,367 +429,747 @@ export function DecisionDashboard() {
   const totalChecksPassed = dashboardData.repositories.reduce((sum, r) => sum + (r.runMetrics?.latestChecksPassed ?? 0), 0);
   const totalChecksCount = dashboardData.repositories.reduce((sum, r) => sum + (r.runMetrics?.latestChecksTotal ?? 0), 0);
 
+  const isHoldPreview = viewMode === "hold-preview";
+  const filteredWhiteboardRows = whiteboardRows.filter(row => {
+    if (repoFilter === "all") return true;
+    return row.repoGroup === repoFilter || row.repoGroup === "shared";
+  });
+
   return <section className="decision-dashboard" aria-labelledby="repo-quality-title">
-    {/* Control Strip: Interactive Scenario Switcher (Option C) + 4 Telemetry KPIs (Option B) */}
-    <div className="ct-control-strip">
-      <div className="ct-scenario-bar">
-        <div className="ct-scenario-header">
-          <span className="ct-scenario-label">
-            <T en="Interactive Release Decision Scenarios (Click to Switch Traceability Board)" zh="互動式發布決策情境（點選切換下方四步追溯看板）" />
-          </span>
-          <code className="ct-section-pill">3 Interactive Scenarios</code>
-        </div>
-        <div className="ct-scenario-tabs" role="group" aria-label="Release decision scenarios" data-aria-label-en="Release decision scenarios" data-aria-label-zh="發布決策情境切換">
-          {(Object.values(scenarioConfigs)).map(item => (
-            <button
-              type="button"
-              key={item.id}
-              className={`ct-s-tab ${activeScenario === item.id ? (item.badgeType === "hold" ? "is-active-hold" : "is-active-go") : ""} ${item.badgeType === "hold" ? "is-hold-tab" : ""}`}
-              aria-pressed={activeScenario === item.id}
-              onClick={() => setActiveScenario(item.id)}
-            >
-              <span className="ct-s-tab-top">
-                <strong><T {...item.tabTitle} /></strong>
-                <code className={item.badgeType === "hold" ? "ct-badge-hold" : "ct-badge-go"}>{item.badgeText}</code>
-              </span>
-              <span className="ct-s-tab-sub"><T {...item.tabSub} /></span>
-            </button>
-          ))}
+    {/* Mode Switcher Bar (Option 5 Dual-Mode + Hold Preview Toggle) */}
+    <div className="lt-mode-bar">
+      <div className="lt-mode-left">
+        <span className="lt-mode-kicker">
+          <T en="VIEW MODE · PROGRESSIVE DISCLOSURE" zh="檢視視角切換 · 漸進式揭露" />
+        </span>
+        <div className="lt-mode-tabs" role="group" aria-label="Dashboard view mode" data-aria-label-en="Dashboard view mode" data-aria-label-zh="儀表板檢視模式">
+          <button
+            type="button"
+            className={`lt-m-tab ${viewMode === "whiteboard" ? "is-active" : ""}`}
+            aria-pressed={viewMode === "whiteboard"}
+            onClick={() => setViewMode("whiteboard")}
+          >
+            <T en="👁️ 1. Low-Tech Whiteboard (30s Summary)" zh="👁️ 1. Low-Tech 白板模式 (30s 決策總覽)" />
+          </button>
+          <button
+            type="button"
+            className={`lt-m-tab ${viewMode === "evidence" ? "is-active" : ""}`}
+            aria-pressed={viewMode === "evidence"}
+            onClick={() => setViewMode("evidence")}
+          >
+            <T en="🔬 2. Engineering Evidence & 4-Stage Traceability (G1–G6 / SHA)" zh="🔬 2. 工程證據與四步追溯 (G1–G6 / SHA)" />
+          </button>
+          <button
+            type="button"
+            className={`lt-m-tab lt-m-tab-hold ${viewMode === "hold-preview" ? "is-active-hold" : ""}`}
+            aria-pressed={viewMode === "hold-preview"}
+            onClick={() => setViewMode(viewMode === "hold-preview" ? "whiteboard" : "hold-preview")}
+          >
+            <T en="🛑 3. Preview P0 Failure Hold State" zh="🛑 3. 預覽 P0 失敗攔截 (Hold Replay)" />
+          </button>
         </div>
       </div>
-
-      <div className="ct-kpi-grid">
-        <div className="ct-kpi-card">
-          <span className="ct-kpi-title"><T en="Pinned Snapshots" zh="鎖定快照決策" /></span>
-          <strong className="ct-kpi-val ct-val-green">2 GO / 1 HOLD</strong>
-          <span className="ct-kpi-sub"><T en="2 Scoped Go + 1 Hold Demo" zh="2 個 Scoped Go + 1 個攔截示範" /></span>
-        </div>
-        <div className="ct-kpi-card">
-          <span className="ct-kpi-title"><T en="Verified Checks" zh="已驗證測試總數" /></span>
-          <strong className="ct-kpi-val ct-val-blue">{`${totalChecksPassed} / ${totalChecksCount} PASS`}</strong>
-          <span className="ct-kpi-sub"><T en="45 CEX + 22 Portfolio Checks" zh="45 項 CEX + 22 項主站檢查" /></span>
-        </div>
-        <div className="ct-kpi-card">
-          <span className="ct-kpi-title"><T en="Evidence Pack" zh="QA 證據鏈模板" /></span>
-          <strong className="ct-kpi-val ct-val-purple">00–08 Linked</strong>
-          <span className="ct-kpi-sub"><T en="9 Canonical QA Templates" zh="9 份標準 QA 模板串接" /></span>
-        </div>
-        <div className="ct-kpi-card">
-          <span className="ct-kpi-title"><T en="Commit Truth Sync" zh="版本與雜湊同步" /></span>
-          <strong className="ct-kpi-val ct-val-amber">SHA-256 Match</strong>
-          <span className="ct-kpi-sub"><T en="Unified JSON + JUnit Digest" zh="統一 JSON 與 JUnit 雜湊" /></span>
-        </div>
+      <div className="lt-filter-pills" role="group" aria-label="Filter product areas by repository" data-aria-label-en="Filter product areas by repository" data-aria-label-zh="依專案篩選功能區域">
+        <button type="button" className={`lt-f-pill ${repoFilter === "all" ? "is-on" : ""}`} onClick={() => setRepoFilter("all")}>
+          <T en="All Areas (6)" zh="全部區域 (6)" />
+        </button>
+        <button type="button" className={`lt-f-pill ${repoFilter === "cex" ? "is-on" : ""}`} onClick={() => setRepoFilter("cex")}>
+          <T en="CEX Lab" zh="CEX 實驗室" />
+        </button>
+        <button type="button" className={`lt-f-pill ${repoFilter === "portfolio" ? "is-on" : ""}`} onClick={() => setRepoFilter("portfolio")}>
+          <T en="Portfolio Site" zh="個人主作品集" />
+        </button>
       </div>
     </div>
 
-    {/* PART 1: 4-Column Traceability & Release Decision Workflow Board (Option C Core) */}
-    <div className="ct-section-bar">
-      <div className="ct-section-title">
-        <span><T en="PART 1 · TRACEABILITY & RELEASE DECISION WORKFLOW" zh="第一部分 · 風險追溯與發布決策四步看板" /></span>
-        <code className="ct-section-pill">{activeConfig.activeLabel}</code>
-      </div>
-      <span className="ct-section-note">
-        <T en="Trace how QA moves from Risk Identification → Suite Execution → Blocker Triage → Final Verdict" zh="追蹤 QA 如何從「風險識別 → 測試執行 → 缺陷攔截 → 最終簽核」形成有證據的決策" />
-      </span>
-    </div>
-
-    <div className="ct-trace-board">
-      {/* Stage 01 */}
-      <article className="ct-stage-col">
-        <div>
-          <header className="ct-stage-head">
-            <div className="ct-stage-step"><span><T en="STAGE 01 · CHARTER & RISK" zh="階段 01 · 測試委託與風險" /></span><code>00–02</code></div>
-            <h3><T en="Scope & Risk Prioritization" zh="範圍界定與風險優先級" /></h3>
-            <p><T en="What must not break vs. explicit exclusions" zh="不可退讓的核心風險 vs. 誠實揭露之未測邊界" /></p>
-          </header>
-          <div className="ct-card-block">
-            <div className="ct-card-block-title">
-              <span><T en="Prioritized Release Risks" zh="優先納管之發布風險" /></span>
-              <code className="ct-text-green">{activeConfig.risks.length} Tracked</code>
-            </div>
-            {activeConfig.risks.map((risk, idx) => (
-              <div className="ct-risk-item" key={idx}>
-                <span>
-                  <code className={risk.tier === "P0" ? "ct-p0-tag" : "ct-p1-tag"}>{risk.tier}</code>
-                  <T {...risk.label} />
+    {/* =====================================================================
+        MODE 1 & 3: LOW-TECH WHITEBOARD (Ultimate Hybrid v3)
+        ===================================================================== */}
+    {viewMode !== "evidence" && (
+      <div className="lt-whiteboard-view">
+        {/* Layer 01: Ultra-Clean Collapsible 3-Question Signal Strip (Red Box #1 De-cluttered) */}
+        <div className="lt-signal-strip">
+          <details className={`lt-sig-card ${isHoldPreview ? "lt-sig-red" : "lt-sig-green"}`}>
+            <summary className="lt-sig-summary">
+              <div>
+                <span className="lt-sig-kicker">
+                  <T en="Q1 · RELEASE VERDICT (CAN WE SHIP?)" zh="Q1 · RELEASE VERDICT (現在能不能發？)" />
                 </span>
-                <strong className={risk.status.en === "FAILED" ? "ct-text-red" : "ct-text-green"}><T {...risk.status} /></strong>
+                <strong className="lt-sig-val">
+                  {isHoldPreview ? (
+                    <T en="× HOLD / NO-GO (1 Blocked)" zh="× HOLD / NO-GO (攔截禁止發布)" />
+                  ) : (
+                    <T en="✓ 2 / 2 SCOPED GO" zh="✓ 2 / 2 SCOPED GO (限定範圍核准)" />
+                  )}
+                </strong>
               </div>
+              <span className="lt-expand-chip">
+                <span className="lt-chev" aria-hidden="true">▸</span>
+                <T en="Sign-Off Note" zh="展開簽核說明" />
+              </span>
+            </summary>
+            <div className="lt-sig-drawer">
+              {isHoldPreview ? (
+                <p>
+                  <T
+                    en="Counterfactual Hold active: P0 defect DEF-MDQ-004 (stale sequence 103 overwrote 104) blocks release. Even after a passing rerun, G6 requires human owner sign-off."
+                    zh="反事實攔截預覽中：因 P0 缺陷 DEF-MDQ-004（過期序號 103 覆蓋 104）阻擋發布。即使工程師重跑通過，在負責人完成 G6 覆核前仍強制停在 HOLD。"
+                  />
+                </p>
+              ) : (
+                <p>
+                  <T
+                    en="Both repositories passed owner review within their locked automated scope (SHA fc1e060 & 643b017). This is a scoped portfolio approval, not a zero-risk production guarantee."
+                    zh="兩個受測專案皆於鎖定之自動化範圍內完成負責人簽核（SHA fc1e060 與 643b017）。此為作品集限定範圍驗收，不冒充生產環境零風險認證。"
+                  />
+                </p>
+              )}
+            </div>
+          </details>
+
+          <details className="lt-sig-card lt-sig-blue">
+            <summary className="lt-sig-summary">
+              <div>
+                <span className="lt-sig-kicker">
+                  <T en="Q2 · COVERAGE DEPTH (HOW DEEP DID WE TEST?)" zh="Q2 · COVERAGE DEPTH (我們測到多深？)" />
+                </span>
+                <strong className="lt-sig-val">
+                  <T en="Core & Edge Covered (5 In-Scope · 1 Excluded)" zh="核心與異常邊界已覆蓋 (5 達標 · 1 排除)" />
+                </strong>
+              </div>
+              <span className="lt-expand-chip">
+                <span className="lt-chev" aria-hidden="true">▸</span>
+                <T en="Depth Criteria" zh="展開深度標準" />
+              </span>
+            </summary>
+            <div className="lt-sig-drawer">
+              <p>
+                <T
+                  en="Instead of vanity percentages (e.g. 98%), we use 3 plain-language milestones: ① Basic Sanity → ② Edge & Negative Cases → ③ High-Load Stress. High-risk private orders and load tests are honestly disclosed as Excluded."
+                  zh="拒絕虛榮百分比數字，改用三階段白話里程碑：① 基礎正常 → ② 異常與邊界 → ③ 高壓極限。私密下單與高併發壓測誠實列為「明確排除（未測）」。"
+                />
+              </p>
+            </div>
+          </details>
+
+          <details className={`lt-sig-card ${isHoldPreview ? "lt-sig-red" : "lt-sig-amber"}`}>
+            <summary className="lt-sig-summary">
+              <div>
+                <span className="lt-sig-kicker">
+                  <T en="Q3 · ACTIVE BLOCKERS & GATES (WHAT IS THE RISK?)" zh="Q3 · ACTIVE BLOCKERS (風險與門檻攔截？)" />
+                </span>
+                <strong className="lt-sig-val">
+                  {isHoldPreview ? (
+                    <T en="1 P0 Blocker (DEF-MDQ-004)" zh="1 個 P0 阻擋缺陷 (DEF-MDQ-004)" />
+                  ) : (
+                    <T en="0 P0/P1 Blockers (1 Bounded Warning)" zh="0 P0/P1 Blockers (1 項受外部影響 Warning)" />
+                  )}
+                </strong>
+              </div>
+              <span className="lt-expand-chip">
+                <span className="lt-chev" aria-hidden="true">▸</span>
+                <T en="Risk Summary" zh="展開風險摘要" />
+              </span>
+            </summary>
+            <div className="lt-sig-drawer">
+              <p>
+                <T
+                  en="Zero open P0/P1 product defects in the locked snapshots. Public Binance live feed is marked Warning because it depends on external network availability. Click 'Preview P0 Failure Hold State' to see how the gate blocks a P0 regression."
+                  zh="鎖定快照中無未關閉之 P0/P1 阻擋缺陷；Binance 即時連線因受外部網路與交易所狀態影響標為 Warning。可點擊「預覽 P0 失敗攔截」檢視門檻如何阻擋問題版本。"
+                />
+              </p>
+            </div>
+          </details>
+        </div>
+
+        {/* Layer 02: Left Compact Collapsible Cards (Red Box #2 De-cluttered) + Right 5-Column Whiteboard */}
+        <div className="lt-workspace">
+          <aside className="lt-left-rail">
+            {/* Subject 01 Card */}
+            <div className={`lt-repo-card ${repoFilter === "cex" || repoFilter === "all" ? "is-focused" : ""}`}>
+              <div className="lt-rc-kicker">
+                <button type="button" className="lt-rc-filter-trigger" onClick={() => setRepoFilter(repoFilter === "cex" ? "all" : "cex")}>
+                  <T en="● SUBJECT 01 · CLICK TO FILTER" zh="● SUBJECT 01 · 點擊篩選 CEX" />
+                </button>
+                <code>@fc1e060</code>
+              </div>
+              <div className="lt-rc-head">
+                <strong className="lt-rc-title">cex-market-data-lab</strong>
+                <code className={isHoldPreview ? "ct-badge-hold" : "ct-badge-go"}>
+                  {isHoldPreview ? "× HOLD" : "✓ SCOPED GO"}
+                </code>
+              </div>
+              <div className="lt-rc-meta">
+                <span>2026-09-07 · 45 checks</span>
+                <span>QA: William</span>
+              </div>
+              <details className="lt-rc-details">
+                <summary>
+                  <span><T en="▸ QA Assessment & Exclusions" zh="▸ 展開 QA 總評與排除範圍" /></span>
+                  <code><T en="Expand" zh="展開" /></code>
+                </summary>
+                <div className="lt-rc-details-body">
+                  <p>
+                    <T
+                      en="Order Book sequence integrity and REST/WS contracts pass 100% deterministically offline. Intentionally excludes authenticated private-key orders and high-concurrency stress testing."
+                      zh="Order Book 序號遞增、亂序拒絕與 REST/WS 契約在離線環境 100% 可重現通過；刻意排除私密金鑰下單與生產高併發壓測。"
+                    />
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            {/* Subject 02 Card */}
+            <div className={`lt-repo-card ${repoFilter === "portfolio" ? "is-focused" : ""}`}>
+              <div className="lt-rc-kicker">
+                <button type="button" className="lt-rc-filter-trigger" onClick={() => setRepoFilter(repoFilter === "portfolio" ? "all" : "portfolio")}>
+                  <T en="○ SUBJECT 02 · CLICK TO FILTER" zh="○ SUBJECT 02 · 點擊篩選主站" />
+                </button>
+                <code>@643b017</code>
+              </div>
+              <div className="lt-rc-head">
+                <strong className="lt-rc-title">sanyoii.github.io</strong>
+                <code className="ct-badge-go">✓ SCOPED GO</code>
+              </div>
+              <div className="lt-rc-meta">
+                <span>2026-09-06 · 22 checks</span>
+                <EvidenceLink href="/run-records/#RUN-20260906-portfolio-chromium-initial">2 Runs ↗</EvidenceLink>
+              </div>
+              <details className="lt-rc-details">
+                <summary>
+                  <span><T en="▸ QA Assessment & Retry History" zh="▸ 展開 QA 總評與重跑紀錄" /></span>
+                  <code><T en="Expand" zh="展開" /></code>
+                </summary>
+                <div className="lt-rc-details-body">
+                  <p>
+                    <T
+                      en="Bilingual EN/ZH toggle, static links, and Chromium desktop/mobile viewports pass. Honestly preserves Attempt 1 (9/22 Blocked by local environment) alongside Attempt 2 (22/22 Pass)."
+                      zh="雙語切換、靜態結構與 Chromium 桌機/手機響應式檢查全過；完整保留第 1 次環境受阻（Blocked）與第 2 次重跑全過的真實歷史。"
+                    />
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            {/* Counterfactual Hold Proof Card */}
+            <div className="lt-repo-card lt-hold-card">
+              <div className="lt-rc-kicker">
+                <span className="ct-text-red"><T en="🛑 FAIL-CLOSED PROOF" zh="🛑 FAIL-CLOSED 攔截證明" /></span>
+                <code className="ct-text-red">DEF-MDQ-004</code>
+              </div>
+              <div className="lt-rc-head">
+                <strong className="lt-rc-title">
+                  <T en="What happens if a P0 check fails?" zh="當 P0 核心測試失敗時如何攔截？" />
+                </strong>
+              </div>
+              <details className="lt-rc-details lt-rc-details-red">
+                <summary>
+                  <span><T en="▸ How Gate Rejection Works (TC-017)" zh="▸ 展開攔截案例說明 (TC-017)" /></span>
+                  <code><T en="Expand" zh="展開" /></code>
+                </summary>
+                <div className="lt-rc-details-body">
+                  <p>
+                    <T
+                      en="We never clutter the green board with fake alarms. Click the preview button below to see how TC-MDQ-017 (stale sequence 103 overwriting 104) turns the Order Book row to Blocked/NO-GO."
+                      zh="不在綠燈畫面常駐假警報！點擊下方按鈕可將右側五欄白板即時切換為「當過期序號 103 覆蓋 104 時」的 NO-GO 攔截狀態。"
+                    />
+                  </p>
+                </div>
+              </details>
+              <button
+                type="button"
+                className="lt-hold-preview-btn"
+                onClick={() => setViewMode(isHoldPreview ? "whiteboard" : "hold-preview")}
+              >
+                {isHoldPreview ? (
+                  <T en="↩ Restore Normal SCOPED GO Whiteboard" zh="↩ 恢復正常 SCOPED GO 白板狀態" />
+                ) : (
+                  <T en="⚡ Preview HOLD State on Whiteboard →" zh="⚡ 點此在右側白板預覽 HOLD 狀態 →" />
+                )}
+              </button>
+            </div>
+          </aside>
+
+          {/* Right Main Board: James Bach 5-Column Table with 3-Stage Plain-Language Milestones */}
+          <div className="lt-board-panel">
+            <div className="lt-board-header">
+              <div>
+                <h2 className="lt-board-title">
+                  <T en="📋 Low-Tech 5-Column Quality Assessment Whiteboard" zh="📋 Low-Tech 五欄品質評估白板" />
+                  <code className="lt-board-count">
+                    {isHoldPreview ? (
+                      <T en="HOLD PREVIEW ACTIVE (DEF-MDQ-004)" zh="正在預覽 P0 失敗攔截狀態 (DEF-MDQ-004)" />
+                    ) : (
+                      <T en={`Showing ${filteredWhiteboardRows.length} Product Areas`} zh={`顯示 ${filteredWhiteboardRows.length} 個產品功能區`} />
+                    )}
+                  </code>
+                </h2>
+                <p className="lt-board-sub">
+                  <T
+                    en="Evidence-based human assessment over vanity test counts — 3-stage plain-language milestones show exactly what is covered and what is excluded."
+                    zh="「不計算虛榮數字，而是基於證據做出主觀評估」——以三階段白話里程碑直觀呈現測試深度與誠實排除邊界。"
+                  />
+                </p>
+              </div>
+              <div className="lt-board-legend">
+                <span><i className="lt-dot lt-dot-pass" aria-hidden="true" /><T en="Covered & Passed" zh="已覆蓋通過" /></span>
+                <span><i className="lt-dot lt-dot-warn" aria-hidden="true" /><T en="Bounded / External" zh="受限／外部依賴" /></span>
+                <span><i className="lt-dot lt-dot-oos" aria-hidden="true" /><T en="Untested / Excluded" zh="未測／範圍排除" /></span>
+              </div>
+            </div>
+
+            <div className="lt-table-wrap">
+              <table className="lt-bach-table">
+                <thead>
+                  <tr>
+                    <th><T en="1. Product Area (Risk Domain)" zh="1. Product Area (功能風險區)" /></th>
+                    <th><T en="2. Effort" zh="2. Effort (投入)" /></th>
+                    <th><T en="3. Coverage Depth (3-Stage Milestones)" zh="3. Coverage Depth (測試深度三階段)" /></th>
+                    <th><T en="4. Quality" zh="4. Quality (評價)" /></th>
+                    <th><T en="5. QA Assessment & Evidence" zh="5. QA Assessment & Evidence (人話判斷與收據)" /></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredWhiteboardRows.map(row => {
+                    const activeMilestones = isHoldPreview && row.holdMilestones ? row.holdMilestones : row.milestones;
+                    const activeQualityLabel = isHoldPreview && row.holdQualityLabel ? row.holdQualityLabel : row.qualityLabel;
+                    const activeQualityTone = isHoldPreview && row.holdQualityTone ? row.holdQualityTone : row.qualityTone;
+                    const activeComment = isHoldPreview && row.holdComment ? row.holdComment : row.comment;
+                    const activeEvHref = isHoldPreview && row.holdEvidenceHref ? row.holdEvidenceHref : row.evidenceHref;
+                    const activeEvLabel = isHoldPreview && row.holdEvidenceLabel ? row.holdEvidenceLabel : row.evidenceLabel;
+
+                    return (
+                      <tr
+                        key={row.id}
+                        className={`${row.effortTone === "oos" ? "lt-row-oos" : ""} ${isHoldPreview && row.holdQualityTone === "bad" ? "lt-row-hold-alert" : ""}`}
+                      >
+                        <td>
+                          <div className="lt-area-name"><T {...row.areaTitle} /></div>
+                          <div className="lt-area-risk"><T {...row.areaRisk} /></div>
+                        </td>
+                        <td>
+                          <code className={`lt-effort-pill lt-ef-${row.effortTone}`}>{row.effortLabel}</code>
+                        </td>
+                        <td>
+                          <div className="lt-ms-grid">
+                            {activeMilestones.map((ms, idx) => (
+                              <span key={idx} className={`lt-ms-chip lt-ms-${ms.tone}`}>
+                                <T {...ms.label} />
+                              </span>
+                            ))}
+                          </div>
+                        </td>
+                        <td>
+                          <span className={`lt-q-pill lt-q-${activeQualityTone}`}>
+                            <T {...activeQualityLabel} />
+                          </span>
+                        </td>
+                        <td>
+                          <div className="lt-comment-cell">
+                            <span className="lt-comment-text"><T {...activeComment} /></span>
+                            <EvidenceLink className="lt-ev-link" href={activeEvHref}>{activeEvLabel}</EvidenceLink>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Bottom Progressive Disclosure Tray */}
+            <div className="lt-drawer-bar">
+              <span className="lt-drawer-label">
+                <T
+                  en="🔬 Engineering Evidence Drawer (Progressive Disclosure) — collapsed by default for a 30-second scan; click to inspect raw receipts:"
+                  zh="🔬 工程證據收納層（Progressive Disclosure）——預設收合不干擾 30 秒閱讀；點擊即可深潛查驗底層收據："
+                />
+              </span>
+              <div className="lt-drawer-chips">
+                <EvidenceLink className="lt-d-chip" href="/run-records">
+                  <strong>34</strong> <T en="Case Specs" zh="案例規格" /> ↗
+                </EvidenceLink>
+                <EvidenceLink className="lt-d-chip" href="/run-records">
+                  <strong>6</strong> <T en="JUnit SHA-256 Receipts" zh="JUnit 雜湊收據" /> ↗
+                </EvidenceLink>
+                <button type="button" className="lt-d-chip lt-d-chip-btn" onClick={() => setViewMode("evidence")}>
+                  <strong>00–08</strong> <T en="4-Stage Traceability" zh="四步追溯看板" /> ↗
+                </button>
+                <EvidenceLink className="lt-d-chip" href="/dashboard-demo">
+                  <strong>G1–G6</strong> <T en="Fail-Closed Rules" zh="裁決規則" /> ↗
+                </EvidenceLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* =====================================================================
+        MODE 2: ENGINEERING EVIDENCE & 4-STAGE TRACEABILITY (SSR rendered & toggleable)
+        ===================================================================== */}
+    <div className={viewMode === "evidence" ? "lt-evidence-view" : "ct-sr-compat"}>
+      {/* Control Strip: Interactive Scenario Switcher (Option C) + 4 Telemetry KPIs (Option B) */}
+      <div className="ct-control-strip">
+        <div className="ct-scenario-bar">
+          <div className="ct-scenario-header">
+            <span className="ct-scenario-label">
+              <T en="Interactive Release Decision Scenarios (Click to Switch Traceability Board)" zh="互動式發布決策情境（點選切換下方四步追溯看板）" />
+            </span>
+            <code className="ct-section-pill">3 Interactive Scenarios</code>
+          </div>
+          <div className="ct-scenario-tabs" role="group" aria-label="Release decision scenarios" data-aria-label-en="Release decision scenarios" data-aria-label-zh="發布決策情境切換">
+            {(Object.values(scenarioConfigs)).map(item => (
+              <button
+                type="button"
+                key={item.id}
+                className={`ct-s-tab ${activeScenario === item.id ? (item.badgeType === "hold" ? "is-active-hold" : "is-active-go") : ""} ${item.badgeType === "hold" ? "is-hold-tab" : ""}`}
+                aria-pressed={activeScenario === item.id}
+                onClick={() => setActiveScenario(item.id)}
+              >
+                <span className="ct-s-tab-top">
+                  <strong><T {...item.tabTitle} /></strong>
+                  <code className={item.badgeType === "hold" ? "ct-badge-hold" : "ct-badge-go"}>{item.badgeText}</code>
+                </span>
+                <span className="ct-s-tab-sub"><T {...item.tabSub} /></span>
+              </button>
             ))}
           </div>
-          <div className="ct-oos-box">
-            <div className="ct-oos-title"><T en="◌ Explicit Out-of-Scope (Honest Boundaries)" zh="◌ 明確排除範圍（誠實揭露未測邊界）" /></div>
-            <div className="ct-oos-tags">
-              {activeConfig.exclusions.map((ex, idx) => (
-                <span className="ct-oos-tag" key={idx}><T {...ex} /></span>
+        </div>
+
+        <div className="ct-kpi-grid">
+          <div className="ct-kpi-card">
+            <span className="ct-kpi-title"><T en="Pinned Snapshots" zh="鎖定快照決策" /></span>
+            <strong className="ct-kpi-val ct-val-green">2 GO / 1 HOLD</strong>
+            <span className="ct-kpi-sub"><T en="2 Scoped Go + 1 Hold Demo" zh="2 個 Scoped Go + 1 個攔截示範" /></span>
+          </div>
+          <div className="ct-kpi-card">
+            <span className="ct-kpi-title"><T en="Verified Checks" zh="已驗證測試總數" /></span>
+            <strong className="ct-kpi-val ct-val-blue">{`${totalChecksPassed} / ${totalChecksCount} PASS`}</strong>
+            <span className="ct-kpi-sub"><T en="45 CEX + 22 Portfolio Checks" zh="45 項 CEX + 22 項主站檢查" /></span>
+          </div>
+          <div className="ct-kpi-card">
+            <span className="ct-kpi-title"><T en="Evidence Pack" zh="QA 證據鏈模板" /></span>
+            <strong className="ct-kpi-val ct-val-purple">00–08 Linked</strong>
+            <span className="ct-kpi-sub"><T en="9 Canonical QA Templates" zh="9 份標準 QA 模板串接" /></span>
+          </div>
+          <div className="ct-kpi-card">
+            <span className="ct-kpi-title"><T en="Commit Truth Sync" zh="版本與雜湊同步" /></span>
+            <strong className="ct-kpi-val ct-val-amber">SHA-256 Match</strong>
+            <span className="ct-kpi-sub"><T en="Unified JSON + JUnit Digest" zh="統一 JSON 與 JUnit 雜湊" /></span>
+          </div>
+        </div>
+      </div>
+
+      {/* PART 1: 4-Column Traceability & Release Decision Workflow Board (Option C Core) */}
+      <div className="ct-section-bar">
+        <div className="ct-section-title">
+          <span><T en="PART 1 · TRACEABILITY & RELEASE DECISION WORKFLOW" zh="第一部分 · 風險追溯與發布決策四步看板" /></span>
+          <code className="ct-section-pill">{activeConfig.activeLabel}</code>
+        </div>
+        <span className="ct-section-note">
+          <T en="Trace how QA moves from Risk Identification → Suite Execution → Blocker Triage → Final Verdict" zh="追蹤 QA 如何從「風險識別 → 測試執行 → 缺陷攔截 → 最終簽核」形成有證據的決策" />
+        </span>
+      </div>
+
+      <div className="ct-trace-board">
+        {/* Stage 01 */}
+        <article className="ct-stage-col">
+          <div>
+            <header className="ct-stage-head">
+              <div className="ct-stage-step"><span><T en="STAGE 01 · CHARTER & RISK" zh="階段 01 · 測試委託與風險" /></span><code>00–02</code></div>
+              <h3><T en="Scope & Risk Prioritization" zh="範圍界定與風險優先級" /></h3>
+              <p><T en="What must not break vs. explicit exclusions" zh="不可退讓的核心風險 vs. 誠實揭露之未測邊界" /></p>
+            </header>
+            <div className="ct-card-block">
+              <div className="ct-card-block-title">
+                <span><T en="Prioritized Release Risks" zh="優先納管之發布風險" /></span>
+                <code className="ct-text-green">{activeConfig.risks.length} Tracked</code>
+              </div>
+              {activeConfig.risks.map((risk, idx) => (
+                <div className="ct-risk-item" key={idx}>
+                  <span>
+                    <code className={risk.tier === "P0" ? "ct-p0-tag" : "ct-p1-tag"}>{risk.tier}</code>
+                    <T {...risk.label} />
+                  </span>
+                  <strong className={risk.status.en === "FAILED" ? "ct-text-red" : "ct-text-green"}><T {...risk.status} /></strong>
+                </div>
+              ))}
+            </div>
+            <div className="ct-oos-box">
+              <div className="ct-oos-title"><T en="◌ Explicit Out-of-Scope (Honest Boundaries)" zh="◌ 明確排除範圍（誠實揭露未測邊界）" /></div>
+              <div className="ct-oos-tags">
+                {activeConfig.exclusions.map((ex, idx) => (
+                  <span className="ct-oos-tag" key={idx}><T {...ex} /></span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <footer className="ct-artifact-footer">
+            <span className="ct-art-chip">00-qa-test-request.md</span>
+            <span className="ct-art-chip">01-risk-assessment.md</span>
+            <span className="ct-art-chip">02-test-spec.md</span>
+          </footer>
+        </article>
+
+        {/* Stage 02 */}
+        <article className="ct-stage-col">
+          <div>
+            <header className="ct-stage-head">
+              <div className="ct-stage-step"><span><T en="STAGE 02 · VERIFICATION" zh="階段 02 · 執行與驗證信號" /></span><code>03–04</code></div>
+              <h3><T en="Execution & Test Signals" zh="測試執行與覆蓋信號" /></h3>
+              <p><T en="Deterministic suites, live checks & attempt logs" zh="自動化套件、即時端點驗證與完整執行紀錄" /></p>
+            </header>
+            <div className="ct-card-block">
+              <div className="ct-card-block-title">
+                <span><T {...activeConfig.suiteTitle} /></span>
+                <code className={activeConfig.suiteBadgeType === "hold" ? "ct-badge-hold" : "ct-badge-go"}>{activeConfig.suiteBadge}</code>
+              </div>
+              {activeConfig.suites.map((suite, idx) => (
+                <div className="ct-risk-item" key={idx}>
+                  <span><T {...suite.label} /></span>
+                  <code className={suite.tone === "fail" ? "ct-text-red" : suite.tone === "warn" ? "ct-text-amber" : "ct-text-green"}>{suite.result}</code>
+                </div>
+              ))}
+            </div>
+            <div className="ct-card-block">
+              <div className="ct-card-block-title">
+                <span><T {...activeConfig.secondaryTitle} /></span>
+                <code className="ct-text-blue">{activeConfig.secondaryTag}</code>
+              </div>
+              {activeConfig.secondaryItems.map((item, idx) => (
+                <div className="ct-risk-item" key={idx}>
+                  <span><T {...item.label} /></span>
+                  <code className={item.tone === "fail" ? "ct-text-red" : item.tone === "warn" ? "ct-text-amber" : "ct-text-green"}>{item.result}</code>
+                </div>
               ))}
             </div>
           </div>
-        </div>
-        <footer className="ct-artifact-footer">
-          <span className="ct-art-chip">00-qa-test-request.md</span>
-          <span className="ct-art-chip">01-risk-assessment.md</span>
-          <span className="ct-art-chip">02-test-spec.md</span>
-        </footer>
-      </article>
+          <footer className="ct-artifact-footer">
+            <span className="ct-art-chip">03-test-scenario.md</span>
+            <span className="ct-art-chip">04-test-case.md</span>
+            <EvidenceLink className="ct-art-chip ct-art-link" href={activeConfig.evidenceAnchor}>{activeConfig.evidenceAnchorLabel}</EvidenceLink>
+            <EvidenceLink className="ct-stage-deep-link ct-sdl-blue" href="/run-records">
+              <T en="🔍 Inspect 67 Checks & 34 Case Specs →" zh="🔍 檢視 67 項檢查與 34 案例規格 →" />
+            </EvidenceLink>
+          </footer>
+        </article>
 
-      {/* Stage 02 */}
-      <article className="ct-stage-col">
-        <div>
-          <header className="ct-stage-head">
-            <div className="ct-stage-step"><span><T en="STAGE 02 · VERIFICATION" zh="階段 02 · 執行與驗證信號" /></span><code>03–04</code></div>
-            <h3><T en="Execution & Test Signals" zh="測試執行與覆蓋信號" /></h3>
-            <p><T en="Deterministic suites, live checks & attempt logs" zh="自動化套件、即時端點驗證與完整執行紀錄" /></p>
-          </header>
-          <div className="ct-card-block">
-            <div className="ct-card-block-title">
-              <span><T {...activeConfig.suiteTitle} /></span>
-              <code className={activeConfig.suiteBadgeType === "hold" ? "ct-badge-hold" : "ct-badge-go"}>{activeConfig.suiteBadge}</code>
-            </div>
-            {activeConfig.suites.map((suite, idx) => (
-              <div className="ct-risk-item" key={idx}>
-                <span><T {...suite.label} /></span>
-                <code className={suite.tone === "fail" ? "ct-text-red" : suite.tone === "warn" ? "ct-text-amber" : "ct-text-green"}>{suite.result}</code>
+        {/* Stage 03 */}
+        <article className="ct-stage-col">
+          <div>
+            <header className="ct-stage-head">
+              <div className="ct-stage-step"><span><T en="STAGE 03 · TRIAGE & GATE" zh="階段 03 · 缺陷分流與攔截" /></span><code>05–06</code></div>
+              <h3><T en="Blockers & Hold Counterfactual" zh="阻擋缺陷與反事實攔截證明" /></h3>
+              <p><T en="Current blocker state + proof the gate stops bad builds" zh="目前阻擋狀態 ＋ 證明品質門檻能攔截問題版本" /></p>
+            </header>
+            <div className="ct-card-block">
+              <div className="ct-card-block-title">
+                <span><T {...activeConfig.triageTitle} /></span>
+                <code className={activeConfig.triageBadgeType === "hold" ? "ct-badge-hold" : "ct-badge-go"}>{activeConfig.triageBadge}</code>
               </div>
-            ))}
-          </div>
-          <div className="ct-card-block">
-            <div className="ct-card-block-title">
-              <span><T {...activeConfig.secondaryTitle} /></span>
-              <code className="ct-text-blue">{activeConfig.secondaryTag}</code>
+              {activeConfig.triageItems.map((item, idx) => (
+                <div className="ct-risk-item" key={idx}>
+                  <span><T {...item.label} /></span>
+                  <strong className={item.tone === "fail" ? "ct-text-red" : item.tone === "warn" ? "ct-text-amber" : "ct-text-green"}><T {...item.result} /></strong>
+                </div>
+              ))}
             </div>
-            {activeConfig.secondaryItems.map((item, idx) => (
-              <div className="ct-risk-item" key={idx}>
-                <span><T {...item.label} /></span>
-                <code className={item.tone === "fail" ? "ct-text-red" : item.tone === "warn" ? "ct-text-amber" : "ct-text-green"}>{item.result}</code>
+
+            <div className="ct-hold-sim-box">
+              <div className="ct-hold-sim-title">
+                <span><T en="🛑 Counterfactual Hold (DEMO-RUN-FAIL-001)" zh="🛑 反事實攔截證明 (DEMO-RUN-FAIL-001)" /></span>
+                <code className="ct-badge-hold">NO-GO PROOF</code>
               </div>
-            ))}
-          </div>
-        </div>
-        <footer className="ct-artifact-footer">
-          <span className="ct-art-chip">03-test-scenario.md</span>
-          <span className="ct-art-chip">04-test-case.md</span>
-          <EvidenceLink className="ct-art-chip ct-art-link" href={activeConfig.evidenceAnchor}>{activeConfig.evidenceAnchorLabel}</EvidenceLink>
-          <EvidenceLink className="ct-stage-deep-link ct-sdl-blue" href="/run-records">
-            <T en="🔍 Inspect 67 Checks & 34 Case Specs →" zh="🔍 檢視 67 項檢查與 34 案例規格 →" />
-          </EvidenceLink>
-        </footer>
-      </article>
-
-      {/* Stage 03 */}
-      <article className="ct-stage-col">
-        <div>
-          <header className="ct-stage-head">
-            <div className="ct-stage-step"><span><T en="STAGE 03 · TRIAGE & GATE" zh="階段 03 · 缺陷分流與攔截" /></span><code>05–06</code></div>
-            <h3><T en="Blockers & Hold Counterfactual" zh="阻擋缺陷與反事實攔截證明" /></h3>
-            <p><T en="Current blocker state + proof the gate stops bad builds" zh="目前阻擋狀態 ＋ 證明品質門檻能攔截問題版本" /></p>
-          </header>
-          <div className="ct-card-block">
-            <div className="ct-card-block-title">
-              <span><T {...activeConfig.triageTitle} /></span>
-              <code className={activeConfig.triageBadgeType === "hold" ? "ct-badge-hold" : "ct-badge-go"}>{activeConfig.triageBadge}</code>
-            </div>
-            {activeConfig.triageItems.map((item, idx) => (
-              <div className="ct-risk-item" key={idx}>
-                <span><T {...item.label} /></span>
-                <strong className={item.tone === "fail" ? "ct-text-red" : item.tone === "warn" ? "ct-text-amber" : "ct-text-green"}><T {...item.result} /></strong>
+              <p className="ct-hold-defect">
+                <strong>[DEF-MDQ-004 · P0 Blocker]</strong>{" "}
+                <T en="TC-MDQ-017 failed: stale sequence 103 overwrote sequence 104 in order-book state." zh="TC-MDQ-017 失敗：舊序號 103 覆蓋最新序號 104 之 Order Book 狀態。" />
+              </p>
+              <p className="ct-hold-defect">
+                <strong>[Replay Rule]</strong>{" "}
+                <T en="Even after a hypothetical passing rerun, decision stays at HOLD until G6 owner review." zh="即使後續重跑通過，在負責人完成 G6 重審前仍強制維持 HOLD。" />
+              </p>
+              <div className="ct-hold-actions">
+                {activeScenario !== "hold-sim" ? (
+                  <button type="button" className="ct-hold-switch-btn" onClick={() => setActiveScenario("hold-sim")}>
+                    <T en="⚡ Switch Board to Inspect HOLD State →" zh="⚡ 切換看板檢視 HOLD 攔截狀態 →" />
+                  </button>
+                ) : (
+                  <EvidenceLink className="ct-hold-switch-btn" href="/run-records/fail-demo">
+                    <T en="Open Full Failure & Execution Log Demo →" zh="開啟完整失敗案例與 Execution Log →" />
+                  </EvidenceLink>
+                )}
               </div>
-            ))}
+            </div>
           </div>
+          <footer className="ct-artifact-footer">
+            <span className="ct-art-chip">05-test-run-record.md</span>
+            <span className="ct-art-chip">06-defect-report.md</span>
+            <EvidenceLink className="ct-art-chip ct-art-link" href="/run-records/fail-demo">Fail Demo ↗</EvidenceLink>
+            <EvidenceLink className="ct-stage-deep-link ct-sdl-red" href="/run-records/fail-demo">
+              <T en="🛑 Launch P0 Failure & Gate Replay →" zh="🛑 啟動 P0 失敗案例與門檻回放 →" />
+            </EvidenceLink>
+          </footer>
+        </article>
 
-          <div className="ct-hold-sim-box">
-            <div className="ct-hold-sim-title">
-              <span><T en="🛑 Counterfactual Hold (DEMO-RUN-FAIL-001)" zh="🛑 反事實攔截證明 (DEMO-RUN-FAIL-001)" /></span>
-              <code className="ct-badge-hold">NO-GO PROOF</code>
+        {/* Stage 04 */}
+        <article className={`ct-stage-col ${activeConfig.verdictTone === "hold" ? "ct-verdict-hold-col" : "ct-verdict-col"}`}>
+          <div>
+            <header className="ct-stage-head">
+              <div className="ct-stage-step"><span><T en="STAGE 04 · DECISION" zh="階段 04 · 最終發布裁決" /></span><code>07–08</code></div>
+              <h3><T en="Release Verdict & Sign-Off" zh="發布決策與負責人簽核" /></h3>
+              <p><T en="Evidence-backed recommendation & TTL boundary" zh="具證據支撐之發布裁決與時效防線" /></p>
+            </header>
+            <div className={activeConfig.verdictTone === "hold" ? "ct-verdict-banner ct-verdict-banner-hold" : "ct-verdict-banner"}>
+              <strong className="ct-verdict-big"><T {...activeConfig.verdictBig} /></strong>
+              <span className="ct-verdict-sub"><T {...activeConfig.verdictSub} /></span>
             </div>
-            <p className="ct-hold-defect">
-              <strong>[DEF-MDQ-004 · P0 Blocker]</strong>{" "}
-              <T en="TC-MDQ-017 failed: stale sequence 103 overwrote sequence 104 in order-book state." zh="TC-MDQ-017 失敗：舊序號 103 覆蓋最新序號 104 之 Order Book 狀態。" />
-            </p>
-            <p className="ct-hold-defect">
-              <strong>[Replay Rule]</strong>{" "}
-              <T en="Even after a hypothetical passing rerun, decision stays at HOLD until G6 owner review." zh="即使後續重跑通過，在負責人完成 G6 重審前仍強制維持 HOLD。" />
-            </p>
-            <div className="ct-hold-actions">
-              {activeScenario !== "hold-sim" ? (
-                <button type="button" className="ct-hold-switch-btn" onClick={() => setActiveScenario("hold-sim")}>
-                  <T en="⚡ Switch Board to Inspect HOLD State →" zh="⚡ 切換看板檢視 HOLD 攔截狀態 →" />
-                </button>
-              ) : (
-                <EvidenceLink className="ct-hold-switch-btn" href="/run-records/fail-demo">
-                  <T en="Open Full Failure & Execution Log Demo →" zh="開啟完整失敗案例與 Execution Log →" />
-                </EvidenceLink>
-              )}
-            </div>
-          </div>
-        </div>
-        <footer className="ct-artifact-footer">
-          <span className="ct-art-chip">05-test-run-record.md</span>
-          <span className="ct-art-chip">06-defect-report.md</span>
-          <EvidenceLink className="ct-art-chip ct-art-link" href="/run-records/fail-demo">Fail Demo ↗</EvidenceLink>
-          <EvidenceLink className="ct-stage-deep-link ct-sdl-red" href="/run-records/fail-demo">
-            <T en="🛑 Launch P0 Failure & Gate Replay →" zh="🛑 啟動 P0 失敗案例與門檻回放 →" />
-          </EvidenceLink>
-        </footer>
-      </article>
-
-      {/* Stage 04 */}
-      <article className={`ct-stage-col ${activeConfig.verdictTone === "hold" ? "ct-verdict-hold-col" : "ct-verdict-col"}`}>
-        <div>
-          <header className="ct-stage-head">
-            <div className="ct-stage-step"><span><T en="STAGE 04 · DECISION" zh="階段 04 · 最終發布裁決" /></span><code>07–08</code></div>
-            <h3><T en="Release Verdict & Sign-Off" zh="發布決策與負責人簽核" /></h3>
-            <p><T en="Evidence-backed recommendation & TTL boundary" zh="具證據支撐之發布裁決與時效防線" /></p>
-          </header>
-          <div className={activeConfig.verdictTone === "hold" ? "ct-verdict-banner ct-verdict-banner-hold" : "ct-verdict-banner"}>
-            <strong className="ct-verdict-big"><T {...activeConfig.verdictBig} /></strong>
-            <span className="ct-verdict-sub"><T {...activeConfig.verdictSub} /></span>
-          </div>
-          <div className="ct-card-block">
-            <div className="ct-card-block-title">
-              <span><T en="Release Gate Criteria Check" zh="發布門檻準則核對" /></span>
-              <code className={activeConfig.verdictTone === "hold" ? "ct-text-red" : "ct-text-green"}>{activeConfig.criteriaCount}</code>
-            </div>
-            {activeConfig.criteria.map((crit, idx) => (
-              <div className="ct-risk-item" key={idx}>
-                <span><T {...crit.label} /></span>
-                <strong className={crit.tone === "fail" ? "ct-text-red" : crit.tone === "warn" ? "ct-text-amber" : "ct-text-green"}><T {...crit.result} /></strong>
+            <div className="ct-card-block">
+              <div className="ct-card-block-title">
+                <span><T en="Release Gate Criteria Check" zh="發布門檻準則核對" /></span>
+                <code className={activeConfig.verdictTone === "hold" ? "ct-text-red" : "ct-text-green"}>{activeConfig.criteriaCount}</code>
               </div>
-            ))}
+              {activeConfig.criteria.map((crit, idx) => (
+                <div className="ct-risk-item" key={idx}>
+                  <span><T {...crit.label} /></span>
+                  <strong className={crit.tone === "fail" ? "ct-text-red" : crit.tone === "warn" ? "ct-text-amber" : "ct-text-green"}><T {...crit.result} /></strong>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
-        <footer className="ct-artifact-footer">
-          <span className="ct-art-chip">07-release-quality-summary.md</span>
-          <span className="ct-art-chip">08-status-contract.json</span>
-          <EvidenceLink className="ct-stage-deep-link ct-sdl-purple" href="/dashboard-demo">
-            <T en="📐 View v4.0 ADR & 6 Policy Rules →" zh="📐 檢視 v4.0 演進與 6 條裁決規則 →" />
-          </EvidenceLink>
-        </footer>
-      </article>
-    </div>
-
-    {/* PART 2: Cross-Repo Signal & Coverage Matrix (Option B Core) */}
-    <div className="ct-section-bar">
-      <div className="ct-section-title">
-        <span><T en="PART 2 · CROSS-REPO SIGNAL & COVERAGE MATRIX (7 DIMENSIONS × 3 SNAPSHOTS)" zh="第二部分 · 跨專案測試信號與覆蓋度矩陣（7 大維度 × 3 組快照）" /></span>
-        <code className="ct-section-pill">Single Source of Truth: data/decision-index.json</code>
+          <footer className="ct-artifact-footer">
+            <span className="ct-art-chip">07-release-quality-summary.md</span>
+            <span className="ct-art-chip">08-status-contract.json</span>
+            <EvidenceLink className="ct-stage-deep-link ct-sdl-purple" href="/dashboard-demo">
+              <T en="📐 View v4.0 ADR & 6 Policy Rules →" zh="📐 檢視 v4.0 演進與 6 條裁決規則 →" />
+            </EvidenceLink>
+          </footer>
+        </article>
       </div>
-      <div className="ct-legend-group">
-        <span className="ct-legend-item"><i className="ct-dot-pass" aria-hidden="true" /><T en="PASS / VERIFIED" zh="通過／已驗證" /></span>
-        <span className="ct-legend-item"><i className="ct-dot-warn" aria-hidden="true" /><T en="RETENTION / DISCLOSED" zh="歷程保留／已揭露" /></span>
-        <span className="ct-legend-item"><i className="ct-dot-hold" aria-hidden="true" /><T en="BLOCKED / HOLD" zh="阻擋／禁止發布" /></span>
-        <span className="ct-legend-item"><i className="ct-dot-oos" aria-hidden="true" /><T en="EXPLICIT OUT-OF-SCOPE" zh="明確排除範圍" /></span>
+
+      {/* PART 2: Cross-Repo Signal & Coverage Matrix (Option B Core) */}
+      <div className="ct-section-bar">
+        <div className="ct-section-title">
+          <span><T en="PART 2 · CROSS-REPO SIGNAL & COVERAGE MATRIX (7 DIMENSIONS × 3 SNAPSHOTS)" zh="第二部分 · 跨專案測試信號與覆蓋度矩陣（7 大維度 × 3 組快照）" /></span>
+          <code className="ct-section-pill">Single Source of Truth: data/decision-index.json</code>
+        </div>
+        <div className="ct-legend-group">
+          <span className="ct-legend-item"><i className="ct-dot-pass" aria-hidden="true" /><T en="PASS / VERIFIED" zh="通過／已驗證" /></span>
+          <span className="ct-legend-item"><i className="ct-dot-warn" aria-hidden="true" /><T en="RETENTION / DISCLOSED" zh="歷程保留／已揭露" /></span>
+          <span className="ct-legend-item"><i className="ct-dot-hold" aria-hidden="true" /><T en="BLOCKED / HOLD" zh="阻擋／禁止發布" /></span>
+          <span className="ct-legend-item"><i className="ct-dot-oos" aria-hidden="true" /><T en="EXPLICIT OUT-OF-SCOPE" zh="明確排除範圍" /></span>
+        </div>
+      </div>
+
+      <div className="ct-matrix-panel">
+        <div className="ct-matrix-scroll">
+          <table className="ct-sig-table">
+            <thead>
+              <tr>
+                <th><T en="Repository / Snapshot" zh="專案／版本快照" /></th>
+                <th><T en="Pinned Verdict" zh="快照裁決" /></th>
+                <th><T en="1. Unit / Static" zh="1. 單元／靜態" /></th>
+                <th><T en="2. Contract / Runtime" zh="2. 契約／執行期" /></th>
+                <th><T en="3. Live / RWD" zh="3. 即時／響應式" /></th>
+                <th><T en="4. Triage / Chronology" zh="4. 歷程／分流" /></th>
+                <th><T en="5. Risk Coverage" zh="5. 風險覆蓋深度" /></th>
+                <th><T en="6. Exclusions" zh="6. 未測邊界揭露" /></th>
+                <th><T en="Evidence" zh="證據連結" /></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div className="ct-repo-cell-title">cex-market-data-quality-lab <code>@fc1e060</code></div>
+                  <div className="ct-repo-cell-sub"><T en="Scoped automated market-data acceptance" zh="限定範圍之行情品質自動化驗收" /></div>
+                </td>
+                <td><code className="ct-badge-go">✓ SCOPED GO</code></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 12/12 PASS</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 28/28 PASS</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 5/5 LIVE</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 4 RUNS OK</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● CORE &amp; EDGE</span></td>
+                <td><span className="ct-cell-pill ct-c-oos">◌ AUTH/LOAD</span></td>
+                <td><EvidenceLink className="ct-inspect-link" href="/run-records/#RUN-20260907-cex-deterministic-1">#RUN-20260907 ↗</EvidenceLink></td>
+              </tr>
+              <tr>
+                <td>
+                  <div className="ct-repo-cell-title">sanyoii.github.io <code>@643b017</code></div>
+                  <div className="ct-repo-cell-sub"><T en="Primary QA portfolio static & Chromium acceptance" zh="個人主作品集靜態與 Chromium 自動化驗收" /></div>
+                </td>
+                <td><code className="ct-badge-go">✓ SCOPED GO</code></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 9/9 STATIC</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 13/13 RUNTIME</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● EN/ZH + RWD</span></td>
+                <td><span className="ct-cell-pill ct-c-warn">▲ 1 BLOCKED→PASS</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● CORE &amp; EDGE</span></td>
+                <td><span className="ct-cell-pill ct-c-oos">◌ NON-CHROMIUM</span></td>
+                <td><EvidenceLink className="ct-inspect-link" href="/run-records/#RUN-20260906-portfolio-chromium-retry">#RUN-20260906 ↗</EvidenceLink></td>
+              </tr>
+              <tr className="ct-hold-row">
+                <td>
+                  <div className="ct-repo-cell-title ct-text-red">cex-market-data-quality-lab (Hold Sim) <code>@DEMO-FAIL</code></div>
+                  <div className="ct-repo-cell-sub"><T en="Counterfactual P0 failure & release gate rejection" zh="反事實 P0 失敗與發布門檻攔截示範" /></div>
+                </td>
+                <td><code className="ct-badge-hold">■ HOLD / NO-GO</code></td>
+                <td><span className="ct-cell-pill ct-c-fail">■ TC-017 FAIL</span></td>
+                <td><span className="ct-cell-pill ct-c-pass">● 2/3 PASS</span></td>
+                <td><span className="ct-cell-pill ct-c-warn">▲ STALE SEQ</span></td>
+                <td><span className="ct-cell-pill ct-c-fail">■ DEF-MDQ-004</span></td>
+                <td><span className="ct-cell-pill ct-c-warn">▲ HOLD AT G6</span></td>
+                <td><span className="ct-cell-pill ct-c-oos">◌ SYNTHETIC</span></td>
+                <td><EvidenceLink className="ct-inspect-link ct-inspect-hold" href="/run-records/fail-demo">Fail Demo ↗</EvidenceLink></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* PART 3: Deep-Dive Evidence & Policy Action Dock */}
+      <div className="ct-section-bar">
+        <div className="ct-section-title">
+          <span><T en="PART 3 · DEEP-DIVE EVIDENCE & POLICY WORKBENCH (3 MODULES)" zh="第三部分 · 延伸證據帳本與決策規則工作台（三大子頁面入口）" /></span>
+          <code className="ct-section-pill">03–08 Linked Modules</code>
+        </div>
+        <span className="ct-section-note">
+          <T en="Inspect the full sanitized JUnit ledger, interactive P0 failure replay, and architecture rulebook" zh="深入檢視去敏後之 JUnit 執行帳本、P0 失敗門檻回放器與架構演進規則" />
+        </span>
+      </div>
+
+      <div className="ct-portal-dock">
+        <EvidenceLink className="ct-portal-card ct-portal-blue" href="/run-records">
+          <div className="ct-portal-top">
+            <span className="ct-portal-tag"><T en="MODULE 01 · STAGE 02 EVIDENCE" zh="模組 01 · 對應階段 02 驗證帳本" /></span>
+            <code className="ct-badge-go">67 CHECKS · 34 CASES</code>
+          </div>
+          <h3><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></h3>
+          <p><T en="Sanitized JUnit SHA-256 telemetry matrix for Sept 6–7 releases plus interactive 34-case specification workbench (OB, REST, WS, DOC, LIVE, MTC)." zh="9/6–9/7 鎖定版本之去敏 JUnit SHA-256 遙測矩陣，以及 34 項標準測試案例互動分類工作台（OB / REST / WS / DOC / LIVE / MTC）。" /></p>
+          <span className="ct-portal-cta"><T en="Open Run Records Workbench →" zh="開啟執行記錄與案例工作台 →" /></span>
+        </EvidenceLink>
+
+        <EvidenceLink className="ct-portal-card ct-portal-red" href="/run-records/fail-demo">
+          <div className="ct-portal-top">
+            <span className="ct-portal-tag"><T en="MODULE 02 · STAGE 03 GATE PROOF" zh="模組 02 · 對應階段 03 攔截證明" /></span>
+            <code className="ct-badge-hold">DEF-MDQ-004 · P0 HOLD</code>
+          </div>
+          <h3><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></h3>
+          <p><T en="4-stage counterfactual incident pipeline for TC-MDQ-017, interactive 3-step Hold boundary simulator, Expected/Actual diff, and Exit Code 1 pytest log." zh="TC-MDQ-017 四步事故追蹤看板、三階段 Hold 決策邊界模擬器、Expected/Actual 狀態差異與 Pytest Exit Code 1 執行日誌。" /></p>
+          <span className="ct-portal-cta"><T en="Launch Failure & Gate Replay →" zh="啟動失敗案例與決定回放 →" /></span>
+        </EvidenceLink>
+
+        <EvidenceLink className="ct-portal-card ct-portal-purple" href="/dashboard-demo">
+          <div className="ct-portal-top">
+            <span className="ct-portal-tag"><T en="MODULE 03 · STAGE 04 POLICY ENGINE" zh="模組 03 · 對應階段 04 決策規則" /></span>
+            <code className="ct-section-pill">LOW-TECH v3 · 6 RULES</code>
+          </div>
+          <h3><T en="Design Evolution & Policy Rulebook" zh="設計演進與決策規則矩陣" /></h3>
+          <p><T en="Architecture evolution from early cards/matrices to the Low-Tech Whiteboard v3 and the 6 deterministic fail-closed remediation rules." zh="架構演進對照（從早期多表堆疊收斂為 Low-Tech 五欄白板 v3）與 6 條 Fail-Closed 決定論處置規則矩陣。" /></p>
+          <span className="ct-portal-cta"><T en="Inspect Architecture & Policy Matrix →" zh="檢視架構演進與規則矩陣 →" /></span>
+        </EvidenceLink>
       </div>
     </div>
 
-    <div className="ct-matrix-panel">
-      <div className="ct-matrix-scroll">
-        <table className="ct-sig-table">
-          <thead>
-            <tr>
-              <th><T en="Repository / Snapshot" zh="專案／版本快照" /></th>
-              <th><T en="Pinned Verdict" zh="快照裁決" /></th>
-              <th><T en="1. Unit / Static" zh="1. 單元／靜態" /></th>
-              <th><T en="2. Contract / Runtime" zh="2. 契約／執行期" /></th>
-              <th><T en="3. Live / RWD" zh="3. 即時／響應式" /></th>
-              <th><T en="4. Triage / Chronology" zh="4. 歷程／分流" /></th>
-              <th><T en="5. Risk Coverage" zh="5. 風險覆蓋深度" /></th>
-              <th><T en="6. Exclusions" zh="6. 未測邊界揭露" /></th>
-              <th><T en="Evidence" zh="證據連結" /></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>
-                <div className="ct-repo-cell-title">cex-market-data-quality-lab <code>@fc1e060</code></div>
-                <div className="ct-repo-cell-sub"><T en="Scoped automated market-data acceptance" zh="限定範圍之行情品質自動化驗收" /></div>
-              </td>
-              <td><code className="ct-badge-go">✓ SCOPED GO</code></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 12/12 PASS</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 28/28 PASS</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 5/5 LIVE</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 4 RUNS OK</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● LEVEL 2/2</span></td>
-              <td><span className="ct-cell-pill ct-c-oos">◌ AUTH/LOAD</span></td>
-              <td><EvidenceLink className="ct-inspect-link" href="/run-records/#RUN-20260907-cex-deterministic-1">#RUN-20260907 ↗</EvidenceLink></td>
-            </tr>
-            <tr>
-              <td>
-                <div className="ct-repo-cell-title">sanyoii.github.io <code>@643b017</code></div>
-                <div className="ct-repo-cell-sub"><T en="Primary QA portfolio static & Chromium acceptance" zh="個人主作品集靜態與 Chromium 自動化驗收" /></div>
-              </td>
-              <td><code className="ct-badge-go">✓ SCOPED GO</code></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 9/9 STATIC</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 13/13 RUNTIME</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● EN/ZH + RWD</span></td>
-              <td><span className="ct-cell-pill ct-c-warn">▲ 1 BLOCKED→PASS</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● LEVEL 2/2</span></td>
-              <td><span className="ct-cell-pill ct-c-oos">◌ NON-CHROMIUM</span></td>
-              <td><EvidenceLink className="ct-inspect-link" href="/run-records/#RUN-20260906-portfolio-chromium-retry">#RUN-20260906 ↗</EvidenceLink></td>
-            </tr>
-            <tr className="ct-hold-row">
-              <td>
-                <div className="ct-repo-cell-title ct-text-red">cex-market-data-quality-lab (Hold Sim) <code>@DEMO-FAIL</code></div>
-                <div className="ct-repo-cell-sub"><T en="Counterfactual P0 failure & release gate rejection" zh="反事實 P0 失敗與發布門檻攔截示範" /></div>
-              </td>
-              <td><code className="ct-badge-hold">■ HOLD / NO-GO</code></td>
-              <td><span className="ct-cell-pill ct-c-fail">■ TC-017 FAIL</span></td>
-              <td><span className="ct-cell-pill ct-c-pass">● 2/3 PASS</span></td>
-              <td><span className="ct-cell-pill ct-c-warn">▲ STALE SEQ</span></td>
-              <td><span className="ct-cell-pill ct-c-fail">■ DEF-MDQ-004</span></td>
-              <td><span className="ct-cell-pill ct-c-warn">▲ HOLD AT G6</span></td>
-              <td><span className="ct-cell-pill ct-c-oos">◌ SYNTHETIC</span></td>
-              <td><EvidenceLink className="ct-inspect-link ct-inspect-hold" href="/run-records/fail-demo">Fail Demo ↗</EvidenceLink></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    {/* PART 3: Deep-Dive Evidence & Policy Action Dock (Option B+A+C Subpage Portals) */}
-    <div className="ct-section-bar">
-      <div className="ct-section-title">
-        <span><T en="PART 3 · DEEP-DIVE EVIDENCE & POLICY WORKBENCH (3 MODULES)" zh="第三部分 · 延伸證據帳本與決策規則工作台（三大子頁面入口）" /></span>
-        <code className="ct-section-pill">03–08 Linked Modules</code>
-      </div>
-      <span className="ct-section-note">
-        <T en="Inspect the full sanitized JUnit ledger, interactive P0 failure replay, and 4-generation architecture rulebook" zh="深入檢視去敏後之 JUnit 執行帳本、P0 失敗門檻回放器與四代架構演進規則" />
-      </span>
-    </div>
-
-    <div className="ct-portal-dock">
-      <EvidenceLink className="ct-portal-card ct-portal-blue" href="/run-records">
-        <div className="ct-portal-top">
-          <span className="ct-portal-tag"><T en="MODULE 01 · STAGE 02 EVIDENCE" zh="模組 01 · 對應階段 02 驗證帳本" /></span>
-          <code className="ct-badge-go">67 CHECKS · 34 CASES</code>
-        </div>
-        <h3><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></h3>
-        <p><T en="Sanitized JUnit SHA-256 telemetry matrix for Sept 6–7 releases plus interactive 34-case specification workbench (OB, REST, WS, DOC, LIVE, MTC)." zh="9/6–9/7 鎖定版本之去敏 JUnit SHA-256 遙測矩陣，以及 34 項標準測試案例互動分類工作台（OB / REST / WS / DOC / LIVE / MTC）。" /></p>
-        <span className="ct-portal-cta"><T en="Open Run Records Workbench →" zh="開啟執行記錄與案例工作台 →" /></span>
-      </EvidenceLink>
-
-      <EvidenceLink className="ct-portal-card ct-portal-red" href="/run-records/fail-demo">
-        <div className="ct-portal-top">
-          <span className="ct-portal-tag"><T en="MODULE 02 · STAGE 03 GATE PROOF" zh="模組 02 · 對應階段 03 攔截證明" /></span>
-          <code className="ct-badge-hold">DEF-MDQ-004 · P0 HOLD</code>
-        </div>
-        <h3><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></h3>
-        <p><T en="4-stage counterfactual incident pipeline for TC-MDQ-017, interactive 3-step Hold boundary simulator, Expected/Actual diff, and Exit Code 1 pytest log." zh="TC-MDQ-017 四步事故追蹤看板、三階段 Hold 決策邊界模擬器、Expected/Actual 狀態差異與 Pytest Exit Code 1 執行日誌。" /></p>
-        <span className="ct-portal-cta"><T en="Launch Failure & Gate Replay →" zh="啟動失敗案例與決定回放 →" /></span>
-      </EvidenceLink>
-
-      <EvidenceLink className="ct-portal-card ct-portal-purple" href="/dashboard-demo">
-        <div className="ct-portal-top">
-          <span className="ct-portal-tag"><T en="MODULE 03 · STAGE 04 POLICY ENGINE" zh="模組 03 · 對應階段 04 決策規則" /></span>
-          <code className="ct-section-pill">v4.0 HYBRID · 6 RULES</code>
-        </div>
-        <h3><T en="Design Evolution & Policy Rulebook" zh="設計演進與決策規則矩陣" /></h3>
-        <p><T en="4-generation architecture evolution (Sample A / B / C → Active B+C Hybrid Control Tower) and the 6 deterministic fail-closed remediation rules." zh="四代架構演進對照（Sample A / B / C ➔ 現役 B+C 混搭控制台）與 6 條 Fail-Closed 決定論處置規則矩陣。" /></p>
-        <span className="ct-portal-cta"><T en="Inspect Architecture & Policy Matrix →" zh="檢視架構演進與規則矩陣 →" /></span>
-      </EvidenceLink>
-    </div>
-
-    {/* Legacy SSR Contract Container (hidden from visual Control Tower UI) */}
+    {/* Legacy SSR Contract Container (hidden from visual UI) */}
     <div className="ct-legacy-ssr-contract" aria-hidden="true">
     <header className="decision-heading">
       <div>

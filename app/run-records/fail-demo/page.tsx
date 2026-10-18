@@ -59,102 +59,105 @@ export default function FailedRunDemo() {
           </div>
         </div>
         <p className="ct-masthead-sub">
-          <T en="Part C 4-Stage Incident Traceability Pipeline + Part A Split Expected/Actual Diff & Pytest Execution Log." zh="結合 C 版「四步事故因果追溯鏈」與 A 版「Expected/Actual 狀態差異 ＋ Pytest 終端機日誌雙欄檢視器」。" />
+          <T en="How a single P0 assertion failure (TC-MDQ-017) blocks release, and why a passing rerun still stops at HOLD until owner review." zh="展示單一 P0 關鍵案例（TC-MDQ-017）失敗時如何攔截發布，以及為何「重跑通過」仍須等待負責人 G6 人工簽核。" />
         </p>
       </header>
 
       <ControlTowerNav active="fail-demo" />
 
-      {/* PART 1 (Option C): 4-Stage Incident & Gate Traceability Pipeline */}
-      <div className="ct-section-bar">
-        <div className="ct-section-title">
-          <span><T en="PART 1 · 4-STAGE COUNTERFACTUAL INCIDENT & GATE PIPELINE" zh="第一部分 · 反事實失敗案例四步因果與攔截看板" /></span>
-          <code className="ct-badge-hold">DEMO-RUN-FAIL-001 → DEF-MDQ-004</code>
-        </div>
-        <span className="ct-section-note">
-          <T en="How a single P0 assertion failure propagates from test execution to defect triage and release gate rejection" zh="單一 P0 關鍵斷言失敗如何從測試執行一路傳遞至缺陷立案與發布門檻攔截" />
-        </span>
-      </div>
-
-      <div className="ct-trace-board">
-        <article className="ct-stage-col">
-          <div>
-            <header className="ct-stage-head">
-              <div className="ct-stage-step"><span><T en="STAGE 01 · TRIGGER CASE" zh="階段 01 · 觸發失敗案例" /></span><code>04-CASE</code></div>
-              <h3>TC-MDQ-017 · P0 Required</h3>
-              <p><T en="Reject stale-sequence market-data updates" zh="拒絕 sequence 已過期的行情更新" /></p>
-            </header>
-            <div className="ct-card-block">
-              <div className="ct-risk-item"><span><T en="Suite Target" zh="測試套件" /></span><code>test_order_book.py</code></div>
-              <div className="ct-risk-item"><span><T en="Case Priority" zh="風險等級" /></span><strong className="ct-text-red">P0 Release Gate</strong></div>
-              <div className="ct-risk-item"><span><T en="Reproducibility" zh="重現率" /></span><strong className="ct-text-red"><T en="3 / 3 Failed" zh="3 / 3 次皆失敗" /></strong></div>
-            </div>
-          </div>
-          <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">04-test-case.md</span>
-            <span className="ct-art-chip">TC-MDQ-017</span>
-          </footer>
-        </article>
-
-        <article className="ct-stage-col">
-          <div>
-            <header className="ct-stage-head">
-              <div className="ct-stage-step"><span><T en="STAGE 02 · STATE DIFF" zh="階段 02 · 狀態異常差異" /></span><code>05-RUN</code></div>
-              <h3><T en="Seq 103 Overwrote 104" zh="舊序號 103 覆蓋最新 104" /></h3>
-              <p><T en="Order-book state regressed to stale snapshot" zh="Order Book 狀態倒退回過期快照" /></p>
-            </header>
-            <div className="ct-card-block">
-              <div className="ct-risk-item"><span>Expected</span><strong className="ct-text-green"><T en="Reject seq 103 < 104" zh="拒絕舊序號 103" /></strong></div>
-              <div className="ct-risk-item"><span>Actual</span><strong className="ct-text-red"><T en="Accepted seq 103" zh="接受並覆蓋 104" /></strong></div>
-              <div className="ct-risk-item"><span>Pytest Status</span><code className="ct-text-red">Exit code 1 (0.83s)</code></div>
-            </div>
-          </div>
-          <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">05-test-run-record.md</span>
-            <a className="ct-art-chip ct-art-link" href="#execution-log">Execution Log ↓</a>
-          </footer>
-        </article>
-
-        <article className="ct-stage-col">
-          <div>
-            <header className="ct-stage-head">
-              <div className="ct-stage-step"><span><T en="STAGE 03 · BLOCKER DEFECT" zh="階段 03 · 阻擋缺陷立案" /></span><code>06-DEFECT</code></div>
-              <h3>DEF-MDQ-004 (Open)</h3>
-              <p><T en="High severity · Release-blocking P0 defect" zh="高嚴重度 · 阻擋發布之 P0 缺陷" /></p>
-            </header>
-            <div className="ct-card-block">
-              <div className="ct-risk-item"><span>Severity / State</span><strong className="ct-text-red">High · Open</strong></div>
-              <div className="ct-risk-item"><span>User Impact</span><strong className="ct-text-amber"><T en="Stale market data" zh="顯示過期行情" /></strong></div>
-              <div className="ct-risk-item"><span>Accountable Owner</span><strong>William (Demo)</strong></div>
-            </div>
-          </div>
-          <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">06-defect-report.md</span>
-            <span className="ct-art-chip">DEF-MDQ-004</span>
-          </footer>
-        </article>
-
-        <article className="ct-stage-col ct-verdict-hold-col">
-          <div>
-            <header className="ct-stage-head">
-              <div className="ct-stage-step"><span><T en="STAGE 04 · GATE VERDICT" zh="階段 04 · 門檻裁決邊界" /></span><code>07–08</code></div>
-              <h3><T en="Enforced HOLD / NO-GO" zh="強制攔截 HOLD / NO-GO" /></h3>
-              <p><T en="Passing rerun alone cannot self-authorize Go" zh="單靠重跑通過不會自動解除攔截" /></p>
-            </header>
-            <div className="ct-verdict-banner ct-verdict-banner-hold">
-              <strong className="ct-verdict-big">× NO-GO / HOLD</strong>
-              <span className="ct-verdict-sub"><T en="Requires Fix + Targeted Rerun + G6 Owner Review" zh="須完成修正 ＋ 重跑驗證 ＋ G6 負責人重審" /></span>
-            </div>
-          </div>
-          <footer className="ct-artifact-footer">
-            <span className="ct-art-chip">07-release-quality-summary.md</span>
-            <span className="ct-art-chip">G6 Governance</span>
-          </footer>
-        </article>
-      </div>
-
-      {/* Interactive 3-Step Replay State Machine */}
+      {/* Primary Hero Interactive State Machine: 3-Step Decision Replay */}
       <DecisionReplay />
+
+      {/* Collapsible 4-Stage Incident Pipeline (De-duplicated from Part 2 below) */}
+      <details className="lt-collapsible-section">
+        <summary className="lt-collapsible-summary">
+          <div>
+            <strong><T en="▸ PART 1 · 4-STAGE COUNTERFACTUAL INCIDENT & GATE PIPELINE (CLICK TO EXPAND)" zh="▸ 展開四步事故因果與門檻攔截鏈摘要 (04–08 模板對應)" /></strong>
+            <span className="lt-collapsible-sub">
+              <T en="How TC-MDQ-017 propagates from assertion failure to DEF-MDQ-004 and G6 Hold" zh="點開檢視 TC-MDQ-017 從斷言失敗、缺陷立案到 G6 攔截的四階段卡片" />
+            </span>
+          </div>
+          <code className="ct-badge-hold">DEMO-RUN-FAIL-001 → DEF-MDQ-004</code>
+        </summary>
+        <div className="lt-collapsible-body">
+          <div className="ct-trace-board">
+            <article className="ct-stage-col">
+              <div>
+                <header className="ct-stage-head">
+                  <div className="ct-stage-step"><span><T en="STAGE 01 · TRIGGER CASE" zh="階段 01 · 觸發失敗案例" /></span><code>04-CASE</code></div>
+                  <h3>TC-MDQ-017 · P0 Required</h3>
+                  <p><T en="Reject stale-sequence market-data updates" zh="拒絕 sequence 已過期的行情更新" /></p>
+                </header>
+                <div className="ct-card-block">
+                  <div className="ct-risk-item"><span><T en="Suite Target" zh="測試套件" /></span><code>test_order_book.py</code></div>
+                  <div className="ct-risk-item"><span><T en="Case Priority" zh="風險等級" /></span><strong className="ct-text-red">P0 Release Gate</strong></div>
+                  <div className="ct-risk-item"><span><T en="Reproducibility" zh="重現率" /></span><strong className="ct-text-red"><T en="3 / 3 Failed" zh="3 / 3 次皆失敗" /></strong></div>
+                </div>
+              </div>
+              <footer className="ct-artifact-footer">
+                <span className="ct-art-chip">04-test-case.md</span>
+                <span className="ct-art-chip">TC-MDQ-017</span>
+              </footer>
+            </article>
+
+            <article className="ct-stage-col">
+              <div>
+                <header className="ct-stage-head">
+                  <div className="ct-stage-step"><span><T en="STAGE 02 · STATE DIFF" zh="階段 02 · 狀態異常差異" /></span><code>05-RUN</code></div>
+                  <h3><T en="Seq 103 Overwrote 104" zh="舊序號 103 覆蓋最新 104" /></h3>
+                  <p><T en="Order-book state regressed to stale snapshot" zh="Order Book 狀態倒退回過期快照" /></p>
+                </header>
+                <div className="ct-card-block">
+                  <div className="ct-risk-item"><span>Expected</span><strong className="ct-text-green"><T en="Reject seq 103 < 104" zh="拒絕舊序號 103" /></strong></div>
+                  <div className="ct-risk-item"><span>Actual</span><strong className="ct-text-red"><T en="Accepted seq 103" zh="接受並覆蓋 104" /></strong></div>
+                  <div className="ct-risk-item"><span>Pytest Status</span><code className="ct-text-red">Exit code 1 (0.83s)</code></div>
+                </div>
+              </div>
+              <footer className="ct-artifact-footer">
+                <span className="ct-art-chip">05-test-run-record.md</span>
+                <a className="ct-art-chip ct-art-link" href="#execution-log">Execution Log ↓</a>
+              </footer>
+            </article>
+
+            <article className="ct-stage-col">
+              <div>
+                <header className="ct-stage-head">
+                  <div className="ct-stage-step"><span><T en="STAGE 03 · BLOCKER DEFECT" zh="階段 03 · 阻擋缺陷立案" /></span><code>06-DEFECT</code></div>
+                  <h3>DEF-MDQ-004 (Open)</h3>
+                  <p><T en="High severity · Release-blocking P0 defect" zh="高嚴重度 · 阻擋發布之 P0 缺陷" /></p>
+                </header>
+                <div className="ct-card-block">
+                  <div className="ct-risk-item"><span>Severity / State</span><strong className="ct-text-red">High · Open</strong></div>
+                  <div className="ct-risk-item"><span>User Impact</span><strong className="ct-text-amber"><T en="Stale market data" zh="顯示過期行情" /></strong></div>
+                  <div className="ct-risk-item"><span>Accountable Owner</span><strong>William (Demo)</strong></div>
+                </div>
+              </div>
+              <footer className="ct-artifact-footer">
+                <span className="ct-art-chip">06-defect-report.md</span>
+                <span className="ct-art-chip">DEF-MDQ-004</span>
+              </footer>
+            </article>
+
+            <article className="ct-stage-col ct-verdict-hold-col">
+              <div>
+                <header className="ct-stage-head">
+                  <div className="ct-stage-step"><span><T en="STAGE 04 · GATE VERDICT" zh="階段 04 · 門檻裁決邊界" /></span><code>07–08</code></div>
+                  <h3><T en="Enforced HOLD / NO-GO" zh="強制攔截 HOLD / NO-GO" /></h3>
+                  <p><T en="Passing rerun alone cannot self-authorize Go" zh="單靠重跑通過不會自動解除攔截" /></p>
+                </header>
+                <div className="ct-verdict-banner ct-verdict-banner-hold">
+                  <strong className="ct-verdict-big">× NO-GO / HOLD</strong>
+                  <span className="ct-verdict-sub"><T en="Requires Fix + Targeted Rerun + G6 Owner Review" zh="須完成修正 ＋ 重跑驗證 ＋ G6 負責人重審" /></span>
+                </div>
+              </div>
+              <footer className="ct-artifact-footer">
+                <span className="ct-art-chip">07-release-quality-summary.md</span>
+                <span className="ct-art-chip">G6 Governance</span>
+              </footer>
+            </article>
+          </div>
+        </div>
+      </details>
 
       {/* PART 2 (Option A): Split Inspector for Expected/Actual Diff, Defect & Pytest Terminal */}
       <div className="ct-section-bar">

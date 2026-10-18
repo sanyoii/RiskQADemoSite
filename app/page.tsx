@@ -45,7 +45,7 @@ export default function Home() {
       </details>
     </div>
     <footer className="footer">
-      <span><T en="Sanitized public projection · original evidence retained" zh="去敏後的公開呈現 · 原始證據保留" /></span>
+      <span><T en="Sanitized public projection · original evidence retained" zh="已隱去敏感資訊的公開版 · 原始證據完整保留" /></span>
       <div className="ct-footer-links">
         <a href="https://sanyoii.github.io/"><T en="← Back to Main Portfolio" zh="← 返回個人主作品集" /></a>
         <a href={siteHref("/dashboard-demo")}><T en="Design evolution" zh="設計演進" /></a>

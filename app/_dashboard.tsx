@@ -77,12 +77,12 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     milestones: [
       { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
       { label: { en: "✓ Edge & Negative", zh: "✓ 異常與邊界" }, tone: "pass" },
-      { label: { en: "◌ Stress Excluded", zh: "◌ 壓測未測" }, tone: "off" },
+      { label: { en: "◌ Stress Excluded", zh: "◌ 壓力測試未測" }, tone: "off" },
     ],
     holdMilestones: [
       { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
       { label: { en: "× Stale Seq Failed", zh: "× 亂序拒絕失敗" }, tone: "fail" },
-      { label: { en: "◌ Stress Excluded", zh: "◌ 壓測未測" }, tone: "off" },
+      { label: { en: "◌ Stress Excluded", zh: "◌ 壓力測試未測" }, tone: "off" },
     ],
     qualityLabel: { en: "● Good", zh: "● Good 良好" },
     qualityTone: "good",
@@ -111,7 +111,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     milestones: [
       { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
       { label: { en: "✓ Edge & Negative", zh: "✓ 異常與邊界" }, tone: "pass" },
-      { label: { en: "◌ Stress Excluded", zh: "◌ 壓測未測" }, tone: "off" },
+      { label: { en: "◌ Stress Excluded", zh: "◌ 壓力測試未測" }, tone: "off" },
     ],
     qualityLabel: { en: "● Good", zh: "● Good 良好" },
     qualityTone: "good",
@@ -194,7 +194,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
   {
     id: "explicit-exclusions",
     repoGroup: "shared",
-    areaTitle: { en: "Explicit Exclusions · Private Keys / Load / Safari", zh: "明確排除 · 私密下單／高併發壓測／Safari" },
+    areaTitle: { en: "Explicit Exclusions · Private Keys / Load / Safari", zh: "明確排除 · 私密下單／高流量壓力測試／Safari" },
     areaRisk: { en: "Honest Boundary (Explicit Out-of-Scope · Never claimed as tested)", zh: "誠實邊界 (Explicit Out-of-Scope · 不冒充已測)" },
     effortLabel: "None · OOS",
     effortTone: "oos",
@@ -205,7 +205,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     qualityTone: "oos",
     comment: {
       en: "Intentionally excludes live fund orders and production load testing; green checks elsewhere never imply full-system zero risk.",
-      zh: "刻意排除真實資金交易與壓測；不因其他項目全綠而宣稱全系統零風險",
+      zh: "刻意排除真實資金交易與壓力測試；不因其他項目全綠而宣稱全系統零風險",
     },
     evidenceHref: "/dashboard-demo",
     evidenceLabel: "Scope G1 ↗",
@@ -257,7 +257,7 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
     ],
     exclusions: [
       { en: "Authenticated Orders / Funds", zh: "私密金鑰與真實下單資金" },
-      { en: "Load / Stress Reconnect", zh: "高併發壓測與生產重連" },
+      { en: "Load / Stress Reconnect", zh: "高流量壓力測試與正式環境斷線重連" },
       { en: "Human Manual UI Tour", zh: "人工手動介面探索" },
     ],
     suiteTitle: { en: "Deterministic Gate Suite", zh: "Deterministic 自動化測試套件" },
@@ -352,7 +352,7 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
   },
   "hold-sim": {
     id: "hold-sim",
-    tabTitle: { en: "③ Counterfactual Hold Demo", zh: "③ 反事實攔截示範 (Hold / No-Go)" },
+    tabTitle: { en: "③ Counterfactual Hold Demo", zh: "③ 模擬 P0 失敗攔截演練 (Hold / No-Go)" },
     badgeText: "HOLD · DEMO-FAIL",
     badgeType: "hold",
     tabSub: { en: "Blocked by P0 stale-sequence defect DEF-MDQ-004", zh: "因 P0 過期序號缺陷 DEF-MDQ-004 觸發攔截" },
@@ -513,14 +513,14 @@ export function DecisionDashboard() {
                 <p>
                   <T
                     en="Counterfactual Hold active: P0 defect DEF-MDQ-004 (stale sequence 103 overwrote 104) blocks release. Even after a passing rerun, G6 requires human owner sign-off."
-                    zh="反事實攔截預覽中：因 P0 缺陷 DEF-MDQ-004（過期序號 103 覆蓋 104）阻擋發布。即使工程師重跑通過，在負責人完成 G6 覆核前仍強制停在 HOLD。"
+                    zh="模擬攔截預覽中：因 P0 缺陷 DEF-MDQ-004（過期序號 103 覆蓋 104）阻擋發布。即使工程師重跑通過，在負責人完成 G6 覆核前仍強制停在 HOLD。"
                   />
                 </p>
               ) : (
                 <p>
                   <T
                     en="Both repositories passed owner review within their locked automated scope (SHA fc1e060 & 643b017). This is a scoped portfolio approval, not a zero-risk production guarantee."
-                    zh="兩個受測專案皆於鎖定之自動化範圍內完成負責人簽核（SHA fc1e060 與 643b017）。此為作品集限定範圍驗收，不冒充生產環境零風險認證。"
+                    zh="兩個受測專案皆於鎖定之自動化範圍內完成負責人簽核（SHA fc1e060 與 643b017）。此為作品集限定範圍驗收，不冒充正式環境零風險保證。"
                   />
                 </p>
               )}
@@ -546,7 +546,7 @@ export function DecisionDashboard() {
               <p>
                 <T
                   en="Instead of vanity percentages (e.g. 98%), we use 3 plain-language milestones: ① Basic Sanity → ② Edge & Negative Cases → ③ High-Load Stress. High-risk private orders and load tests are honestly disclosed as Excluded."
-                  zh="拒絕虛榮百分比數字，改用三階段白話里程碑：① 基礎正常 → ② 異常與邊界 → ③ 高壓極限。私密下單與高併發壓測誠實列為「明確排除（未測）」。"
+                  zh="拒絕虛榮百分比數字，改用三階段白話里程碑：① 基礎正常 → ② 異常與邊界 → ③ 高壓極限。私密下單與高流量壓力測試誠實列為「明確排除（未測）」。"
                 />
               </p>
             </div>
@@ -612,7 +612,7 @@ export function DecisionDashboard() {
                   <p>
                     <T
                       en="Order Book sequence integrity and REST/WS contracts pass 100% deterministically offline. Intentionally excludes authenticated private-key orders and high-concurrency stress testing."
-                      zh="Order Book 序號遞增、亂序拒絕與 REST/WS 契約在離線環境 100% 可重現通過；刻意排除私密金鑰下單與生產高併發壓測。"
+                      zh="Order Book 序號遞增、亂序拒絕與 REST/WS 契約在離線環境 100% 可重現通過；刻意排除私密金鑰下單與正式環境高流量壓力測試。"
                     />
                   </p>
                 </div>
@@ -960,7 +960,7 @@ export function DecisionDashboard() {
           <div>
             <header className="ct-stage-head">
               <div className="ct-stage-step"><span><T en="STAGE 03 · TRIAGE & GATE" zh="階段 03 · 缺陷分流與攔截" /></span><code>05–06</code></div>
-              <h3><T en="Blockers & Hold Counterfactual" zh="阻擋缺陷與反事實攔截證明" /></h3>
+              <h3><T en="Blockers & Hold Counterfactual" zh="阻擋缺陷與模擬攔截證明" /></h3>
               <p><T en="Current blocker state + proof the gate stops bad builds" zh="目前阻擋狀態 ＋ 證明品質門檻能攔截問題版本" /></p>
             </header>
             <div className="ct-card-block">
@@ -978,7 +978,7 @@ export function DecisionDashboard() {
 
             <div className="ct-hold-sim-box">
               <div className="ct-hold-sim-title">
-                <span><T en="🛑 Counterfactual Hold (DEMO-RUN-FAIL-001)" zh="🛑 反事實攔截證明 (DEMO-RUN-FAIL-001)" /></span>
+                <span><T en="🛑 Counterfactual Hold (DEMO-RUN-FAIL-001)" zh="🛑 模擬失敗攔截證明 (DEMO-RUN-FAIL-001)" /></span>
                 <code className="ct-badge-hold">NO-GO PROOF</code>
               </div>
               <p className="ct-hold-defect">
@@ -1109,7 +1109,7 @@ export function DecisionDashboard() {
               <tr className="ct-hold-row">
                 <td>
                   <div className="ct-repo-cell-title ct-text-red">cex-market-data-quality-lab (Hold Sim) <code>@DEMO-FAIL</code></div>
-                  <div className="ct-repo-cell-sub"><T en="Counterfactual P0 failure & release gate rejection" zh="反事實 P0 失敗與發布門檻攔截示範" /></div>
+                  <div className="ct-repo-cell-sub"><T en="Counterfactual P0 failure & release gate rejection" zh="模擬 P0 失敗與發布門檻攔截示範" /></div>
                 </td>
                 <td><code className="ct-badge-hold">■ HOLD / NO-GO</code></td>
                 <td><span className="ct-cell-pill ct-c-fail">■ TC-017 FAIL</span></td>
@@ -1132,7 +1132,7 @@ export function DecisionDashboard() {
           <code className="ct-section-pill">03–08 Linked Modules</code>
         </div>
         <span className="ct-section-note">
-          <T en="Inspect the full sanitized JUnit ledger, interactive P0 failure replay, and architecture rulebook" zh="深入檢視去敏後之 JUnit 執行帳本、P0 失敗門檻回放器與架構演進規則" />
+          <T en="Inspect the full sanitized JUnit ledger, interactive P0 failure replay, and architecture rulebook" zh="深入檢視公開版 JUnit 執行帳本（已移除本機路徑）、P0 失敗門檻回放器與架構演進規則" />
         </span>
       </div>
 
@@ -1143,7 +1143,7 @@ export function DecisionDashboard() {
             <code className="ct-badge-go">67 CHECKS · 34 CASES</code>
           </div>
           <h3><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></h3>
-          <p><T en="Sanitized JUnit SHA-256 telemetry matrix for Sept 6–7 releases plus interactive 34-case specification workbench (OB, REST, WS, DOC, LIVE, MTC)." zh="9/6–9/7 鎖定版本之去敏 JUnit SHA-256 遙測矩陣，以及 34 項標準測試案例互動分類工作台（OB / REST / WS / DOC / LIVE / MTC）。" /></p>
+          <p><T en="Sanitized JUnit SHA-256 telemetry matrix for Sept 6–7 releases plus interactive 34-case specification workbench (OB, REST, WS, DOC, LIVE, MTC)." zh="9/6–9/7 鎖定版本之公開版 JUnit SHA-256 正式執行紀錄總表，以及 34 項標準測試案例互動分類工作台（OB / REST / WS / DOC / LIVE / MTC）。" /></p>
           <span className="ct-portal-cta"><T en="Open Run Records Workbench →" zh="開啟執行記錄與案例工作台 →" /></span>
         </EvidenceLink>
 

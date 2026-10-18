@@ -103,7 +103,7 @@ export function ControlTowerNav({ active }: { active: ActivePageId }) {
           <a className="ct-nav-pill" href={siteHref("/dashboard-demo")}>
             <span className="ct-nav-step">03</span>
             <strong><T en="Design evolution" zh="設計演進" /></strong>
-            <code className="ct-nav-badge ct-nb-purple">v4.0 Hybrid · 6 Rules</code>
+            <code className="ct-nav-badge ct-nb-purple">Low-Tech v3 · 6 Rules</code>
           </a>
         )}
       </div>

@@ -111,7 +111,7 @@ tags:
 ## Defects, reruns and exceptions
 
 - Defect triage rule：
-- Retest rule：修正後新增 Run 複測失敗案例，並加跑同模型元素／同風險的回歸；原 Fail 保留。
+- Retest rule：修正後新增 Run 重測失敗案例，並加跑同模型元素／同風險的回歸；原 Fail 保留。
 - Regression rule：
 - Retry／flakiness rule：
 - Waiver／override authority：

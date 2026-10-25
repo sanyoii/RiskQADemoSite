@@ -104,7 +104,7 @@ tags:
 
 ### Product Test Status
 
-- `Ready`：human-owned assessment 明確核准，且已知問題、執行完整性、出場判定、未測範圍四列都支援；已確認 Fail 或未解決 S1 不得為 Ready。歷史 Ready 不是目前授權。
+- `Ready`：human-owned assessment 明確核准，且已知問題、執行完整性、結束條件判定、未測範圍四列都支援；已確認 Fail 或未解決 S1 不得為 Ready。歷史 Ready 不是目前授權。
 - `At Risk`：可以考慮發布，但有明確 residual risk、owner 與 follow-up。
 - `Blocked`：必要 evidence、environment、dependency 或 release gate 無法完成。
 - `Unknown`：資料不足、互相衝突、未核准或無法安全判定。

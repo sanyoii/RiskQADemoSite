@@ -74,7 +74,7 @@ export default function FailedRunDemo() {
           <div>
             <strong><T en="▸ PART 1 · 4-STAGE COUNTERFACTUAL INCIDENT & GATE PIPELINE (CLICK TO EXPAND)" zh="▸ 展開四步事故因果與門檻攔截鏈摘要（04–08 模板對應）" /></strong>
             <span className="lt-collapsible-sub">
-              <T en="How TC-MDQ-017 becomes DEF-MDQ-004 and a Blocked exit" zh="點開檢視 TC-MDQ-017 如何成為 DEF-MDQ-004 與 Blocked 出場" />
+              <T en="How TC-MDQ-017 becomes DEF-MDQ-004 and a Blocked exit" zh="點開檢視 TC-MDQ-017 如何成為 DEF-MDQ-004，並使結束條件為 Blocked" />
             </span>
           </div>
           <code className="ct-badge-hold">DEMO-RUN-FAIL-001 → DEF-MDQ-004</code>
@@ -245,7 +245,7 @@ Actual: stale update replaced current state
           <div className="fail-summary-grid">
             <article><p>Run Result</p><Result state="Fail">Fail</Result><small>3 Cases · 2 Pass · 1 Fail</small></article>
             <article><p>Product Status</p><Result state="Blocked">Blocked</Result><small><T en="Confirmed Fail and demo S1; never Ready" zh="已確認 Fail 與示範 S1；不得為 Ready" /></small></article>
-            <article><p>Release Decision</p><Result state="No-Go"><T en="Do not release" zh="不能發布" /></Result><small><T en="Exit unmet until a new Run and regression" zh="新 Run 與回歸完成前，出場條件不成立" /></small></article>
+            <article><p>Release Decision</p><Result state="No-Go"><T en="Do not release" zh="不能發布" /></Result><small><T en="Exit unmet until a new Run and regression" zh="新 Run 與回歸完成前，結束條件不成立" /></small></article>
             <article><p>Linked Defect</p><strong>DEF-MDQ-004</strong><small>S1 · Triaged · demo</small></article>
           </div>
         </section>
@@ -277,8 +277,8 @@ Actual: stale update replaced current state
           <h2 id="fail-rule-title"><T en="Reading rules" zh="閱讀規則" /></h2>
           <ol>
             <li><strong>Test Case Fail</strong><span><T en="Records the actual failure of one check." zh="記錄單一檢查的實際失敗。" /></span></li>
-            <li><strong>Run Fail</strong><span><T en="This Run contains at least one case that did not meet acceptance criteria. A retest is a new Run; this Fail stays." zh="這次 Run 至少有一個案例不符合接受條件。複測是新 Run；這次 Fail 保留。" /></span></li>
-            <li><strong>Release No-Go</strong><span><T en="Exit is unmet: confirmed Fail and demo S1 DEF-MDQ-004. Case priority is not the ship rule." zh="出場條件不成立：已確認 Fail，以及示範 S1 DEF-MDQ-004。案例 Priority 不是發布判準。" /></span></li>
+            <li><strong>Run Fail</strong><span><T en="This Run contains at least one case that did not meet acceptance criteria. A retest is a new Run; this Fail stays." zh="這次 Run 至少有一個案例不符合接受條件。重測是新 Run；這次 Fail 保留。" /></span></li>
+            <li><strong>Release No-Go</strong><span><T en="Exit is unmet: confirmed Fail and demo S1 DEF-MDQ-004. Case priority is not the ship rule." zh="結束條件不成立：已確認 Fail，以及示範 S1 DEF-MDQ-004。案例 Priority 不是發布判準。" /></span></li>
           </ol>
         </section>
       </div>

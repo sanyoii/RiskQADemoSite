@@ -66,7 +66,7 @@ tags:
 |---|---|---|---|---|
 | | | `Not Run` / `Skipped`（原因） / `Blocked` / `Pass` / `Fail` | | |
 
-`In Progress` 只用於尚未交付的草稿，不能當最終狀態。複測是新的 Run，原 Fail 保留。
+`In Progress` 只用於尚未交付的草稿，不能當最終狀態。重測是新的 Run，原 Fail 保留。
 
 ## Artifacts
 

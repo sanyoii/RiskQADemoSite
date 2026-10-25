@@ -392,7 +392,7 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
     verdictTone: "hold",
     criteriaCount: "Gate Blocked",
     criteria: [
-      { label: { en: "Exit · unresolved demo S1", zh: "出場 · 示範 S1 未解決" }, result: { en: "× unmet", zh: "× 不成立" }, tone: "fail" },
+      { label: { en: "Exit · unresolved demo S1", zh: "結束條件 · 示範 S1 未解決" }, result: { en: "× unmet", zh: "× 不成立" }, tone: "fail" },
       { label: { en: "G3 · Required Automated Suite Pass", zh: "G3 · 必要自動化套件全數通過" }, result: { en: "× 2/3 Pass", zh: "× 2/3 通過" }, tone: "fail" },
       { label: { en: "Unresolved demo S1", zh: "未解決的示範 S1" }, result: { en: "× DEF-MDQ-004", zh: "× DEF-MDQ-004" }, tone: "fail" },
       { label: { en: "A Pass Run alone cannot authorize Go", zh: "單靠 Pass Run 不會變成 Go" }, result: { en: "! Hold", zh: "! 維持 Hold" }, tone: "warn" },
@@ -510,14 +510,14 @@ export function DecisionDashboard() {
                 <p>
                   <T
                     en="Demo only: DEF-MDQ-004 is QA-suggested S1 because stale data overwrote book amounts. Confirmed Fail plus S1 is Blocked, never Ready. A retest would be a new Run plus RISK-OB-SEQ regression; this page does not record one."
-                    zh="僅示範：DEF-MDQ-004 的 QA 建議是 S1，因為舊資料覆蓋了帳本金額。已確認 Fail 加上 S1 為 Blocked，不得為 Ready。複測必須是新 Run，並加跑 RISK-OB-SEQ 回歸；本頁沒有這筆紀錄。"
+                    zh="僅示範：DEF-MDQ-004 的 QA 建議是 S1，因為舊資料覆蓋了帳本金額。已確認 Fail 加上 S1 為 Blocked，不得為 Ready。重測必須是新 Run，並加跑 RISK-OB-SEQ 回歸；本頁沒有這筆紀錄。"
                   />
                 </p>
               ) : (
                 <p>
                   <T
                     en="Known issues: no confirmed S1 in the pinned runs. Execution: historical Pass, evidence expired. Exit: self-review only, now expired, not an independent sign-off. Untested scope remains. Order is Blocked, At Risk, Unknown, Ready, so the current line is Unknown."
-                    zh="已知問題：鎖定 Run 沒有已確認的 S1。執行：歷史 Pass，證據已過期。出場：只有自審且已過期，不是獨立簽核。未測範圍仍在。優先序是 Blocked、At Risk、Unknown、Ready，所以目前是 Unknown。"
+                    zh="已知問題：鎖定 Run 沒有已確認的 S1。執行：歷史 Pass，證據已過期。結束條件：只有自審且已過期，不是獨立簽核。未測範圍仍在。優先序是 Blocked、At Risk、Unknown、Ready，所以目前是 Unknown。"
                   />
                 </p>
               )}

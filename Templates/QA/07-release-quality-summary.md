@@ -88,7 +88,7 @@ tags:
 ## Recommendation
 
 - Release assessment：`Ready` / `At Risk` / `Blocked` / `Unknown`
-- One-line rationale（由四列推導，優先序 Blocked ＞ At Risk ＞ Unknown ＞ Ready。有阻擋 → Blocked；無阻擋但有剩餘缺陷或已接受風險 → At Risk；無已知問題但缺依據 → Unknown；出場與覆核成立且無剩餘風險 → Ready。已確認 Fail 或 S1 不得為 Ready。Ready 由人最後決定。）：
+- One-line rationale（由四列推導，優先序 Blocked ＞ At Risk ＞ Unknown ＞ Ready。有阻擋 → Blocked；無阻擋但有剩餘缺陷或已接受風險 → At Risk；無已知問題但缺依據 → Unknown；結束條件與覆核成立且無剩餘風險 → Ready。已確認 Fail 或 S1 不得為 Ready。Ready 由人最後決定。）：
 - Required actions：
 - Residual risk：
 - Assessment expires at：

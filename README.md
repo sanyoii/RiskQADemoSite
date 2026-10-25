@@ -73,7 +73,7 @@ Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是 code c
 
 每張非 Ready 卡片顯示一項由實際原因產生的下一步；[六種合成範例](https://sanyoii.github.io/test-status/dashboard-demo/#next-action-examples) 用相同規則示範過期、待核准、無法取得來源、缺少證據與審查、No-Go 與 At Risk，不改動真實狀態。
 
-Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 複測（原 Fail 保留）與 No-Go。它不是目前兩個 repository 的正式結果，也不是簽核。
+Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 重測（原 Fail 保留）與 No-Go。它不是目前兩個 repository 的正式結果，也不是簽核。
 
 ## 核心模板與放置位置
 
@@ -115,7 +115,7 @@ Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 複�
 
 ### 05 Test Run Record
 
-Append-only 保存 full SHA、worktree、environment、exact command／procedure、每次 attempt、exit code、case results、artifact hash、retention 與 final run state。Run 最終狀態只用 Not Run、Skipped（原因）、Blocked、Pass、Fail。複測是新 Run。
+Append-only 保存 full SHA、worktree、environment、exact command／procedure、每次 attempt、exit code、case results、artifact hash、retention 與 final run state。Run 最終狀態只用 Not Run、Skipped（原因）、Blocked、Pass、Fail。重測是新 Run。
 
 ### 06 Defect Report
 

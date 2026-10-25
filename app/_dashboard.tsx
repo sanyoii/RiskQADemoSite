@@ -875,7 +875,7 @@ export function DecisionDashboard() {
           <div>
             <header className="ct-stage-head">
               <div className="ct-stage-step"><span><T en="STAGE 01 · CHARTER & RISK" zh="階段 01 · 測試委託與風險" /></span><code>00–02</code></div>
-              <h3><T en="Scope & Risk Prioritization" zh="範圍界定與風險優先級" /></h3>
+              <h3><T en="Scope & Risk Prioritization" zh="範圍界定與風險優先順序" /></h3>
               <p><T en="What must not break vs. explicit exclusions" zh="不可退讓的核心風險 vs. 誠實揭露之未測邊界" /></p>
             </header>
             <div className="ct-card-block">

@@ -19,17 +19,17 @@ flowchart LR
 
 ## Template index
 
-| No. | Template | Use | Suggested repository copy |
+| Canonical Markdown | English example | 繁體中文示例 | Suggested repository copy |
 |---|---|---|---|
-| 00 | [QA Test Request](00-qa-test-request.md) | 鎖定 subject、scope 與 decision question | `docs/quality/<release>/quality-decision-brief.md` |
-| 01 | [Quality Risk Assessment](01-quality-risk-assessment.md) | 決定風險與 target coverage | `docs/quality/<release>/risk-assessment.md` |
-| 02 | [Test Spec](02-test-spec.md) | 定義 approach、test design decision、gates 與 evidence | `docs/quality/<release>/test-spec.md` |
-| 03 | [Test Scenario](03-test-scenario.md) | 描述業務流程與正負向 coverage | `docs/quality/<release>/coverage-inventory.md` |
-| 04 | [Test Case](04-test-case.md) | 保存可重現的 test procedure | `docs/quality/<release>/test-cases.md` |
-| 05 | [Test Run Record](05-test-run-record.md) | Append-only 保存每次執行 | `test-records/<run-id>/run-record.md` |
-| 06 | [Defect Report](06-defect-report.md) | 連結 failure、impact 與 verification | `docs/quality/<release>/defect-log.md` |
-| 07 | [Release Quality Summary](07-release-quality-summary.md) | 形成 human-owned release recommendation | `docs/quality/<release>/release-quality-summary.md` |
-| 08 | [Dashboard Status Contract](08-dashboard-status-contract.md) | 約束 `.test-dashboard/status.json` projection | `.test-dashboard/status.json` |
+| [00 QA Test Request](00-qa-test-request.md) | [English](../../public/qa-templates/qa-test-request.en.html) | [繁體中文](../../public/qa-templates/qa-test-request.html) | `docs/quality/<release>/quality-decision-brief.md` |
+| [01 Quality Risk Assessment](01-quality-risk-assessment.md) | [English](../../public/qa-templates/quality-risk-assessment.en.html) | [繁體中文](../../public/qa-templates/quality-risk-assessment.html) | `docs/quality/<release>/risk-assessment.md` |
+| [02 Test Spec](02-test-spec.md) | [English](../../public/qa-templates/test-spec-template.en.html) | [繁體中文](../../public/qa-templates/test-spec-template.html) | `docs/quality/<release>/test-spec.md` |
+| [03 Test Scenario](03-test-scenario.md) | [English](../../public/qa-templates/test-scenario-template.en.html) | [繁體中文](../../public/qa-templates/test-scenario-template.html) | `docs/quality/<release>/coverage-inventory.md` |
+| [04 Test Case](04-test-case.md) | [English](../../public/qa-templates/test-case-template.en.html) | [繁體中文](../../public/qa-templates/test-case-template.html) | `docs/quality/<release>/test-cases.md` |
+| [05 Test Run Record](05-test-run-record.md) | [English](../../public/qa-templates/run-log.en.html) | [繁體中文](../../public/qa-templates/run-log.html) | `test-records/<run-id>/run-record.md` |
+| [06 Defect Report](06-defect-report.md) | [English](../../public/qa-templates/bug-report-template.en.html) | [繁體中文](../../public/qa-templates/bug-report-template.html) | `docs/quality/<release>/defect-log.md` |
+| [07 Release Quality Summary](07-release-quality-summary.md) | [English](../../public/qa-templates/quality-report.en.html) | [繁體中文](../../public/qa-templates/quality-report.html) | `docs/quality/<release>/release-quality-summary.md` |
+| [08 Dashboard Status Contract](08-dashboard-status-contract.md) | [English](../../public/qa-templates/dashboard-status-contract.en.html) | [繁體中文](../../public/qa-templates/dashboard-status-contract.html) | `.test-dashboard/status.json` |
 
 九份模板是 library，不代表每次 release 都要建立九份文件。依 `QA-Lite`、`QA-Standard`、`QA-High-Risk` 與 conditional triggers 決定所需組合；Test Run Record 與 Release Quality Summary 每次 release 都不能省略。
 
@@ -62,3 +62,12 @@ Coverage Analysis 沿用 03 Test Scenario contract，把完整 Requirement／AC 
 - Product Test Status 和 Data Status 分開判定。
 - `Ready` 需要 human-owned release assessment；測試全綠不會自動產生 Ready。
 - 公開前執行 allowlist projection、secret／PII scan、link review 與 post-publish smoke。
+
+
+## 中英文 HTML 範本與合成示例
+
+[繁體中文入口](../../public/qa-templates/index.html)／[English entry](../../public/qa-templates/index.en.html)。每種語言都是入口加九份文件，共 20 頁；00～08 與上表一一對應，每份都有空白欄位、Order Book 合成示例及對應語言連結。網站導覽依目前語言開啟閱讀版；Pages 路徑保留 `/test-status/qa-templates/`。檔案可獨立閱讀與列印，沒有編輯、儲存、實測證據或核准功能。
+
+The HTML library provides a complete English and Traditional Chinese reading version of all nine documents, with blank fields and the same synthetic Order Book example. Markdown remains canonical for authoring. Applied release records retain their versions; HTML is not another ledger or approval system. QA-Lite retains brief/design, run ledger and decision as three records.
+
+空白範本與方法源自測試公司 2026-10-25 的範本；v1.2 改用本站 Order Book，v1.3 補齊申請、風險、公開狀態契約與完整雙語內容。原公司檔案及歷史 Run 不改寫。九份 Markdown v0.3.0 保留版本與資料契約、readiness／授權、三項退出條件、四面向摘要及分歧／AI 誤判恢復；適用欄位填寫，不適用寫原因。維護方式見 [產生器說明](samples/README.md)。

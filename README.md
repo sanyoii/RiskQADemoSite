@@ -79,21 +79,23 @@ The Fail Demo uses synthetic data to show a Test Case Fail, a demo S1, a new Run
 
 ## Core templates and where they go
 
-The nine templates are an authoring library. When you apply them, copy the filled documents into the target repository so the evidence is reviewed with that release version. This public README only indexes the content and the repository locations. The local location of the private QA vault is not published.
+The nine Markdown templates are the canonical authoring library. The bilingual HTML library has **one index plus nine matching documents per language** (20 static pages total). Each document includes a blank form and a synthetic Order Book example. Start with [English examples](public/qa-templates/index.en.html) or [Traditional Chinese examples](public/qa-templates/index.html); each page links to its language counterpart. HTML is a reading and field-copying aid, not an editor, execution record or approval system. These are repository files; this update does not by itself publish them to the live site.
 
-| Template | Canonical file | Repository location after use |
-|---|---|---|
-| [00 QA Test Request](Templates/QA/00-qa-test-request.md) | `Templates/QA/00-qa-test-request.md` | `docs/quality/<release>/quality-decision-brief.md` |
-| [01 Quality Risk Assessment](Templates/QA/01-quality-risk-assessment.md) | `Templates/QA/01-quality-risk-assessment.md` | `docs/quality/<release>/risk-assessment.md` |
-| [02 Test Spec](Templates/QA/02-test-spec.md) | `Templates/QA/02-test-spec.md` | `docs/quality/<release>/test-spec.md` |
-| [03 Test Scenario](Templates/QA/03-test-scenario.md) | `Templates/QA/03-test-scenario.md` | `docs/quality/<release>/coverage-inventory.md` |
-| [04 Test Case](Templates/QA/04-test-case.md) | `Templates/QA/04-test-case.md` | `docs/quality/<release>/test-cases.md` |
-| [05 Test Run Record](Templates/QA/05-test-run-record.md) | `Templates/QA/05-test-run-record.md` | `test-records/<run-id>/run-record.md` |
-| [06 Defect Report](Templates/QA/06-defect-report.md) | `Templates/QA/06-defect-report.md` | `docs/quality/<release>/defect-log.md` |
-| [07 Release Quality Summary](Templates/QA/07-release-quality-summary.md) | `Templates/QA/07-release-quality-summary.md` | `docs/quality/<release>/release-quality-summary.md` |
-| [08 Dashboard Status Contract](Templates/QA/08-dashboard-status-contract.md) | `Templates/QA/08-dashboard-status-contract.md` | `.test-dashboard/status.json` |
+Use the table to move from an example to its canonical Markdown source and then the release-specific location. Copy completed records into the target repository and review them with that release version. Preserve historical Runs and the original FinMAS source. Prices, quantities and times in the Order Book example are disclosed teaching assumptions, not exchange rules or fresh execution evidence.
 
-Nine templates do not mean every release produces nine documents. `QA-Lite` can keep the request, risk, coverage, and decision in one short document. The Test Run Record and the Release Quality Summary are kept for every execution. `QA-Standard`, `QA-High-Risk`, and any scope that hits a hard trigger add detailed cases or conditional templates.
+| Canonical Markdown template | English example | Traditional Chinese example | Repository location after use |
+|---|---|---|---|
+| [00 QA Test Request](Templates/QA/00-qa-test-request.md) | [English](public/qa-templates/qa-test-request.en.html) | [繁體中文](public/qa-templates/qa-test-request.html) | `docs/quality/<release>/quality-decision-brief.md` |
+| [01 Quality Risk Assessment](Templates/QA/01-quality-risk-assessment.md) | [English](public/qa-templates/quality-risk-assessment.en.html) | [繁體中文](public/qa-templates/quality-risk-assessment.html) | `docs/quality/<release>/risk-assessment.md` |
+| [02 Test Spec](Templates/QA/02-test-spec.md) | [English](public/qa-templates/test-spec-template.en.html) | [繁體中文](public/qa-templates/test-spec-template.html) | `docs/quality/<release>/test-spec.md` |
+| [03 Test Scenario](Templates/QA/03-test-scenario.md) | [English](public/qa-templates/test-scenario-template.en.html) | [繁體中文](public/qa-templates/test-scenario-template.html) | `docs/quality/<release>/coverage-inventory.md` |
+| [04 Test Case](Templates/QA/04-test-case.md) | [English](public/qa-templates/test-case-template.en.html) | [繁體中文](public/qa-templates/test-case-template.html) | `docs/quality/<release>/test-cases.md` |
+| [05 Test Run Record](Templates/QA/05-test-run-record.md) | [English](public/qa-templates/run-log.en.html) | [繁體中文](public/qa-templates/run-log.html) | `test-records/<run-id>/run-record.md` |
+| [06 Defect Report](Templates/QA/06-defect-report.md) | [English](public/qa-templates/bug-report-template.en.html) | [繁體中文](public/qa-templates/bug-report-template.html) | `docs/quality/<release>/defect-log.md` |
+| [07 Release Quality Summary](Templates/QA/07-release-quality-summary.md) | [English](public/qa-templates/quality-report.en.html) | [繁體中文](public/qa-templates/quality-report.html) | `docs/quality/<release>/release-quality-summary.md` |
+| [08 Dashboard Status Contract](Templates/QA/08-dashboard-status-contract.md) | [English](public/qa-templates/dashboard-status-contract.en.html) | [繁體中文](public/qa-templates/dashboard-status-contract.html) | `.test-dashboard/status.json` |
+
+Nine templates do not require nine files for every release. **QA-Lite keeps three records: brief/design, run ledger, decision.** The brief/design combines request, risk, design and case references; the run ledger appends attempts; the decision records the quality summary and authorized recommendation. Detailed templates are expanded for QA-Standard, QA-High-Risk or applicable triggers. The Dashboard reads a sanitized projection and adds no second ledger.
 
 ### 00 QA Test Request
 

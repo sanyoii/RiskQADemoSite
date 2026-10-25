@@ -1,6 +1,6 @@
 ---
 type: quality-risk-assessment
-templateVersion: 0.1.0
+templateVersion: 0.3.0
 status: draft
 assessmentId:
 repository:
@@ -66,3 +66,14 @@ tags:
 - Independent review required：`yes` / `no`
 - Review outcome：`approved` / `changes-required` / `blocked`
 - Notes：
+
+
+## Change and traceability review
+
+| Requirement ID／version | Risk ID | Scenario ID／version | Case ID／version | Run／Defect links | Gap／owner／resolution |
+|---|---|---|---|---|---|
+| | | | | | |
+
+此表索引原始紀錄，不另維護 Pass／Fail。新失效模式回到風險評估；新流程回到建模；規則新解讀回到判準；帳號、環境或額度不足回到準備。記錄變動理由、受影響 ID 與恢復條件。
+
+Severity 描述已發生缺陷的影響，案例 Priority 描述執行順序；不可從風險排序或 P0／P1 機械轉成 S1／S2。風險接受不能代替關鍵路徑的完成證據。

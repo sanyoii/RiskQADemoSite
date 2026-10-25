@@ -73,3 +73,10 @@ Evidence target: docs/quality/<release>/coverage-inventory.md
 Decision owner: <human or Unknown>
 External actions: none
 ```
+
+
+## Version and denominator checks
+
+Matching Run 也必須對上 Case／oracle／資料契約版本。矩陣的 Run status 是原紀錄的唯讀投影，不另維護結果。缺某層來源時只標該缺口 Unknown，保留其他已確認問題。
+
+完成率＝(Pass+Fail)/本輪選定案例數，0 記 N/A；Blocked／Skipped／Not Run 保留分母與原因。案例、資料列、工具及產品分開計數。關鍵路徑未完成時，即使缺口有說明也不能宣告測試退出成立。結論交 07 的四面向推導，沿 [Review and recovery](playbook-contract.md#review-and-recovery) 處理版本變動與分歧。

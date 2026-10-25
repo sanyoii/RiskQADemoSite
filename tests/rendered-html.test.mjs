@@ -287,3 +287,12 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
   }
 });
 
+
+
+test("public navigation reaches the offline QA sample entry", async () => {
+  const html = await (await render("/")).text();
+  assert.match(html, /href="\/qa-templates\/index.en.html"/);
+  assert.match(html, /data-href-en="\/qa-templates\/index.en.html" data-href-zh="\/qa-templates\/"/);
+  const entry = await readFile(new URL("../dist/client/qa-templates/index.html", import.meta.url), "utf8");
+  assert.match(entry, /test-case-template.html#sample/);
+});

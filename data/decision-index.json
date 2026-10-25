@@ -1,5 +1,5 @@
 {
-  "policyVersion": "2.0.0",
+  "policyVersion": "2.1.0",
   "repositories": [
     {
       "snapshot": {
@@ -124,7 +124,7 @@
           "RUN_STALE",
           "REVIEW_TIME_INVALID"
         ],
-        "policyVersion": "2.0.0",
+        "policyVersion": "2.1.0",
         "inputDigest": "c3766a1063a53f06210816083ae45a314549dd86ab0ce9fb4db76520c0562223",
         "sourceSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
         "expiresAt": "2026-09-08T23:59:00+08:00"
@@ -286,7 +286,7 @@
           "RUN_STALE",
           "REVIEW_TIME_INVALID"
         ],
-        "policyVersion": "2.0.0",
+        "policyVersion": "2.1.0",
         "inputDigest": "5ff7e3e3cc32f5b1a54b221819ea0a04f695fb33e58923a2a8a2cb0ed7987d7e",
         "sourceSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
         "expiresAt": "2026-09-13T20:40:00+08:00"

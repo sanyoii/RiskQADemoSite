@@ -77,3 +77,8 @@ External actions: none
 ```
 
 問題只作為 draft；沒有另行授權時不送出、不改 Jira。
+
+
+## Versioned questions
+
+待問問題沿 00／02 原紀錄保存 Question ID、來源／版本、責任人、受影響 ID、答案來源／日期與新判準版本。已 reviewed 的需求若有新解讀仍須重新評估，不把舊 ready-to-review 當永久核准。依 [Review and recovery](playbook-contract.md#review-and-recovery) 回到受影響階段，保留舊 Run。

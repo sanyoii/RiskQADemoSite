@@ -44,3 +44,17 @@ test("prepares directory routes and lifts prefixed assets for Pages", async () =
     await rm(directory, { recursive: true, force: true });
   }
 });
+
+
+test("offline QA sample HTML keeps its filenames and relative links in Pages export", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "qa-samples-export-"));
+  const source = join(directory, "source"), output = join(directory, "output");
+  await mkdir(join(source, "qa-templates"), { recursive: true });
+  await writeFile(join(source, "qa-templates", "index.html"), '<a href="test-case-template.html#blank">Case</a>');
+  await writeFile(join(source, "qa-templates", "test-case-template.html"), '<h1 id="blank">Case</h1>');
+  try {
+    const result = spawnSync(process.execPath, ["scripts/prepare-pages-artifact.mjs", "--source", source, "--output", output], { cwd: new URL("../", import.meta.url), encoding: "utf8" });
+    assert.equal(result.status, 0, result.stderr);
+    assert.equal(await readFile(join(output, "qa-templates", "test-case-template.html"), "utf8"), '<h1 id="blank">Case</h1>');
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});

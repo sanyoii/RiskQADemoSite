@@ -24,6 +24,11 @@ function applyLanguage(language: Language) {
     if (value !== undefined) node.dataset.label = value;
   });
 
+  document.querySelectorAll<HTMLAnchorElement>("a[data-href-en][data-href-zh]").forEach((node) => {
+    const href = node.dataset[key === "zh" ? "hrefZh" : "hrefEn"];
+    if (href !== undefined && node.getAttribute("href") !== href) node.setAttribute("href", href);
+  });
+
   const page = document.querySelector<HTMLElement>("[data-page-title-en][data-page-title-zh]");
   if (page) {
     const title = page.dataset[key === "zh" ? "pageTitleZh" : "pageTitleEn"];
@@ -54,7 +59,7 @@ export function LanguageToggle() {
     const initial = saved === "zh" ? "zh" : "en";
     applyLanguage(initial);
     // Dynamic clock/replay updates must keep the selected language too.
-    const options = { subtree: true, childList: true, attributes: true, attributeFilter: ["data-en", "data-zh", "data-aria-label-en", "data-aria-label-zh"] };
+    const options = { subtree: true, childList: true, attributes: true, attributeFilter: ["data-en", "data-zh", "data-aria-label-en", "data-aria-label-zh", "data-href-en", "data-href-zh"] };
     const observer = new MutationObserver(() => {
       observer.disconnect();
       applyLanguage(document.documentElement.lang === "zh-Hant" ? "zh" : "en");

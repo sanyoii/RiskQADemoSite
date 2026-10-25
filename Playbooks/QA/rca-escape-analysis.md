@@ -44,3 +44,6 @@ External actions: none
 ```
 
 本 Playbook 不改 defect state、不 assign action、不宣告修復完成。Action 完成與否要由後續 verification evidence 證明。
+
+
+AI 誤判也沿 [Review and recovery](playbook-contract.md#review-and-recovery) 保留輸入輸出、版本與受影響判定；先重查原始證據，分開模型錯誤與產品／測試／資料／環境原因。未完成核實不得把推測升成 confirmed cause，修正後以保留測試集重評，不抹除原誤判。

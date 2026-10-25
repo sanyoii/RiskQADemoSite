@@ -54,6 +54,8 @@ try {
 
   const htmlFiles = await collectHtml(output);
   for (const htmlPath of htmlFiles) {
+    // Offline sample documents use literal .html sibling links, not app routes.
+    if (relative(output, htmlPath).split(/[\\/]/)[0] === "qa-templates") continue;
     const fileName = basename(htmlPath);
     if (fileName === "index.html" || fileName === "404.html") continue;
     const routeDirectory = join(dirname(htmlPath), basename(fileName, ".html"));

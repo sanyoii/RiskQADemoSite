@@ -1,4 +1,4 @@
-# Decision workflow · policy 2.0.0
+# Decision workflow · policy 2.1.0
 
 ## One maintained implementation
 
@@ -104,3 +104,14 @@ The real Dashboard replay lists only recorded runs, the original decision and ex
 | Cloudflare/Vinext/Sites local runtime | Retained: current build and rendered tests import `dist/server/index.js`, supplied by this runtime. Pages build bypasses Cloudflare. Removing it now requires a separately validated runtime migration, not a safe dependency deletion |
 
 Pages export now refuses existing output directories rather than recursively deleting them. Export to a fresh named directory. No deployment workflow, branch protection, hosted account or publication settings were modified.
+
+
+## Criteria changes, known issues and recovery (2.1.0)
+
+When a retained previous packet is supplied, affected required cases from `changeImpact.mustRun` must have a new Run after the previous decision. Replacing only the review digest, renaming an old Run or adding a waiver cannot satisfy this requirement. Unchanged cases retain their evidence subject to existing freshness and review checks. Subsequent releases must supply `--previous` or the controlled registry `previousReleaseEvidence`; without a retained previous packet the tool cannot detect an omitted earlier version. Case/oracle/data-contract versions remain in the existing records; this change does not rewrite past packets or introduce a second ledger.
+
+Current Ready cannot coexist with a recorded Warning/residual risk. Known coherent Blocked/At Risk for the same subject remains visible alongside stale/missing evidence or approval. Malformed, unsafe or subject-mismatched input remains Unknown; it cannot establish a product fact. Historical validation preserves old decisions under their recorded terms, while current policy is stricter. The original assessment and Runs are never rewritten. A valid owner-reviewed packet alone is not proof that every current Ready condition holds.
+
+The four dimensions are known issues, execution completeness, exit decision and untested scope. Ready is test-delivery readiness; deployment still requires the separate Go decision and release gate. A historical, subsequently resolved Fail is not a permanent blocker. An unresolved S1, unaccepted S2 or confirmed critical-path nonconformance is blocking. Accepted S2 or remaining S3/S4 is At Risk, even if execution is incomplete. Explaining missing critical execution does not satisfy exit.
+
+Design/result review, disagreements, AI calibration and misjudgment recovery use the existing [Playbook contract](../Playbooks/QA/playbook-contract.md#review-and-recovery). These are procedures, not proof of independent human acceptance or model accuracy. [HTML samples](../public/qa-templates/index.html) show the same document ownership with explicitly synthetic data.

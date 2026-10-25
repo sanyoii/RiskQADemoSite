@@ -42,7 +42,7 @@ External actions: none
 ## Authority rules
 
 - Playbook output 是 draft／recommendation，不是 test evidence。
-- `Pass`、`Fail`、`Blocked` 只能來自已執行的 run record。
+- `Pass`／`Fail` 必須來自實際執行與核定判準。選定案例缺必要前提可在操作前記 `Blocked`，附缺項、已觀察事實與恢復條件；Playbook 本身不產生 Run 結果。
 - `Ready`、`At Risk`、`Blocked`、`Unknown` 的 release recommendation 只由 07 Release Quality Summary 管理。
 - confirmed root cause 必須有 evidence、reviewer 與 evidence owner；否則維持 hypothesis／Unknown。
 - 新輸出不能覆蓋舊 Fail、Blocked、retry 或 disposition chronology。
@@ -65,3 +65,18 @@ Playbook 只能把 review 後內容送到既有模板或 release-specific artifa
 ## Evidence label
 
 沒有實際 host／model behavior run receipt 時，Playbook eval 標為 `DEFINED_UNRUN`。Parser、schema 或 static fixture PASS 只能證明 deterministic contract checks 通過。
+
+
+## Review and recovery
+
+覆核先讀原始需求、判準版本、案例與證據，再比較作者結論。設計與結果各記覆核範圍。同人或同上下文換角色是自查；不同 Bot 也不保證獨立，AI 覆核不等於真人驗收。沿原角色分工，不另設核准者。
+
+| Trigger | Preserve in the existing record | Stop／return | Resume condition |
+|---|---|---|---|
+| 來源改版 | 問題 ID、舊／新來源及判準版本、受影響案例／Run、責任人 | 流程回建模、規則回判準、失效模式回風險、前提回準備；只停受影響範圍 | 重評、必要新 Run 及新覆核；舊 Pass／Fail 不改寫 |
+| 覆核分歧 | 雙方主張、來源／證據、影響 ID、未決原因 | 不升級受影響結論；交原有權人裁決，不用多數模型投票代替 | 裁決理由、人員、時間及必要重測／再覆核 |
+| AI 誤判 | 原輸入輸出、模型／prompt／資料／評測版本、錯誤類型及影響範圍 | 暫停受影響自動判定，回到原證據人工檢查；保留舊評測結果並另記修正 | 修正後以既有失敗題、正反例與保留測試集重評，記覆核限制 |
+
+AI 生成案例須查來源、遺漏、重複及步驟／資料一致性；自動化檢查需已知正反例。若使用 AI judge，使用人工核准標籤，分開校準集與保留測試集；記樣本來源／版本／數量、誤報與漏報、適用範圍。未量測不宣稱準確率。模型、prompt 或資料改版後重新評測；把誤判題加入校準後，不能再把同一題當未見過的保留集。
+
+非確定性輸出需記 K 次、允許變異、不變條件、逐次與彙整判準、停止／費用上限，逐次保存結果。這些方法不自動授權外部模型、敏感資料上傳或帳號操作。

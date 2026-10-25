@@ -46,3 +46,8 @@ External actions: none
 ```
 
 資料只是 draft；不建立帳號、不呼叫 API、不寫入 environment。Review 後由 04 Test Case 引用具體資料與 observable expected result。
+
+
+## Shared numeric contract
+
+在 02 的既有 Spec 定義 DC ID／version／確認狀態、來源、單位／期間／幣別、as-of／時區、公式、缺值／零值、精度／捨入及容差依據。04 引用條款並保留本案具體輸入、資料列 ID 與可重算預期值；05 記實際契約版本、快照與擷取時間。各資料列獨立判定，契約更新依 [Review and recovery](playbook-contract.md#review-and-recovery) 重評。

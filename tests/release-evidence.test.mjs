@@ -86,3 +86,27 @@ test("self review requires explicit overlap disclosure and a scoped waiver canno
   p.waivers = [{ id: "W", targetId: "RISK", accepted: true, reason: "broad waiver", compensatingControl: "none", approver: "owner", expiresAt: "2026-09-07T00:00:00Z" }];
   assert.ok(reviewRelease(p, { now, authority }).findings.some(f => f.code === "WAIVER_INVALID"));
 });
+
+
+test("changed requirement or oracle requires a new affected Run even after re-review", () => {
+  for (const mutate of [p => { p.requirements[0].digest = "c".repeat(64); }, p => { p.designs[0].oracle.sourceDigest = "c".repeat(64); }, p => { p.cases[0].version = "2"; }]) {
+    const previous = packet(), candidate = structuredClone(previous);
+    mutate(candidate); candidate.review.inputDigest = evidenceDigest(candidate);
+    assert.deepEqual(changeImpact(previous, candidate).mustRun, ["CASE"]);
+    assert.ok(reviewRelease(candidate, { now, authority, previous }).findings.some(f => f.code === "CHANGED_CASE_REQUIRES_RUN"));
+    candidate.runs.push({ ...candidate.runs[0], id: "NEW", executedAt: "2026-09-06T11:15:00Z", previousAttemptIds: ["RUN"] });
+    candidate.review.decidedAt = "2026-09-06T11:30:00Z";
+    candidate.review.inputDigest = evidenceDigest(candidate);
+    assert.equal(reviewRelease(candidate, { now, authority, previous }).eligible, true);
+    assert.deepEqual(candidate.runs[0], previous.runs[0]);
+  }
+});
+
+test("a renamed old Run and waiver cannot bypass a changed case rerun", () => {
+  const previous = packet(), candidate = structuredClone(previous);
+  candidate.designs[0].parameters = "new boundary";
+  candidate.runs.push({ ...candidate.runs[0], id: "RENAMED", previousAttemptIds: ["RUN"] });
+  candidate.waivers = [{ id: "W", targetId: "CASE", accepted: true, reason: "accepted risk", compensatingControl: "restriction", approver: "owner", expiresAt: "2026-09-07T00:00:00Z" }];
+  candidate.review.inputDigest = evidenceDigest(candidate);
+  assert.ok(reviewRelease(candidate, { now, authority, previous }).findings.some(f => f.code === "CHANGED_CASE_REQUIRES_RUN"));
+});

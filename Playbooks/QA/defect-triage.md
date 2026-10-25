@@ -36,3 +36,6 @@ External actions: none
 ```
 
 本 Playbook 不直接更新 tracker、合併 duplicate、關閉 defect、改 priority 或 assign owner。這些都是 external write，必須由 human triage owner review 並另行授權。
+
+
+S1 優先：重複扣款／扣點即使可退款仍為 S1；延期或退款不改變影響等級。QA 建議、委託方裁定與最終採用依據各保留。Fixed 不是 Verified；新 Run 重測失敗回 Reopened；Deferred 記有權接受者、理由、責任人與重評日。狀態對應／分歧沿 [Review and recovery](playbook-contract.md#review-and-recovery)，不直接更新外部 tracker。

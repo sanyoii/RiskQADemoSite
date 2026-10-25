@@ -52,3 +52,10 @@ External actions: none
 ```
 
 這份輸出不能宣告 subset risk-free，不能修改 test suite、CI selection、run record 或 release decision。
+
+
+## Criteria changes and retest
+
+Requirement、oracle、資料契約或 Case 版本變動也算 change；不只看產品程式 diff。修復後新增 Run，保留原 Fail，按風險／相依性列納入與排除理由。必要案例列為 must-run 後，不能只更新 review digest 重用舊 Pass；填寫證據包時帶 `--previous` 或 registry `previousReleaseEvidence`。
+
+未映射改動先揭露缺口並採保守範圍，不把 targeted subset 說成完整回歸。分歧依 [Review and recovery](playbook-contract.md#review-and-recovery) 處理。

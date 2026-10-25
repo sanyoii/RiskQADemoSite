@@ -1,6 +1,6 @@
 ---
 type: defect-report
-templateVersion: 0.1.0
+templateVersion: 0.3.0
 status: New
 defectId:
 title:
@@ -121,3 +121,14 @@ Defect `In Progress` 是處理進度，不是 Run Status。Rejected／Duplicate 
 - Acceptance／defer reason：
 - Residual risk：
 - Expiry／review date：
+
+
+## Detailed Run linkage
+
+| Run ID | Case ID／version | Data row | Attempt | Failed step／checkpoint | Raw evidence | Retest Run |
+|---|---|---|---|---|---|---|
+| | | | | | | |
+
+同一缺陷可連多次 Run，同一 Run 可連多個缺陷。Fixed 不等於 Verified；重測失敗回 Reopened。回歸依改動、風險與相依性列納入／排除理由，不限原失敗案例，也不自動要求全部重跑。外部 tracker 狀態先對應，不自行修改外部系統。
+
+S1 優先於 S2：重複扣款／扣點即使可退款仍為 S1；退款或延期不是降低 Severity 的理由。分級爭議保留雙方證據，由有權人裁定；未核定前標示暫定及其限制。

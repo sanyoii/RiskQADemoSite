@@ -79,21 +79,23 @@ Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 重�
 
 ## 核心模板與放置位置
 
-九個模板是撰寫用的模板庫。實際套用時，把填好的文件複製進目標 repository，讓證據跟著該 release version 一起審查。這份公開 README 只提供內容索引與 repository 落點。私人 QA vault 的本機位置不公開。
+九份 Markdown 是正式撰寫用的模板庫。中英文 HTML 閱讀版各有 **1 個入口＋9 份對應文件**，合計 20 頁；每份都有空白範本與 Order Book 合成填寫示例。入口：[繁體中文](public/qa-templates/index.html)／[English](public/qa-templates/index.en.html)，各頁可切換對應語言。HTML 供閱讀與複製欄位，沒有編輯、執行記錄或核准功能；以下連結指向 repository 檔案，本次更新不表示已發布到線上網站。
 
-| 模板 | 標準檔案 | 套用後的 repository 位置 |
-|---|---|---|
-| [00 QA Test Request](Templates/QA/00-qa-test-request.md) | `Templates/QA/00-qa-test-request.md` | `docs/quality/<release>/quality-decision-brief.md` |
-| [01 Quality Risk Assessment](Templates/QA/01-quality-risk-assessment.md) | `Templates/QA/01-quality-risk-assessment.md` | `docs/quality/<release>/risk-assessment.md` |
-| [02 Test Spec](Templates/QA/02-test-spec.md) | `Templates/QA/02-test-spec.md` | `docs/quality/<release>/test-spec.md` |
-| [03 Test Scenario](Templates/QA/03-test-scenario.md) | `Templates/QA/03-test-scenario.md` | `docs/quality/<release>/coverage-inventory.md` |
-| [04 Test Case](Templates/QA/04-test-case.md) | `Templates/QA/04-test-case.md` | `docs/quality/<release>/test-cases.md` |
-| [05 Test Run Record](Templates/QA/05-test-run-record.md) | `Templates/QA/05-test-run-record.md` | `test-records/<run-id>/run-record.md` |
-| [06 Defect Report](Templates/QA/06-defect-report.md) | `Templates/QA/06-defect-report.md` | `docs/quality/<release>/defect-log.md` |
-| [07 Release Quality Summary](Templates/QA/07-release-quality-summary.md) | `Templates/QA/07-release-quality-summary.md` | `docs/quality/<release>/release-quality-summary.md` |
-| [08 Dashboard Status Contract](Templates/QA/08-dashboard-status-contract.md) | `Templates/QA/08-dashboard-status-contract.md` | `.test-dashboard/status.json` |
+依下表從示例找到 Markdown 原始模板，再把填好的文件放進實際案件 repository，跟著 release version 審閱。歷史 Run 與 FinMAS 原始範本保留；Order Book 的價格、數量與時間明示為教學假設，不能當成交易所規則或新的實測證據。
 
-九份模板不等於每次 release 都要產生九份文件。`QA-Lite` 可以把 request、risk、coverage 與決策收在同一份短文件。Test Run Record 與 Release Quality Summary 每次執行都要保留。`QA-Standard`、`QA-High-Risk`，以及命中 hard trigger 的範圍，再加入詳細案例或條件式模板。
+| 正式 Markdown 模板 | 英文示例 | 繁體中文示例 | 套用後的 repository 位置 |
+|---|---|---|---|
+| [00 QA Test Request](Templates/QA/00-qa-test-request.md) | [English](public/qa-templates/qa-test-request.en.html) | [繁體中文](public/qa-templates/qa-test-request.html) | `docs/quality/<release>/quality-decision-brief.md` |
+| [01 Quality Risk Assessment](Templates/QA/01-quality-risk-assessment.md) | [English](public/qa-templates/quality-risk-assessment.en.html) | [繁體中文](public/qa-templates/quality-risk-assessment.html) | `docs/quality/<release>/risk-assessment.md` |
+| [02 Test Spec](Templates/QA/02-test-spec.md) | [English](public/qa-templates/test-spec-template.en.html) | [繁體中文](public/qa-templates/test-spec-template.html) | `docs/quality/<release>/test-spec.md` |
+| [03 Test Scenario](Templates/QA/03-test-scenario.md) | [English](public/qa-templates/test-scenario-template.en.html) | [繁體中文](public/qa-templates/test-scenario-template.html) | `docs/quality/<release>/coverage-inventory.md` |
+| [04 Test Case](Templates/QA/04-test-case.md) | [English](public/qa-templates/test-case-template.en.html) | [繁體中文](public/qa-templates/test-case-template.html) | `docs/quality/<release>/test-cases.md` |
+| [05 Test Run Record](Templates/QA/05-test-run-record.md) | [English](public/qa-templates/run-log.en.html) | [繁體中文](public/qa-templates/run-log.html) | `test-records/<run-id>/run-record.md` |
+| [06 Defect Report](Templates/QA/06-defect-report.md) | [English](public/qa-templates/bug-report-template.en.html) | [繁體中文](public/qa-templates/bug-report-template.html) | `docs/quality/<release>/defect-log.md` |
+| [07 Release Quality Summary](Templates/QA/07-release-quality-summary.md) | [English](public/qa-templates/quality-report.en.html) | [繁體中文](public/qa-templates/quality-report.html) | `docs/quality/<release>/release-quality-summary.md` |
+| [08 Dashboard Status Contract](Templates/QA/08-dashboard-status-contract.md) | [English](public/qa-templates/dashboard-status-contract.en.html) | [繁體中文](public/qa-templates/dashboard-status-contract.html) | `.test-dashboard/status.json` |
+
+九份模板不等於每次 release 要建立九份檔案。**QA-Lite 維持 brief/design、run ledger、decision 三份紀錄**：brief/design 收斂申請、風險、設計與案例引用；run ledger 追加各次執行；decision 保存品質摘要與有權人的建議。QA-Standard、QA-High-Risk 或命中條件式觸發時，再展開詳細模板。Dashboard 讀取經遮蔽的唯讀投影，不另開第二份帳。
 
 ### 00 QA Test Request
 

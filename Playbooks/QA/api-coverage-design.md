@@ -52,3 +52,6 @@ Evidence target: 02 / 03 / 04
 Decision owner: <human or Unknown>
 External actions: none
 ```
+
+
+非同步 API 的等待條件、核定時限、允許狀態與重試／費用上限也要有來源。產品違反已核定時限記錄為待核實偏差；缺少判準／觀察條件則列 readiness 缺口，不一律把 timeout 當產品 Fail。回到 02／04 補設計，實際 Run 由 05 記錄；來源變更沿 [Review and recovery](playbook-contract.md#review-and-recovery)。

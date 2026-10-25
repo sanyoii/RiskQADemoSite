@@ -74,3 +74,27 @@ test("public evidence links fail closed on schemes, private hosts and deceptive 
   for (const url of ["javascript:void(0)", "//evil.example/path", "/\\evil", "https://github.com.evil.example/x", "https://user@github.com/x", "https://localhost/x", "/%2fevil"]) assert.equal(safeEvidenceUrl(url), false, url);
   for (const url of ["/run-records/#run", "https://github.com/sanyoii/repo/actions/runs/1"]) assert.equal(safeEvidenceUrl(url), true, url);
 });
+
+
+test("known blockers and accepted risks survive missing review and stale evidence", () => {
+  for (const status of ["blocked", "at-risk"]) {
+    const snapshot = structuredClone(base); snapshot.releaseAssessment.status = status;
+    for (const at of [now, new Date(base.releaseAssessment.expiresAt)]) {
+      const view = decisionView(snapshot, { now: at, enforceReview: true });
+      assert.equal(view.status, status);
+      assert.ok(view.reasons.some(r => r.code === "RELEASE_EVIDENCE_REQUIRED"));
+    }
+    snapshot.provenance.sourceSha = "f".repeat(40);
+    assert.equal(decisionView(snapshot, { now }).status, "unknown", "mismatched subject is not trustworthy");
+  }
+});
+
+test("current residual warning cannot be Ready; historical source remains unchanged", () => {
+  const snapshot = structuredClone(base);
+  snapshot.productAreas[0].quality = "warning";
+  snapshot.productAreas[0].comment = "Known remaining S3 defect with a workaround";
+  assert.ok(policyErrors(snapshot, { now }).some(e => e.code === "RESIDUAL_RISK_PRESENT"));
+  assert.equal(decisionView(snapshot, { now }).status, "at-risk");
+  assert.equal(snapshot.releaseAssessment.status, "ready");
+  assert.deepEqual(policyErrors(snapshot, { now, historical: true }), []);
+});

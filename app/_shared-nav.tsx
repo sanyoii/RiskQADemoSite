@@ -51,6 +51,10 @@ export function ControlTowerNav({ active }: { active: ActivePageId }) {
   return (
     <nav className="decision-nav ct-nav ct-hybrid-nav" aria-label="Primary navigation" data-aria-label-en="Primary navigation" data-aria-label-zh="主要導覽">
       <div className="ct-nav-pills">
+        <a className="ct-nav-pill" href={`${siteHref("/qa-templates/")}index.en.html`} data-href-en={`${siteHref("/qa-templates/")}index.en.html`} data-href-zh={siteHref("/qa-templates/")}>
+          <strong><T en="QA templates and examples" zh="QA 文件範本與示例" /></strong>
+          <code className="ct-nav-badge">v1.3 · EN / ZH</code>
+        </a>
         {active === "dashboard" ? (
           <span className="ct-nav-pill is-active" aria-current="page">
             <span className="ct-nav-step">00</span>

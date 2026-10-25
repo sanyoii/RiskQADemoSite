@@ -1,6 +1,6 @@
 ---
 type: dashboard-status-contract
-templateVersion: 0.1.0
+templateVersion: 0.3.0
 status: draft
 repository:
 releaseTarget:
@@ -104,10 +104,10 @@ tags:
 
 ### Product Test Status
 
-- `Ready`：human-owned assessment 明確核准，且已知問題、執行完整性、結束條件判定、未測範圍四列都支援；已確認 Fail 或未解決 S1 不得為 Ready。歷史 Ready 不是目前授權。
-- `At Risk`：可以考慮發布，但有明確 residual risk、owner 與 follow-up。
-- `Blocked`：必要 evidence、environment、dependency 或 release gate 無法完成。
-- `Unknown`：資料不足、互相衝突、未核准或無法安全判定。
+- `Ready`：human-owned assessment 明確核准，且已知問題、執行完整性、結束條件判定、未測範圍四列都支援；未解決的阻斷問題或 S1 不得為 Ready；歷史 Fail 經有效新 Run 驗證修復後仍保留。歷史 Ready 不是目前授權。
+- `At Risk`：無阻斷問題但有剩餘缺陷或已接受風險，列 owner 與 follow-up；另列退出條件與未測範圍，不代表已准許發布。
+- `Blocked`：有未解決 S1、未獲接受的 S2 或已確認關鍵路徑不符合；同時保留缺少的 evidence、environment 與未測部分。
+- `Unknown`：無已知阻斷或剩餘問題，但資料、判準、執行或覆核不足；不能蓋掉可信且同版本的 Blocked／At Risk。損毀或版本不符的來源不當成可信產品事實。
 
 ### Data Status
 
@@ -147,3 +147,6 @@ tags:
 - Correction／withdrawal procedure：
 - Rollback owner：
 - Post-publish smoke evidence：
+
+
+Ready 表示測試交付條件成立且無已知剩餘缺陷／接受風險；實際發布另需具名 Go。新版 current policy 拒絕 Ready 與 Warning 並存。archive 驗證保留舊決定原文，不改寫歷史 Ready／Run；目前投影另列資料時效與未完成核准。此輪保留 status schema 與既有四種狀態，不新增發布帳本。

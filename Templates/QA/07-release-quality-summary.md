@@ -62,11 +62,11 @@ tags:
 
 ## Run inventory
 
-| Run ID | Subject／environment | Executed at | Pass | Fail | Blocked | Skipped | Incomplete | Evidence available | Freshness |
+| Run ID | Subject／environment | Executed at | Pass | Fail | Blocked | Skipped（原因） | Not Run | Evidence available | Freshness |
 |---|---|---|---|---|---|---|---|---|---|
 | | | | | | | | | `yes` / `no` / `partial` | `Fresh` / `Stale` / `Unknown` |
 
-## Open items and dispositions
+## Unresolved items and dispositions
 
 | Type | ID | Severity／impact | Status | Owner | Decision／disposition | Expiry | Evidence |
 |---|---|---|---|---|---|---|---|
@@ -79,14 +79,16 @@ tags:
 | Subject, scope, evidence and owners are complete | `Pass` / `Fail` / `Unknown` | |
 | Critical areas reached their planned coverage | `Pass` / `Fail` / `Unknown` | |
 | No untreated release blocker remains | `Pass` / `Fail` / `Unknown` | |
-| Blocked, Skipped and Incomplete have dispositions | `Pass` / `Fail` / `Unknown` | |
+| Blocked, Skipped and Not Run have reasons | `Pass` / `Fail` / `Unknown` | |
 | Evidence is within freshness SLA | `Pass` / `Fail` / `Unknown` | |
 | Assessment and actual evidence do not conflict | `Pass` / `Fail` / `Unknown` | |
+| Four columns agree: known issues, execution completeness, exit decision, untested scope | `Pass` / `Fail` / `Unknown` | |
+| Confirmed Fail or unresolved S1 is not Ready and is not hidden as Unknown | `Pass` / `Fail` / `Unknown` | |
 
 ## Recommendation
 
 - Release assessment：`Ready` / `At Risk` / `Blocked` / `Unknown`
-- One-line rationale：
+- One-line rationale（由四列推導，優先序 Blocked ＞ At Risk ＞ Unknown ＞ Ready。有阻擋 → Blocked；無阻擋但有剩餘缺陷或已接受風險 → At Risk；無已知問題但缺依據 → Unknown；出場與覆核成立且無剩餘風險 → Ready。已確認 Fail 或 S1 不得為 Ready。Ready 由人最後決定。）：
 - Required actions：
 - Residual risk：
 - Assessment expires at：

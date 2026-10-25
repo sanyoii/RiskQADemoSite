@@ -26,7 +26,7 @@ tags:
 | Case ID | |
 | Title | |
 | Product Area | |
-| Priority | |
+| Case priority（案例 Priority） | 執行優先序（P0／P1…）。引用風險 ID。不是缺陷 Severity，不用來當發布判準。 |
 | Requirement | |
 | Risk | |
 | Scenario | |
@@ -67,10 +67,10 @@ tags:
 
 ## Execution result
 
-> 只在實際執行後填寫。未執行時保留 `Not Run`。
+> Actual result 寫在 Run Record，不寫在案例。下面只留連結。未執行記 `Not Run`。`In Progress` 只用於草稿，不能當最終狀態。
 
 - Run ID：
-- Status：`Pass` / `Fail` / `Blocked` / `Skipped` / `Not Run`
+- Status：`Not Run` / `Skipped`（寫原因） / `Blocked` / `Pass` / `Fail`
 - Actual result：
 - Executed by：
 - Executed at：

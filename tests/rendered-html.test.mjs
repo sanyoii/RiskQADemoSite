@@ -127,7 +127,7 @@ test("server-renders human-readable Test Case and Run records", async () => {
     "DEMO-RUN-FAIL-001",
     "3 Test Cases · 2 Pass · 1 Fail",
     "過期 sequence 應被拒絕",
-    "DEF-MDQ-004 · High · Open",
+    "DEF-MDQ-004 · S1 · Triaged · demo",
   ]) {
     assert.match(html, new RegExp(text));
   }
@@ -162,8 +162,11 @@ test("server-renders the synthetic failed Test Case and Run demo", async () => {
     "Actual",
     "過期 update 被接受",
     "DEF-MDQ-004",
-    "High · Release blocking",
-    "修正 → targeted rerun → release re-assessment",
+    "QA suggestion",
+    "demo/fictional",
+    "S1 · demo only, not a client ruling",
+    "New Run for the failed case; original Fail kept",
+    "Regression: same RISK-OB-SEQ cases",
     "Execution Log",
     "Exit code 1",
     "python -m pytest tests/test_order_book.py::test_rejects_stale_update -q",
@@ -257,7 +260,7 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
 
   for (const snippet of [
     "B+C HYBRID · CONTROL TOWER",
-    "2 GO / 1 HOLD",
+    "2 Unknown · 1 Hold",
     "67 / 67 PASS",
     "00–08 Linked",
     "STAGE 01 · CHARTER &amp; RISK",
@@ -266,8 +269,8 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
     "STAGE 04 · DECISION",
     "PART 2 · CROSS-REPO SIGNAL &amp; COVERAGE MATRIX",
     "PART 3 · DEEP-DIVE EVIDENCE &amp; POLICY WORKBENCH",
-    "Pinned Snapshot: Ready (45/45 Pass)",
-    "Pinned Snapshot: Ready (22/22 Pass)",
+    "Historical record: Ready (45/45 Pass) · not a current Go",
+    "Historical record: Ready (22/22 Pass) · not a current Go",
     "Counterfactual Hold (DEMO-RUN-FAIL-001)",
   ]) {
     assert.ok(homeHtml.includes(snippet), `missing B+C hybrid snippet on /: ${snippet}`);

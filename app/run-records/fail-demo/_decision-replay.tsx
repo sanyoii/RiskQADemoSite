@@ -6,7 +6,7 @@ import { replayDecision } from "../../../lib/replay-policy.mjs";
 const steps = [
   { id: "failed", en: "1 · Failure", zh: "1 · 失敗", badge: "NO-GO" },
   { id: "fix-proposed", en: "2 · Proposed fix", zh: "2 · 提出修正", badge: "HOLD" },
-  { id: "rerun-passed", en: "3 · Passing rerun?", zh: "3 · 重跑通過？", badge: "HOLD (G6)" },
+  { id: "rerun-passed", en: "3 · Passing rerun?", zh: "3 · 重跑通過？", badge: "HOLD" },
 ];
 
 export function DecisionReplay() {

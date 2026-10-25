@@ -2,7 +2,7 @@
 
 ## Decision question
 
-現有 evidence 能支持哪些 causal links？哪個只是 symptom、哪個仍是 hypothesis、哪個才可由 evidence owner 確認為 confirmed cause？Failure 為什麼沒有在較早的 control／test／review 被發現？
+現有 evidence 能支援哪些 causal links？哪個只是 symptom、哪個仍是 hypothesis、哪個才可由 evidence owner 確認為 confirmed cause？Failure 為什麼沒有在較早的 control／test／review 被發現？
 
 ## Entry criteria
 

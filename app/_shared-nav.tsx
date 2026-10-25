@@ -55,13 +55,13 @@ export function ControlTowerNav({ active }: { active: ActivePageId }) {
           <span className="ct-nav-pill is-active" aria-current="page">
             <span className="ct-nav-step">00</span>
             <strong><T en="Low-Tech Board" zh="主控白板" /></strong>
-            <code className="ct-nav-badge ct-nb-blue">2 GO · 1 HOLD</code>
+            <code className="ct-nav-badge ct-nb-blue">2 Unknown · 1 Hold</code>
           </span>
         ) : (
           <a className="ct-nav-pill" href={siteHref("/")}>
             <span className="ct-nav-step">00</span>
             <strong><T en="Low-Tech Board" zh="主控白板" /></strong>
-            <code className="ct-nav-badge ct-nb-blue">2 GO · 1 HOLD</code>
+            <code className="ct-nav-badge ct-nb-blue">2 Unknown · 1 Hold</code>
           </a>
         )}
 

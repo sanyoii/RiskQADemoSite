@@ -109,13 +109,13 @@
     {
       "id": "G5",
       "title": "Test-gated build passed",
-      "note": "Portfolio + Dashboard checks",
+      "note": "CI checks only; not an external sign-off",
       "state": "complete"
     },
     {
       "id": "G6",
-      "title": "Pages production verified",
-      "note": "8 routes + CSS · HTTP 200",
+      "title": "Pages routes checked",
+      "note": "HTTP checks only; not a formal Go",
       "state": "complete"
     },
     {

@@ -52,7 +52,7 @@ flowchart LR
 | Element | 回答的問題 | 來源 |
 |---|---|---|
 | Repository | 正在看哪個 release subject？ | repo、release／tag、branch、full SHA |
-| Objective | 這次要支持什麼決策？ | Test Request／Test Spec |
+| Objective | 這次要支援什麼決策？ | Test Request／Test Spec |
 | Release Decision | 現在能不能發布？ | human-owned Release Quality Summary |
 | Test Effort（明細） | 當時投入多少種測試活動？ | Run inventory＋QA assessment |
 | Coverage | 風險區域測到多深？ | Risk Assessment＋Coverage Inventory |
@@ -73,7 +73,7 @@ Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是 code c
 
 每張非 Ready 卡片顯示一項由實際原因產生的下一步；[六種合成範例](https://sanyoii.github.io/test-status/dashboard-demo/#next-action-examples) 用相同規則示範過期、待核准、無法取得來源、缺少證據與審查、No-Go 與 At Risk，不改動真實狀態。
 
-Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targeted rerun 與 No-Go 的呈現方式；它不屬於目前兩個 repository 的正式結果。
+Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 複測（原 Fail 保留）與 No-Go。它不是目前兩個 repository 的正式結果，也不是簽核。
 
 ## 核心模板與放置位置
 
@@ -95,11 +95,11 @@ Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targ
 
 ### 00 QA Test Request
 
-鎖定 requester、release subject、business objective、scope、known risks、限制與要支持的 release question。資訊不足時維持 `needs-information`。
+鎖定 requester、release subject、business objective、scope、known risks、限制與要支援的 release question。資訊不足時維持 `needs-information`。
 
 ### 01 Quality Risk Assessment
 
-逐一列出 Product Area、failure mode、impact、uncertainty、recoverability、existing controls、target coverage、residual risk 與 owner。Unknown 不會被默認成 Low。
+逐一列出 Product Area、failure mode、impact、uncertainty、recoverability、existing controls、target coverage、residual risk 與 owner。Unknown 不會被預設成 Low。
 
 ### 02 Test Spec
 
@@ -111,11 +111,11 @@ Fail Demo 使用 synthetic data，示範 Test Case Fail、release blocker、targ
 
 ### 04 Test Case
 
-保存 preconditions、concrete data、連續步驟、observable expected result、cleanup、variants、actual result、Run ID、Defect ID 與 evidence links。
+保存 preconditions、concrete data、連續步驟、observable expected result、cleanup 與 variants。案例 Priority 是執行優先序。Actual result 寫在 Run Record。
 
 ### 05 Test Run Record
 
-Append-only 保存 full SHA、worktree、environment、exact command／procedure、每次 attempt、exit code、case results、artifact hash、retention 與 final run state。
+Append-only 保存 full SHA、worktree、environment、exact command／procedure、每次 attempt、exit code、case results、artifact hash、retention 與 final run state。Run 最終狀態只用 Not Run、Skipped（原因）、Blocked、Pass、Fail。複測是新 Run。
 
 ### 06 Defect Report
 
@@ -152,7 +152,7 @@ Playbook output 一律先標 draft／recommendation。External input 視為 untr
 | QA template library | 可重用的空白模板 | 只定義欄位與流程，不代表已執行 |
 | Repository evidence | release-specific docs、run records、machine results、artifacts | 綁定 full SHA、environment、scope 與 chronology |
 | Status contract | approved assessment 的 machine-readable projection | validator 不猜缺值；failure 保留 last-known-good 並標示 Stale／Invalid／Unreachable |
-| Public Dashboard | 支持決策所需的 sanitized snapshot | 只顯示 allowlist fields 與可公開 links |
+| Public Dashboard | 支援決策所需的 sanitized snapshot | 只顯示 allowlist fields 與可公開 links |
 
 Public surface 不包含 raw logs、protected receipts、credentials、test accounts、PII、local paths、private URLs、敏感 test data 或未消毒的 defect details。
 
@@ -171,7 +171,7 @@ Public surface 不包含 raw logs、protected receipts、credentials、test acco
 - [Synthetic Fail Demo](app/run-records/fail-demo/page.tsx)
 - [Contract、sync 與 registry tests](tests/status-contract.test.mjs)
 - [Rendered route tests](tests/rendered-html.test.mjs)
-- [Continuity handoff](handoff/2026-08-18-repo-based-low-tech-testing-dashboard.md)
+- [Pages artifact check](docs/reviewed-pages-artifact.md)
 
 ## Local development
 
@@ -188,6 +188,11 @@ npm run lint
 
 `npm run verify:workflow` 另外記錄 lint、typecheck、Pages build/export 與 release gate；每次執行輸出新的實際 logs、SHA-256 和 source/worktree digest。Raw artifacts 留在忽略的本機資料夾，不打包進公開 UI。`release-gate` 結果獨立保存，軟體 Pass 不掩蓋產品 release Fail。
 
-Pages export 要指定新的 output directory；不再自動遞迴刪除既有目錄。Cloudflare/Sites 仍支援目前本機 preview 與 rendered-test runtime，沒有新增 production dependency，也沒有修改 hosted deployment 設定。
+靜態匯出給 `sanyoii.github.io` 的 `test-status/` 使用。本 repo 不負責上傳。
 
-Codex接續commit／push、測試或獲授權的網站上傳時，請讀[產物檢查與Codex操作交接](docs/reviewed-pages-artifact.md#codex-操作交接)。Git推送、CI成功與網站發布分開回報；只有實際準備上傳時才執行固定產物比對，失敗即停止上傳。
+```bash
+GITHUB_PAGES=true npm run build
+node scripts/prepare-pages-artifact.mjs --source dist/client --output out/test-status-preview
+```
+
+`out/test-status-preview` 必須是新目錄。產出後自行覆核；不要把這份指令當成已經發布。

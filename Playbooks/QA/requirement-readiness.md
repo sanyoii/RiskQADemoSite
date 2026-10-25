@@ -32,7 +32,7 @@ Non-trigger：requirement 已 reviewed，現在要設計完整 coverage 或逐�
 ### Non-functional
 
 - Performance、security／authorization、accessibility、compatibility、i18n、audit／logging 是否適用？
-- 不適用必須有理由；沒資料時標 `Unknown`，不能默認不適用。
+- 不適用必須有理由；沒資料時標 `Unknown`，不能預設不適用。
 
 ### Cross-cutting
 

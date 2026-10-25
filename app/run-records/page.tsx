@@ -52,7 +52,7 @@ function CaseGroups({ groups }: { groups: TestCaseGroup[] }) {
           <div className="case-table-wrap">
             <table className="case-table">
               <thead>
-                <tr><th scope="col">Test Case</th><th scope="col"><T en="Priority" zh="優先級" /></th><th scope="col"><T en="Check" zh="檢查內容" /></th><th scope="col"><T en="Expected result" zh="預期結果" /></th></tr>
+                <tr><th scope="col">Test Case</th><th scope="col"><T en="Case priority" zh="案例 Priority" /></th><th scope="col"><T en="Check" zh="檢查內容" /></th><th scope="col"><T en="Expected result" zh="預期結果" /></th></tr>
               </thead>
               <tbody>
                 {group.cases.map((testCase) => (
@@ -117,7 +117,7 @@ export default function RunRecords() {
           <strong>OB · REST · WS · DOC · LIVE · MTC</strong>
         </a>
         <a className="ct-chrono-card ct-chrono-hold" href={siteHref("/run-records/fail-demo")}>
-          <span className="ct-chrono-step"><T en="SECTION 03 · COUNTERFACTUAL HOLD DEMO" zh="第三區 · 模擬 P0 失敗攔截演練" /></span>
+          <span className="ct-chrono-step"><T en="SECTION 03 · COUNTERFACTUAL HOLD DEMO" zh="第三區 · 模擬 S1 失敗攔截演練" /></span>
           <strong>DEMO-RUN-FAIL-001 · <code>TC-MDQ-017</code> → <code>DEF-MDQ-004</code></strong>
         </a>
       </nav>
@@ -247,7 +247,7 @@ export default function RunRecords() {
             <div className="run-failure-summary">
               <div><p>Expected</p><strong><T en="The stale sequence is rejected" zh="過期 sequence 應被拒絕" /></strong></div>
               <div><p>Actual</p><strong><T en="The stale sequence overwrites current state" zh="過期 sequence 覆蓋目前狀態" /></strong></div>
-              <div><p>Defect</p><strong>DEF-MDQ-004 · High · Open</strong></div>
+              <div><p>Defect</p><strong>DEF-MDQ-004 · S1 · Triaged · demo</strong></div>
               <a href={siteHref("/run-records/fail-demo#execution-log")}><T en="View full Failure, Defect, and Execution Log" zh="查看完整 Fail、Defect 與 Execution Log" /></a>
             </div>
           </article>

@@ -88,7 +88,7 @@
       "coverage": "2",
       "targetCoverage": "2",
       "quality": "good",
-      "comment": "Manual evidence review and G6 decision were completed.",
+      "comment": "Historical manual review only. No independent external review or formal Go is on record.",
       "evidenceLinks": [
         "/run-records"
       ]
@@ -109,15 +109,15 @@
     },
     {
       "id": "G5",
-      "title": "外部檢視完成",
-      "note": "回饋已取得",
-      "state": "complete"
+      "title": "無獨立外部審查紀錄",
+      "note": "示範標籤；repo 沒有 G5 簽核",
+      "state": "unknown"
     },
     {
       "id": "G6",
-      "title": "正式 Go 紀錄完成",
-      "note": "Release authorized",
-      "state": "complete"
+      "title": "非正式 Go",
+      "note": "不是簽核，也不是發布授權",
+      "state": "unknown"
     },
     {
       "id": "Release",

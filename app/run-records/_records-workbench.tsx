@@ -54,7 +54,7 @@ export function RecordsWorkbench() {
                 <thead>
                   <tr>
                     <th scope="col">Test Case ID</th>
-                    <th scope="col"><T en="Priority" zh="優先級" /></th>
+                    <th scope="col"><T en="Case priority" zh="案例 Priority" /></th>
                     <th scope="col"><T en="Verification Check" zh="檢查內容" /></th>
                     <th scope="col"><T en="Expected Result" zh="預期結果" /></th>
                   </tr>
@@ -66,7 +66,7 @@ export function RecordsWorkbench() {
                         <code className="ct-case-id-pill">{testCase.id}</code>
                       </th>
                       <td>
-                        <code className={testCase.priority === "P0" ? "ct-p0-tag" : "ct-p1-tag"}>{testCase.priority}</code>
+                        <code className={testCase.priority === "P0" ? "ct-p0-tag" : "ct-p1-tag"}>{`case ${testCase.priority}`}</code>
                       </td>
                       <td><T en={caseTextEn[testCase.id].check} zh={testCase.check} /></td>
                       <td><T en={caseTextEn[testCase.id].expected} zh={testCase.expected} /></td>

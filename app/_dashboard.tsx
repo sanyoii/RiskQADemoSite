@@ -23,9 +23,6 @@ const historicalGateEnglish: Record<string, string> = {
   "範圍已鎖定": "Scope locked",
   "測試已通過": "Tests passed",
   "3 類測試完成": "3 test categories completed",
-  "外部檢視完成": "External review completed",
-  "回饋已取得": "Feedback received",
-  "正式 Go 紀錄完成": "Formal Go record completed",
   "測試範圍已定義": "Test scope defined",
 };
 
@@ -71,7 +68,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     id: "cex-orderbook",
     repoGroup: "cex",
     areaTitle: { en: "CEX · Order Book Sequence & State", zh: "CEX · Order Book 序號與狀態" },
-    areaRisk: { en: "P0 Core Risk · Prevent stale sequence overwriting latest state", zh: "P0 核心風險 · 防止舊序號覆蓋最新帳本" },
+    areaRisk: { en: "RISK-OB-SEQ · Stale book must not overwrite amounts", zh: "RISK-OB-SEQ · 舊資料不得覆蓋帳本金額" },
     effortLabel: "High · Done",
     effortTone: "high",
     milestones: [
@@ -81,7 +78,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     ],
     holdMilestones: [
       { label: { en: "✓ Basic Sanity", zh: "✓ 基礎正常" }, tone: "pass" },
-      { label: { en: "× Stale Seq Failed", zh: "× 亂序拒絕失敗" }, tone: "fail" },
+      { label: { en: "× Stale seq Fail", zh: "× 舊序號 Fail" }, tone: "fail" },
       { label: { en: "◌ Stress Excluded", zh: "◌ 壓力測試未測" }, tone: "off" },
     ],
     qualityLabel: { en: "● Good", zh: "● Good 良好" },
@@ -105,7 +102,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     id: "cex-contracts",
     repoGroup: "cex",
     areaTitle: { en: "CEX · REST & WebSocket Contracts", zh: "CEX · REST & WebSocket 契約" },
-    areaRisk: { en: "P0 Core Risk · Schema types, Heartbeat & malformed payload guards", zh: "P0 核心風險 · 欄位型別、Heartbeat 與防呆" },
+    areaRisk: { en: "RISK-CONTRACT · Schema, heartbeat, and malformed payloads", zh: "RISK-CONTRACT · 結構、heartbeat 與異常 payload" },
     effortLabel: "High · Done",
     effortTone: "high",
     milestones: [
@@ -126,7 +123,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     id: "cex-live",
     repoGroup: "cex",
     areaTitle: { en: "CEX · Binance Public Live Feed", zh: "CEX · Binance 公開即時行情 (Live)" },
-    areaRisk: { en: "P1 External Dependency · Live exchange public endpoint handshake", zh: "P1 外部依賴 · 真實交易所公開端點握手" },
+    areaRisk: { en: "RISK-LIVE · Public exchange endpoint, outside this repo", zh: "RISK-LIVE · 公開交易所端點，不在本 repo 內" },
     effortLabel: "Med · Done",
     effortTone: "med",
     milestones: [
@@ -147,7 +144,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     id: "portfolio-rwd",
     repoGroup: "portfolio",
     areaTitle: { en: "Portfolio · Bilingual & Chromium RWD", zh: "Portfolio · 雙語內容與 Chromium RWD" },
-    areaRisk: { en: "P0 Presentation Risk · EN/ZH parity & desktop/mobile viewports", zh: "P0 呈現風險 · EN/ZH 對齊與桌機/手機視窗" },
+    areaRisk: { en: "RISK-I18N · EN/ZH parity and desktop/mobile viewports", zh: "RISK-I18N · 英／繁中對齊與桌機／手機視窗" },
     effortLabel: "Med · Done",
     effortTone: "med",
     milestones: [
@@ -168,7 +165,7 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     id: "shared-doc-integrity",
     repoGroup: "shared",
     areaTitle: { en: "Cross-Repo · Claim & Evidence Integrity", zh: "跨專案 · 文件主張與證據鏈對齊" },
-    areaRisk: { en: "P1 Governance Risk · Prevent README claims exceeding tested scope", zh: "P1 治理風險 · 防止 README 宣稱超出實測範圍" },
+    areaRisk: { en: "RISK-DOC · Public claims stay inside the tested scope", zh: "RISK-DOC · 公開主張不超出已測範圍" },
     effortLabel: "Low · Done",
     effortTone: "low",
     milestones: [
@@ -178,15 +175,15 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     ],
     qualityLabel: { en: "● Good", zh: "● Good 良好" },
     qualityTone: "good",
-    holdQualityLabel: { en: "▲ Hold at G6", zh: "▲ G6 攔截生效" },
+    holdQualityLabel: { en: "▲ Hold · not a Go", zh: "▲ Hold · 不是 Go" },
     holdQualityTone: "warn",
     comment: {
       en: "All public claims are pinned to Git SHAs and sanitized JUnit SHA-256 digests without inflated percentages.",
       zh: "所有公開數字皆綁定 Git SHA 與 JUnit 收據，無誇大覆蓋率",
     },
     holdComment: {
-      en: "Fail-Closed Policy G6: Even if a developer reruns tests to green, status stays at HOLD until owner sign-off.",
-      zh: "Fail-Closed 規則 G6：即使工程師修完重跑全綠，在負責人完成人工覆核前強制維持 HOLD",
+      en: "A later Pass is a new Run. It does not erase the Fail or create a Go by itself.",
+      zh: "之後的 Pass 是新 Run。它不會抹掉 Fail，也不能自己變成 Go。",
     },
     evidenceHref: "/run-records",
     evidenceLabel: "5 checks ↗",
@@ -195,13 +192,13 @@ const whiteboardRows: WhiteboardAreaRow[] = [
     id: "explicit-exclusions",
     repoGroup: "shared",
     areaTitle: { en: "Explicit Exclusions · Private Keys / Load / Safari", zh: "明確排除 · 私密下單／高流量壓力測試／Safari" },
-    areaRisk: { en: "Honest Boundary (Explicit Out-of-Scope · Never claimed as tested)", zh: "誠實邊界 (Explicit Out-of-Scope · 不冒充已測)" },
+    areaRisk: { en: "Honest Boundary (Explicit Out-of-Scope · Never claimed as tested)", zh: "誠實邊界（Explicit Out-of-Scope · 不冒充已測）" },
     effortLabel: "None · OOS",
     effortTone: "oos",
     milestones: [
       { label: { en: "🚫 Explicitly Excluded (Untested · Not a Zero-Risk Claim)", zh: "🚫 明確排除（未測 · 不冒充零風險）" }, tone: "oos-span" },
     ],
-    qualityLabel: { en: "◌ Untested (Disclosed)", zh: "◌ 未測 (誠實揭露)" },
+    qualityLabel: { en: "◌ Untested (Disclosed)", zh: "◌ 未測（誠實揭露）" },
     qualityTone: "oos",
     comment: {
       en: "Intentionally excludes live fund orders and production load testing; green checks elsewhere never imply full-system zero risk.",
@@ -219,7 +216,7 @@ interface ScenarioConfig {
   badgeType: "go" | "hold";
   tabSub: LocalizedText;
   activeLabel: string;
-  risks: Array<{ tier: "P0" | "P1"; label: LocalizedText; status: LocalizedText }>;
+  risks: Array<{ tier: "RISK" | "case P0" | "case P1" | "rule"; label: LocalizedText; status: LocalizedText }>;
   exclusions: LocalizedText[];
   suiteTitle: LocalizedText;
   suiteBadge: string;
@@ -245,15 +242,15 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
   "cex-go": {
     id: "cex-go",
     tabTitle: { en: "① CEX Market Data Lab", zh: "① CEX 行情品質實驗室" },
-    badgeText: "GO · fc1e060",
+    badgeText: "Expired · fc1e060",
     badgeType: "go",
     tabSub: { en: "45/45 checks pass · 40 deterministic + 5 live", zh: "45/45 項檢查通過 · 40 項自動化 + 5 項即時行情" },
     activeLabel: "cex-market-data-quality-lab @ SHA fc1e060",
     risks: [
-      { tier: "P0", label: { en: "Order Book Sequence & State Integrity", zh: "Order Book 序號與狀態完整性" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P0", label: { en: "REST & WebSocket Schema Contract", zh: "REST 與 WebSocket 結構契約" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P1", label: { en: "Public Binance Live Feed Handshake", zh: "Binance 公開即時行情連線驗證" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P1", label: { en: "Documentation & Claim Boundary Sync", zh: "文件與主張邊界一致性檢查" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Order Book Sequence & State Integrity", zh: "Order Book 序號與狀態完整性" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "REST & WebSocket Schema Contract", zh: "REST 與 WebSocket 結構契約" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Public Binance Live Feed Handshake", zh: "Binance 公開即時行情連線驗證" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Documentation & Claim Boundary Sync", zh: "文件與主張邊界一致性檢查" }, status: { en: "Covered", zh: "已覆蓋" } },
     ],
     exclusions: [
       { en: "Authenticated Orders / Funds", zh: "私密金鑰與真實下單資金" },
@@ -280,18 +277,18 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
     triageBadge: "0 BLOCKERS",
     triageBadgeType: "go",
     triageItems: [
-      { label: { en: "Open P0 / P1 Release-Blocking Defects", zh: "未關閉之 P0 / P1 阻擋缺陷" }, result: { en: "0 Open", zh: "0 個未關" }, tone: "pass" },
+      { label: { en: "Unresolved S1 or unaccepted S2", zh: "未解決的 S1 或未接受的 S2" }, result: { en: "0", zh: "0" }, tone: "pass" },
       { label: { en: "Prior Sept 6 Baseline Runs Retained", zh: "保留 9/6 前置執行歷史紀錄" }, result: { en: "4 Runs Linked", zh: "4 筆 Run 已連結" }, tone: "warn" },
     ],
-    verdictBig: { en: "✓ GO — SCOPED RELEASE APPROVED", zh: "✓ GO — 限定範圍驗收通過" },
-    verdictSub: { en: "Pinned SHA fc1e060 · Verified 2026-09-07 · Core & Edge Covered", zh: "鎖定 SHA fc1e060 · 2026-09-07 驗證 · 核心與異常邊界已覆蓋" },
+    verdictBig: { en: "Not a current Go · self-review expired", zh: "不是目前的 Go · 自審已過期" },
+    verdictSub: { en: "Pinned SHA fc1e060 · recorded 2026-09-07 · not an independent sign-off", zh: "鎖定 SHA fc1e060 · 2026-09-07 記錄 · 不是獨立簽核" },
     verdictTone: "go",
     criteriaCount: "4/4 Met",
     criteria: [
       { label: { en: "G1 · Automated Scope & Exclusions Locked", zh: "G1 · 自動化範圍與排除項已鎖定" }, result: { en: "✓ YES", zh: "✓ 通過" }, tone: "pass" },
       { label: { en: "G3 · Deterministic (40) + Live (5) Suites", zh: "G3 · 自動化 (40) + 即時 (5) 套件全過" }, result: { en: "✓ 45/45", zh: "✓ 45/45" }, tone: "pass" },
-      { label: { en: "Zero Open P0 / P1 Blocking Defects", zh: "零開放之 P0 / P1 發布阻擋缺陷" }, result: { en: "✓ 0 Open", zh: "✓ 0 阻擋" }, tone: "pass" },
-      { label: { en: "G6 · Owner Self-Review & Overlap Disclosed", zh: "G6 · 負責人自審與角色重疊已揭露" }, result: { en: "✓ Disclosed", zh: "✓ 已揭露" }, tone: "warn" },
+      { label: { en: "No unresolved S1; no unaccepted S2", zh: "沒有未解決的 S1，也沒有未接受的 S2" }, result: { en: "✓ none", zh: "✓ 無" }, tone: "pass" },
+      { label: { en: "G6 · Self-review only, not an independent sign-off", zh: "G6 · 只有自審，不是獨立簽核" }, result: { en: "✓ Disclosed", zh: "✓ 已揭露" }, tone: "warn" },
     ],
     evidenceAnchor: "/run-records/#RUN-20260907-cex-deterministic-1",
     evidenceAnchorLabel: "#RUN-20260907-cex-deterministic-1 ↗",
@@ -299,15 +296,15 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
   "portfolio-go": {
     id: "portfolio-go",
     tabTitle: { en: "② Portfolio Acceptance", zh: "② 個人主站驗收 (sanyoii.github.io)" },
-    badgeText: "GO · 643b017",
+    badgeText: "Expired · 643b017",
     badgeType: "go",
     tabSub: { en: "22/22 checks pass · 1 prior Blocked attempt retained", zh: "22/22 項檢查通過 · 保留 1 次前置 Blocked 紀錄" },
     activeLabel: "sanyoii.github.io @ SHA 643b017",
     risks: [
-      { tier: "P0", label: { en: "Primary CTA, Proof Links & 404 Routing", zh: "主要 CTA、證據連結與 404 路由" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P0", label: { en: "Bilingual EN / Traditional Chinese Parity", zh: "英／繁中雙語切換與內容對齊" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P1", label: { en: "Responsive Chromium Layouts (Desktop/Mobile)", zh: "Chromium 響應式版面 (桌機／手機)" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P1", label: { en: "Reduced-Motion & Accessibility Guardrails", zh: "減敏動態與基礎無障礙防線" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Primary CTA, Proof Links & 404 Routing", zh: "主要 CTA、證據連結與 404 路由" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Bilingual EN / Traditional Chinese Parity", zh: "英／繁中雙語切換與內容對齊" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Responsive Chromium Layouts (Desktop/Mobile)", zh: "Chromium 響應式版面（桌機／手機）" }, status: { en: "Covered", zh: "已覆蓋" } },
+      { tier: "RISK", label: { en: "Reduced-Motion & Accessibility Guardrails", zh: "減敏動態與基礎無障礙防線" }, status: { en: "Covered", zh: "已覆蓋" } },
     ],
     exclusions: [
       { en: "Non-Chromium Browsers", zh: "非 Chromium 瀏覽器矩陣" },
@@ -327,48 +324,48 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
     secondaryTag: "2 ATTEMPTS",
     secondaryItems: [
       { label: { en: "Attempt 1 · Initial Run (Environment Blocked)", zh: "第 1 次執行 · 初始環境受阻 (Blocked)" }, result: "9/22 BLOCKED", tone: "warn" },
-      { label: { en: "Attempt 2 · Retry Run (Full Suite Passed)", zh: "第 2 次執行 · 排除環境後重跑全過" }, result: "22/22 PASS", tone: "pass" },
+      { label: { en: "Attempt 2 · New Run (suite Pass)", zh: "第 2 次 · 新 Run（整組 Pass）" }, result: "22/22 PASS", tone: "pass" },
       { label: { en: "Prior Attempt Link Preserved in Packet", zh: "前置失敗紀錄完整保留於證據包" }, result: "AUDITED", tone: "pass" },
     ],
     triageTitle: { en: "Pinned Release Run (SHA 643b017)", zh: "鎖定版本執行結果 (SHA 643b017)" },
     triageBadge: "0 BLOCKERS",
     triageBadgeType: "go",
     triageItems: [
-      { label: { en: "Open P0 / P1 Product Defects on Retry", zh: "重跑後未關閉之 P0 / P1 產品缺陷" }, result: { en: "0 Open", zh: "0 個未關" }, tone: "pass" },
+      { label: { en: "Unresolved S1 or unaccepted S2 after the new Run", zh: "新 Run 之後未解決的 S1 或未接受的 S2" }, result: { en: "0", zh: "0" }, tone: "pass" },
       { label: { en: "Initial Blocked Run Retained (Not Erased)", zh: "初始 Blocked 紀錄完整保留（未抹除）" }, result: { en: "1 Retained", zh: "保留 1 筆" }, tone: "warn" },
     ],
-    verdictBig: { en: "✓ GO — SCOPED RELEASE APPROVED", zh: "✓ GO — 限定範圍驗收通過" },
-    verdictSub: { en: "Pinned SHA 643b017 · Verified 2026-09-06 · Core & Edge Covered", zh: "鎖定 SHA 643b017 · 2026-09-06 驗證 · 核心與異常邊界已覆蓋" },
+    verdictBig: { en: "Not a current Go · self-review expired", zh: "不是目前的 Go · 自審已過期" },
+    verdictSub: { en: "Pinned SHA 643b017 · recorded 2026-09-06 · not an independent sign-off", zh: "鎖定 SHA 643b017 · 2026-09-06 記錄 · 不是獨立簽核" },
     verdictTone: "go",
     criteriaCount: "4/4 Met",
     criteria: [
       { label: { en: "G1 · Automated Scope & Exclusions Locked", zh: "G1 · 自動化範圍與排除項已鎖定" }, result: { en: "✓ YES", zh: "✓ 通過" }, tone: "pass" },
       { label: { en: "G3 · Static (9) + Chromium Runtime (13)", zh: "G3 · 靜態 (9) + Chromium 執行期 (13) 全過" }, result: { en: "✓ 22/22", zh: "✓ 22/22" }, tone: "pass" },
       { label: { en: "Earlier Blocked Attempt Linked in Ledger", zh: "前置 Blocked 紀錄已串接於帳本" }, result: { en: "✓ Linked", zh: "✓ 已串接" }, tone: "pass" },
-      { label: { en: "G6 · Owner Self-Review & Overlap Disclosed", zh: "G6 · 負責人自審與角色重疊已揭露" }, result: { en: "✓ Disclosed", zh: "✓ 已揭露" }, tone: "warn" },
+      { label: { en: "G6 · Self-review only, not an independent sign-off", zh: "G6 · 只有自審，不是獨立簽核" }, result: { en: "✓ Disclosed", zh: "✓ 已揭露" }, tone: "warn" },
     ],
     evidenceAnchor: "/run-records/#RUN-20260906-portfolio-chromium-retry",
     evidenceAnchorLabel: "#RUN-20260906-portfolio-chromium-retry ↗",
   },
   "hold-sim": {
     id: "hold-sim",
-    tabTitle: { en: "③ Counterfactual Hold Demo", zh: "③ 模擬 P0 失敗攔截演練 (Hold / No-Go)" },
+    tabTitle: { en: "③ Counterfactual Hold Demo", zh: "③ 模擬 S1 失敗攔截演練 (Hold / No-Go)" },
     badgeText: "HOLD · DEMO-FAIL",
     badgeType: "hold",
-    tabSub: { en: "Blocked by P0 stale-sequence defect DEF-MDQ-004", zh: "因 P0 過期序號缺陷 DEF-MDQ-004 觸發攔截" },
+    tabSub: { en: "Blocked by demo S1 DEF-MDQ-004 and a confirmed Fail", zh: "因示範 S1 DEF-MDQ-004 與已確認 Fail 而 Blocked" },
     activeLabel: "DEMO-RUN-FAIL-001 · Counterfactual Gate Rejection",
     risks: [
-      { tier: "P0", label: { en: "TC-MDQ-017 · Reject Stale Sequence Updates", zh: "TC-MDQ-017 · 拒絕過期序號覆蓋最新狀態" }, status: { en: "FAILED", zh: "驗證失敗" } },
-      { tier: "P0", label: { en: "TC-MDQ-016 · Sequential Order Book Update", zh: "TC-MDQ-016 · 依序遞增更新 Order Book" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P1", label: { en: "TC-MDQ-018 · Reconnect Snapshot Recovery", zh: "TC-MDQ-018 · 斷線重連後恢復最新快照" }, status: { en: "Covered", zh: "已覆蓋" } },
-      { tier: "P1", label: { en: "G6 · Passing Rerun Cannot Self-Approve Go", zh: "G6 · 重跑通過不得自動跳過負責人核准" }, status: { en: "Enforced", zh: "強制攔截" } },
+      { tier: "case P0", label: { en: "TC-MDQ-017 · Reject Stale Sequence Updates", zh: "TC-MDQ-017 · 拒絕過期序號覆蓋最新狀態" }, status: { en: "Fail", zh: "Fail" } },
+      { tier: "case P0", label: { en: "TC-MDQ-016 · Sequential Order Book Update", zh: "TC-MDQ-016 · 依序遞增更新 Order Book" }, status: { en: "Pass", zh: "Pass" } },
+      { tier: "case P1", label: { en: "TC-MDQ-018 · Reconnect Snapshot Recovery", zh: "TC-MDQ-018 · 斷線重連後恢復最新快照" }, status: { en: "Pass", zh: "Pass" } },
+      { tier: "rule", label: { en: "A new Pass Run cannot approve itself", zh: "新的 Pass Run 不能自己核准" }, status: { en: "Enforced", zh: "強制攔截" } },
     ],
     exclusions: [
       { en: "Synthetic Teaching Scenario", zh: "合成教學情境（非真實產品結果）" },
       { en: "Never Overwrites Real Pass Ledger", zh: "絕不覆寫真實 Pass 帳本" },
     ],
     suiteTitle: { en: "WebSocket Ordering Suite (DEMO-RUN-FAIL-001)", zh: "WebSocket 序號檢查套件 (DEMO-RUN-FAIL-001)" },
-    suiteBadge: "1 FAILED · 2 PASS",
+    suiteBadge: "1 FAIL · 2 PASS",
     suiteBadgeType: "hold",
     suites: [
       { label: { en: "TC-MDQ-016 · Sequential Update Accepted", zh: "TC-MDQ-016 · 接受依序遞增之更新" }, result: "PASS (0.18s)", tone: "pass" },
@@ -379,26 +376,26 @@ const scenarioConfigs: Record<ScenarioId, ScenarioConfig> = {
     secondaryTitle: { en: "Decision Replay Boundary (3 Stages)", zh: "決策邊界回放（三階段狀態機）" },
     secondaryTag: "STOPS AT HOLD",
     secondaryItems: [
-      { label: { en: "Stage 1 · P0 Failure Detected", zh: "階段 1 · 偵測到 P0 必要案例失敗" }, result: "NO-GO", tone: "fail" },
-      { label: { en: "Stage 2 · Fix Proposed Without Rerun", zh: "階段 2 · 僅提出修正但尚未重跑驗證" }, result: "NO-GO", tone: "fail" },
-      { label: { en: "Stage 3 · Rerun Passed (Awaiting G6 Sign-Off)", zh: "階段 3 · 重跑通過（待負責人 G6 簽核）" }, result: "HOLD", tone: "warn" },
+      { label: { en: "Stage 1 · Confirmed Fail on TC-MDQ-017", zh: "階段 1 · TC-MDQ-017 已確認 Fail" }, result: "NO-GO", tone: "fail" },
+      { label: { en: "Stage 2 · Fix proposed; no new Run", zh: "階段 2 · 只提出修正，還沒有新 Run" }, result: "NO-GO", tone: "fail" },
+      { label: { en: "Stage 3 · Hypothetical Pass is a new Run, not Go", zh: "階段 3 · 假設的 Pass 是新 Run，不是 Go" }, result: "HOLD", tone: "warn" },
     ],
     triageTitle: { en: "Active Blocker Triage (DEF-MDQ-004)", zh: "活躍阻擋缺陷分析 (DEF-MDQ-004)" },
-    triageBadge: "1 P0 BLOCKER",
+    triageBadge: "1 S1 DEMO",
     triageBadgeType: "hold",
     triageItems: [
-      { label: { en: "DEF-MDQ-004 · Stale sequence 103 overwrote 104", zh: "DEF-MDQ-004 · 舊序號 103 覆蓋最新狀態 104" }, result: { en: "High · Open", zh: "高風險 · 未關閉" }, tone: "fail" },
-      { label: { en: "Reproduction Rate Across Attempts", zh: "多次執行重現率" }, result: { en: "3 / 3 Failed", zh: "3 / 3 次皆失敗" }, tone: "fail" },
+      { label: { en: "DEF-MDQ-004 · Stale sequence 103 overwrote 104", zh: "DEF-MDQ-004 · 舊序號 103 覆蓋最新狀態 104" }, result: { en: "S1 · Triaged · demo", zh: "S1 · Triaged · 示範" }, tone: "fail" },
+      { label: { en: "Reproduction Rate Across Attempts", zh: "多次執行重現率" }, result: { en: "3 / 3 Fail", zh: "3 / 3 次 Fail" }, tone: "fail" },
     ],
     verdictBig: { en: "× NO-GO / HOLD — RELEASE BLOCKED", zh: "× NO-GO / HOLD — 攔截禁止發布" },
-    verdictSub: { en: "P0 Risk Unaccepted · Requires Fix + Targeted Rerun + Owner G6 Review", zh: "P0 風險未接受 · 須完成修正 + 重跑 + 負責人 G6 重審" },
+    verdictSub: { en: "Demo S1 not accepted · new Run plus RISK-OB-SEQ regression; not a sign-off", zh: "示範 S1 未接受 · 新 Run 加 RISK-OB-SEQ 回歸；不是簽核" },
     verdictTone: "hold",
     criteriaCount: "Gate Blocked",
     criteria: [
-      { label: { en: "G1 · Required P0 Risk Mitigation", zh: "G1 · 必要 P0 風險緩解" }, result: { en: "× FAILED", zh: "× 未通過" }, tone: "fail" },
+      { label: { en: "Exit · unresolved demo S1", zh: "結束條件 · 示範 S1 未解決" }, result: { en: "× unmet", zh: "× 不成立" }, tone: "fail" },
       { label: { en: "G3 · Required Automated Suite Pass", zh: "G3 · 必要自動化套件全數通過" }, result: { en: "× 2/3 Pass", zh: "× 2/3 通過" }, tone: "fail" },
-      { label: { en: "Open P0 / P1 Blocking Defects", zh: "未關閉之 P0 / P1 阻擋缺陷" }, result: { en: "× DEF-MDQ-004", zh: "× DEF-MDQ-004" }, tone: "fail" },
-      { label: { en: "G6 · Passing Rerun Alone Cannot Authorize Go", zh: "G6 · 單靠重跑通過不會自動變成 Go" }, result: { en: "! Hold Rule", zh: "! 維持 Hold" }, tone: "warn" },
+      { label: { en: "Unresolved demo S1", zh: "未解決的示範 S1" }, result: { en: "× DEF-MDQ-004", zh: "× DEF-MDQ-004" }, tone: "fail" },
+      { label: { en: "A Pass Run alone cannot authorize Go", zh: "單靠 Pass Run 不會變成 Go" }, result: { en: "! Hold", zh: "! 維持 Hold" }, tone: "warn" },
     ],
     evidenceAnchor: "/run-records/fail-demo",
     evidenceAnchorLabel: "Open Fail Demo ↗",
@@ -449,7 +446,7 @@ export function DecisionDashboard() {
             aria-pressed={viewMode === "whiteboard"}
             onClick={() => setViewMode("whiteboard")}
           >
-            <T en="👁️ 1. Low-Tech Whiteboard (30s Summary)" zh="👁️ 1. Low-Tech 白板模式 (30s 決策總覽)" />
+            <T en="👁️ 1. Low-Tech Whiteboard (30s Summary)" zh="👁️ 1. Low-Tech 白板模式（30s 決策總覽）" />
           </button>
           <button
             type="button"
@@ -465,7 +462,7 @@ export function DecisionDashboard() {
             aria-pressed={viewMode === "hold-preview"}
             onClick={() => setViewMode(viewMode === "hold-preview" ? "whiteboard" : "hold-preview")}
           >
-            <T en="🛑 3. Preview P0 Failure Hold State" zh="🛑 3. 預覽 P0 失敗攔截 (Hold Replay)" />
+            <T en="🛑 3. Preview S1 Fail hold" zh="🛑 3. 預覽 S1 Fail 攔截" />
           </button>
         </div>
       </div>
@@ -489,38 +486,38 @@ export function DecisionDashboard() {
       <div className="lt-whiteboard-view">
         {/* Layer 01: Ultra-Clean Collapsible 3-Question Signal Strip (Red Box #1 De-cluttered) */}
         <div className="lt-signal-strip">
-          <details className={`lt-sig-card ${isHoldPreview ? "lt-sig-red" : "lt-sig-green"}`}>
+          <details className={`lt-sig-card ${isHoldPreview ? "lt-sig-red" : "lt-sig-amber"}`}>
             <summary className="lt-sig-summary">
               <div>
                 <span className="lt-sig-kicker">
-                  <T en="Q1 · RELEASE VERDICT (CAN WE SHIP?)" zh="Q1 · RELEASE VERDICT (現在能不能發？)" />
+                  <T en="Q1 · RELEASE VERDICT (CAN WE SHIP?)" zh="Q1 · RELEASE VERDICT（現在能不能發？）" />
                 </span>
                 <strong className="lt-sig-val">
                   {isHoldPreview ? (
-                    <T en="× HOLD / NO-GO (1 Blocked)" zh="× HOLD / NO-GO (攔截禁止發布)" />
+                    <T en="Blocked · demo S1 and confirmed Fail" zh="Blocked · 示範 S1 與已確認 Fail" />
                   ) : (
-                    <T en="✓ 2 / 2 SCOPED GO" zh="✓ 2 / 2 SCOPED GO (限定範圍核准)" />
+                    <T en="Unknown · expired records, not a current Go" zh="Unknown · 紀錄已過期，不是目前的 Go" />
                   )}
                 </strong>
               </div>
               <span className="lt-expand-chip">
                 <span className="lt-chev" aria-hidden="true">▸</span>
-                <T en="Sign-Off Note" zh="展開簽核說明" />
+                <T en="Why this is not Go" zh="為什麼不是 Go" />
               </span>
             </summary>
             <div className="lt-sig-drawer">
               {isHoldPreview ? (
                 <p>
                   <T
-                    en="Counterfactual Hold active: P0 defect DEF-MDQ-004 (stale sequence 103 overwrote 104) blocks release. Even after a passing rerun, G6 requires human owner sign-off."
-                    zh="模擬攔截預覽中：因 P0 缺陷 DEF-MDQ-004（過期序號 103 覆蓋 104）阻擋發布。即使工程師重跑通過，在負責人完成 G6 覆核前仍強制停在 HOLD。"
+                    en="Demo only: DEF-MDQ-004 is QA-suggested S1 because stale data overwrote book amounts. Confirmed Fail plus S1 is Blocked, never Ready. A retest would be a new Run plus RISK-OB-SEQ regression; this page does not record one."
+                    zh="僅示範：DEF-MDQ-004 的 QA 建議是 S1，因為舊資料覆蓋了帳本金額。已確認 Fail 加上 S1 為 Blocked，不得為 Ready。重測必須是新 Run，並加跑 RISK-OB-SEQ 回歸；本頁沒有這筆紀錄。"
                   />
                 </p>
               ) : (
                 <p>
                   <T
-                    en="Both repositories passed owner review within their locked automated scope (SHA fc1e060 & 643b017). This is a scoped portfolio approval, not a zero-risk production guarantee."
-                    zh="兩個受測專案皆於鎖定之自動化範圍內完成負責人簽核（SHA fc1e060 與 643b017）。此為作品集限定範圍驗收，不冒充正式環境零風險保證。"
+                    en="Known issues: no confirmed S1 in the pinned runs. Execution: historical Pass, evidence expired. Exit: self-review only, now expired, not an independent sign-off. Untested scope remains. Order is Blocked, At Risk, Unknown, Ready, so the current line is Unknown."
+                    zh="已知問題：鎖定 Run 沒有已確認的 S1。執行：歷史 Pass，證據已過期。結束條件：只有自審且已過期，不是獨立簽核。未測範圍仍在。優先序是 Blocked、At Risk、Unknown、Ready，所以目前是 Unknown。"
                   />
                 </p>
               )}
@@ -531,10 +528,10 @@ export function DecisionDashboard() {
             <summary className="lt-sig-summary">
               <div>
                 <span className="lt-sig-kicker">
-                  <T en="Q2 · COVERAGE DEPTH (HOW DEEP DID WE TEST?)" zh="Q2 · COVERAGE DEPTH (我們測到多深？)" />
+                  <T en="Q2 · COVERAGE DEPTH (HOW DEEP DID WE TEST?)" zh="Q2 · COVERAGE DEPTH（我們測到多深？）" />
                 </span>
                 <strong className="lt-sig-val">
-                  <T en="Core & Edge Covered (5 In-Scope · 1 Excluded)" zh="核心與異常邊界已覆蓋 (5 達標 · 1 排除)" />
+                  <T en="Core & Edge Covered (5 In-Scope · 1 Excluded)" zh="核心與異常邊界已覆蓋（5 達標 · 1 排除）" />
                 </strong>
               </div>
               <span className="lt-expand-chip">
@@ -556,13 +553,13 @@ export function DecisionDashboard() {
             <summary className="lt-sig-summary">
               <div>
                 <span className="lt-sig-kicker">
-                  <T en="Q3 · ACTIVE BLOCKERS & GATES (WHAT IS THE RISK?)" zh="Q3 · ACTIVE BLOCKERS (風險與門檻攔截？)" />
+                  <T en="Q3 · ACTIVE BLOCKERS & GATES (WHAT IS THE RISK?)" zh="Q3 · ACTIVE BLOCKERS（風險與門檻攔截？）" />
                 </span>
                 <strong className="lt-sig-val">
                   {isHoldPreview ? (
-                    <T en="1 P0 Blocker (DEF-MDQ-004)" zh="1 個 P0 阻擋缺陷 (DEF-MDQ-004)" />
+                    <T en="1 demo S1 (DEF-MDQ-004)" zh="1 個示範 S1 (DEF-MDQ-004)" />
                   ) : (
-                    <T en="0 P0/P1 Blockers (1 Bounded Warning)" zh="0 P0/P1 Blockers (1 項受外部影響 Warning)" />
+                    <T en="No unresolved S1 (1 external warning)" zh="沒有未解決的 S1（1 項外部 Warning）" />
                   )}
                 </strong>
               </div>
@@ -574,8 +571,8 @@ export function DecisionDashboard() {
             <div className="lt-sig-drawer">
               <p>
                 <T
-                  en="Zero open P0/P1 product defects in the locked snapshots. Public Binance live feed is marked Warning because it depends on external network availability. Click 'Preview P0 Failure Hold State' to see how the gate blocks a P0 regression."
-                  zh="鎖定快照中無未關閉之 P0/P1 阻擋缺陷；Binance 即時連線因受外部網路與交易所狀態影響標為 Warning。可點擊「預覽 P0 失敗攔截」檢視門檻如何阻擋問題版本。"
+                  en="No unresolved S1 in the locked snapshots. The public Binance feed stays a warning because it depends on an outside network. Preview the S1 Fail hold to see why a confirmed Fail cannot be Ready."
+                  zh="鎖定快照沒有未解決的 S1。Binance 公開連線仍是 Warning，因為它依賴外部網路。可預覽 S1 Fail 攔截，看已確認 Fail 為何不能是 Ready。"
                 />
               </p>
             </div>
@@ -596,7 +593,7 @@ export function DecisionDashboard() {
               <div className="lt-rc-head">
                 <strong className="lt-rc-title">cex-market-data-lab</strong>
                 <code className={isHoldPreview ? "ct-badge-hold" : "ct-badge-go"}>
-                  {isHoldPreview ? "× HOLD" : "✓ SCOPED GO"}
+                  {isHoldPreview ? "× HOLD" : "Unknown"}
                 </code>
               </div>
               <div className="lt-rc-meta">
@@ -629,7 +626,7 @@ export function DecisionDashboard() {
               </div>
               <div className="lt-rc-head">
                 <strong className="lt-rc-title">sanyoii.github.io</strong>
-                <code className="ct-badge-go">✓ SCOPED GO</code>
+                <code className="ct-badge-go">Unknown</code>
               </div>
               <div className="lt-rc-meta">
                 <span>2026-09-06 · 22 checks</span>
@@ -659,7 +656,7 @@ export function DecisionDashboard() {
               </div>
               <div className="lt-rc-head">
                 <strong className="lt-rc-title">
-                  <T en="What happens if a P0 check fails?" zh="當 P0 核心測試失敗時如何攔截？" />
+                  <T en="What happens if a required case Fails?" zh="必要案例 Fail 時會怎樣？" />
                 </strong>
               </div>
               <details className="lt-rc-details lt-rc-details-red">
@@ -682,7 +679,7 @@ export function DecisionDashboard() {
                 onClick={() => setViewMode(isHoldPreview ? "whiteboard" : "hold-preview")}
               >
                 {isHoldPreview ? (
-                  <T en="↩ Restore Normal SCOPED GO Whiteboard" zh="↩ 恢復正常 SCOPED GO 白板狀態" />
+                  <T en="↩ Restore the expired-record view" zh="↩ 回到已過期紀錄的畫面" />
                 ) : (
                   <T en="⚡ Preview HOLD State on Whiteboard →" zh="⚡ 點此在右側白板預覽 HOLD 狀態 →" />
                 )}
@@ -698,7 +695,7 @@ export function DecisionDashboard() {
                   <T en="📋 Low-Tech 5-Column Quality Assessment Whiteboard" zh="📋 Low-Tech 五欄品質評估白板" />
                   <code className="lt-board-count">
                     {isHoldPreview ? (
-                      <T en="HOLD PREVIEW ACTIVE (DEF-MDQ-004)" zh="正在預覽 P0 失敗攔截狀態 (DEF-MDQ-004)" />
+                      <T en="HOLD PREVIEW ACTIVE (DEF-MDQ-004)" zh="正在預覽 S1 Fail 攔截 (DEF-MDQ-004)" />
                     ) : (
                       <T en={`Showing ${filteredWhiteboardRows.length} Product Areas`} zh={`顯示 ${filteredWhiteboardRows.length} 個產品功能區`} />
                     )}
@@ -712,7 +709,7 @@ export function DecisionDashboard() {
                 </p>
               </div>
               <div className="lt-board-legend">
-                <span><i className="lt-dot lt-dot-pass" aria-hidden="true" /><T en="Covered & Passed" zh="已覆蓋通過" /></span>
+                <span><i className="lt-dot lt-dot-pass" aria-hidden="true" /><T en="Covered · Pass" zh="已覆蓋 · Pass" /></span>
                 <span><i className="lt-dot lt-dot-warn" aria-hidden="true" /><T en="Bounded / External" zh="受限／外部依賴" /></span>
                 <span><i className="lt-dot lt-dot-oos" aria-hidden="true" /><T en="Untested / Excluded" zh="未測／範圍排除" /></span>
               </div>
@@ -722,11 +719,11 @@ export function DecisionDashboard() {
               <table className="lt-bach-table">
                 <thead>
                   <tr>
-                    <th><T en="1. Product Area (Risk Domain)" zh="1. Product Area (功能風險區)" /></th>
-                    <th><T en="2. Effort" zh="2. Effort (投入)" /></th>
-                    <th><T en="3. Coverage Depth (3-Stage Milestones)" zh="3. Coverage Depth (測試深度三階段)" /></th>
-                    <th><T en="4. Quality" zh="4. Quality (評價)" /></th>
-                    <th><T en="5. QA Assessment & Evidence" zh="5. QA Assessment & Evidence (人話判斷與收據)" /></th>
+                    <th><T en="1. Product Area (Risk Domain)" zh="1. Product Area（功能風險區）" /></th>
+                    <th><T en="2. Effort" zh="2. Effort（投入）" /></th>
+                    <th><T en="3. Coverage Depth (3-Stage Milestones)" zh="3. Coverage Depth（測試深度三階段）" /></th>
+                    <th><T en="4. Quality" zh="4. Quality（品質）" /></th>
+                    <th><T en="5. QA Assessment & Evidence" zh="5. QA Assessment & Evidence（人話判斷與收據）" /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -840,8 +837,8 @@ export function DecisionDashboard() {
         <div className="ct-kpi-grid">
           <div className="ct-kpi-card">
             <span className="ct-kpi-title"><T en="Pinned Snapshots" zh="鎖定快照決策" /></span>
-            <strong className="ct-kpi-val ct-val-green">2 GO / 1 HOLD</strong>
-            <span className="ct-kpi-sub"><T en="2 Scoped Go + 1 Hold Demo" zh="2 個 Scoped Go + 1 個攔截示範" /></span>
+            <strong className="ct-kpi-val ct-val-green">2 Unknown · 1 Hold</strong>
+            <span className="ct-kpi-sub"><T en="2 expired records + 1 Hold demo" zh="2 筆過期紀錄 + 1 個攔截示範" /></span>
           </div>
           <div className="ct-kpi-card">
             <span className="ct-kpi-title"><T en="Verified Checks" zh="已驗證測試總數" /></span>
@@ -889,7 +886,7 @@ export function DecisionDashboard() {
               {activeConfig.risks.map((risk, idx) => (
                 <div className="ct-risk-item" key={idx}>
                   <span>
-                    <code className={risk.tier === "P0" ? "ct-p0-tag" : "ct-p1-tag"}>{risk.tier}</code>
+                    <code className={risk.tier === "case P0" ? "ct-p0-tag" : "ct-p1-tag"}>{risk.tier}</code>
                     <T {...risk.label} />
                   </span>
                   <strong className={risk.status.en === "FAILED" ? "ct-text-red" : "ct-text-green"}><T {...risk.status} /></strong>
@@ -982,12 +979,12 @@ export function DecisionDashboard() {
                 <code className="ct-badge-hold">NO-GO PROOF</code>
               </div>
               <p className="ct-hold-defect">
-                <strong>[DEF-MDQ-004 · P0 Blocker]</strong>{" "}
+                <strong>[DEF-MDQ-004 · S1 demo]</strong>{" "}
                 <T en="TC-MDQ-017 failed: stale sequence 103 overwrote sequence 104 in order-book state." zh="TC-MDQ-017 失敗：舊序號 103 覆蓋最新序號 104 之 Order Book 狀態。" />
               </p>
               <p className="ct-hold-defect">
                 <strong>[Replay Rule]</strong>{" "}
-                <T en="Even after a hypothetical passing rerun, decision stays at HOLD until G6 owner review." zh="即使後續重跑通過，在負責人完成 G6 重審前仍強制維持 HOLD。" />
+                <T en="A hypothetical Pass would be a new Run plus RISK-OB-SEQ regression. It is not a Go, and this demo does not record that Run." zh="假設的 Pass 會是新 Run，並加跑 RISK-OB-SEQ 回歸。那不是 Go，本示範也沒有這筆 Run。" />
               </p>
               <div className="ct-hold-actions">
                 {activeScenario !== "hold-sim" ? (
@@ -1007,7 +1004,7 @@ export function DecisionDashboard() {
             <span className="ct-art-chip">06-defect-report.md</span>
             <EvidenceLink className="ct-art-chip ct-art-link" href="/run-records/fail-demo">Fail Demo ↗</EvidenceLink>
             <EvidenceLink className="ct-stage-deep-link ct-sdl-red" href="/run-records/fail-demo">
-              <T en="🛑 Launch P0 Failure & Gate Replay →" zh="🛑 啟動 P0 失敗案例與門檻回放 →" />
+              <T en="🛑 Launch S1 Fail replay →" zh="🛑 開啟 S1 Fail 回放 →" />
             </EvidenceLink>
           </footer>
         </article>
@@ -1017,7 +1014,7 @@ export function DecisionDashboard() {
           <div>
             <header className="ct-stage-head">
               <div className="ct-stage-step"><span><T en="STAGE 04 · DECISION" zh="階段 04 · 最終發布裁決" /></span><code>07–08</code></div>
-              <h3><T en="Release Verdict & Sign-Off" zh="發布決策與負責人簽核" /></h3>
+              <h3><T en="Release line from the four columns" zh="由四列推出的發布結論" /></h3>
               <p><T en="Evidence-backed recommendation & TTL boundary" zh="具證據支撐之發布裁決與時效防線" /></p>
             </header>
             <div className={activeConfig.verdictTone === "hold" ? "ct-verdict-banner ct-verdict-banner-hold" : "ct-verdict-banner"}>
@@ -1083,7 +1080,7 @@ export function DecisionDashboard() {
                   <div className="ct-repo-cell-title">cex-market-data-quality-lab <code>@fc1e060</code></div>
                   <div className="ct-repo-cell-sub"><T en="Scoped automated market-data acceptance" zh="限定範圍之行情品質自動化驗收" /></div>
                 </td>
-                <td><code className="ct-badge-go">✓ SCOPED GO</code></td>
+                <td><code className="ct-badge-go">Unknown</code></td>
                 <td><span className="ct-cell-pill ct-c-pass">● 12/12 PASS</span></td>
                 <td><span className="ct-cell-pill ct-c-pass">● 28/28 PASS</span></td>
                 <td><span className="ct-cell-pill ct-c-pass">● 5/5 LIVE</span></td>
@@ -1097,7 +1094,7 @@ export function DecisionDashboard() {
                   <div className="ct-repo-cell-title">sanyoii.github.io <code>@643b017</code></div>
                   <div className="ct-repo-cell-sub"><T en="Primary QA portfolio static & Chromium acceptance" zh="個人主作品集靜態與 Chromium 自動化驗收" /></div>
                 </td>
-                <td><code className="ct-badge-go">✓ SCOPED GO</code></td>
+                <td><code className="ct-badge-go">Unknown</code></td>
                 <td><span className="ct-cell-pill ct-c-pass">● 9/9 STATIC</span></td>
                 <td><span className="ct-cell-pill ct-c-pass">● 13/13 RUNTIME</span></td>
                 <td><span className="ct-cell-pill ct-c-pass">● EN/ZH + RWD</span></td>
@@ -1109,7 +1106,7 @@ export function DecisionDashboard() {
               <tr className="ct-hold-row">
                 <td>
                   <div className="ct-repo-cell-title ct-text-red">cex-market-data-quality-lab (Hold Sim) <code>@DEMO-FAIL</code></div>
-                  <div className="ct-repo-cell-sub"><T en="Counterfactual P0 failure & release gate rejection" zh="模擬 P0 失敗與發布門檻攔截示範" /></div>
+                  <div className="ct-repo-cell-sub"><T en="Counterfactual S1 Fail; not a real sign-off" zh="模擬 S1 Fail；不是真實簽核" /></div>
                 </td>
                 <td><code className="ct-badge-hold">■ HOLD / NO-GO</code></td>
                 <td><span className="ct-cell-pill ct-c-fail">■ TC-017 FAIL</span></td>
@@ -1132,7 +1129,7 @@ export function DecisionDashboard() {
           <code className="ct-section-pill">03–08 Linked Modules</code>
         </div>
         <span className="ct-section-note">
-          <T en="Inspect the full sanitized JUnit ledger, interactive P0 failure replay, and architecture rulebook" zh="深入檢視公開版 JUnit 執行帳本（已移除本機路徑）、P0 失敗門檻回放器與架構演進規則" />
+          <T en="Inspect the sanitized JUnit ledger, the S1 Fail replay, and the decision rules" zh="檢視已移除本機路徑的 JUnit 帳本、S1 Fail 回放與決策規則" />
         </span>
       </div>
 
@@ -1150,7 +1147,7 @@ export function DecisionDashboard() {
         <EvidenceLink className="ct-portal-card ct-portal-red" href="/run-records/fail-demo">
           <div className="ct-portal-top">
             <span className="ct-portal-tag"><T en="MODULE 02 · STAGE 03 GATE PROOF" zh="模組 02 · 對應階段 03 攔截證明" /></span>
-            <code className="ct-badge-hold">DEF-MDQ-004 · P0 HOLD</code>
+            <code className="ct-badge-hold">DEF-MDQ-004 · S1 demo</code>
           </div>
           <h3><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></h3>
           <p><T en="4-stage counterfactual incident pipeline for TC-MDQ-017, interactive 3-step Hold boundary simulator, Expected/Actual diff, and Exit Code 1 pytest log." zh="TC-MDQ-017 四步事故追蹤看板、三階段 Hold 決策邊界模擬器、Expected/Actual 狀態差異與 Pytest Exit Code 1 執行日誌。" /></p>
@@ -1163,7 +1160,7 @@ export function DecisionDashboard() {
             <code className="ct-section-pill">LOW-TECH v3 · 6 RULES</code>
           </div>
           <h3><T en="Design Evolution & Policy Rulebook" zh="設計演進與決策規則矩陣" /></h3>
-          <p><T en="Architecture evolution from early cards/matrices to the Low-Tech Whiteboard v3 and the 6 deterministic fail-closed remediation rules." zh="架構演進對照（從早期多表堆疊收斂為 Low-Tech 五欄白板 v3）與 6 條 Fail-Closed 決定論處置規則矩陣。" /></p>
+          <p><T en="Architecture evolution from early cards/matrices to the Low-Tech Whiteboard v3 and the 6 deterministic fail-closed remediation rules." zh="架構演進對照（從早期多表堆疊收斂為 Low-Tech 五欄白板 v3）與 6 條 Fail-Closed 確定性處置規則矩陣。" /></p>
           <span className="ct-portal-cta"><T en="Inspect Architecture & Policy Matrix →" zh="檢視架構演進與規則矩陣 →" /></span>
         </EvidenceLink>
       </div>
@@ -1175,7 +1172,7 @@ export function DecisionDashboard() {
       <div>
         <h2 id="repo-quality-title"><T en="Release overview" zh="目前發布狀態" /></h2>
         <p className="ct-part3-sub">
-          <T en="Dual-layer transparency: Pinned Historical Approval (Scoped Go) vs. Live Browser Clock TTL Gate" zh="雙層狀態透明呈現：鎖定之歷史驗收快照（Scoped Go）vs. 瀏覽器即時時效門檻（TTL Gate）" />
+          <T en="Historical records stay visible. The clock decides whether they are a current Go." zh="歷史紀錄仍可看。是否為目前的 Go，由時效檢查決定。" />
         </p>
       </div>
       <p className="decision-count"><T en={`${entries.length} repositories · Not live`} zh={`${entries.length} 個 Repo · 非即時`} /></p>
@@ -1204,7 +1201,7 @@ export function DecisionDashboard() {
               <p className="eyebrow">{snapshot.objective}</p>
               <span className="ct-pinned-go-badge">
                 <span aria-hidden="true">{historicalVerdict.icon}</span>
-                <T en={`Pinned Snapshot: ${historicalVerdict.en} (${runMetrics.latestChecksPassed}/${runMetrics.latestChecksTotal} Pass)`} zh={`鎖定快照：${historicalVerdict.zh}（${runMetrics.latestChecksPassed}/${runMetrics.latestChecksTotal} 通過）`} />
+                <T en={`Historical record: ${historicalVerdict.en} (${runMetrics.latestChecksPassed}/${runMetrics.latestChecksTotal} Pass) · not a current Go`} zh={`歷史紀錄：${historicalVerdict.zh}（${runMetrics.latestChecksPassed}/${runMetrics.latestChecksTotal} Pass）· 不是目前的 Go`} />
               </span>
             </div>
             <h3><EvidenceLink href={snapshot.repository.url}>{snapshot.repository.name}</EvidenceLink></h3>

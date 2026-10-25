@@ -16,8 +16,8 @@
 
 1. 先列出 missing information：repro、environment、subject SHA、evidence、impact 或 owner policy。
 2. 以 affected behavior、trigger、environment 與 evidence 建立 possible duplicate groups，逐組寫相同點與不同點。
-3. 分開提出 `severity`（impact）與 `priority`（urgency）recommendation，附 policy／evidence 理由。
-4. 只有 ownership map 支持時才提出 `owner suggestion`；否則為 Unknown。
+3. 分開提出 `severity`（S1–S4 impact）與修復 `priority`（排程）。兩者都不是案例 Priority，也不能代替發布判準。附 policy／evidence 理由。QA 建議與委託方裁定分開保留。
+4. 只有 ownership map 支援時才提出 `owner suggestion`；否則為 Unknown。
 5. 保存每份 defect 原始 ID 與 chronology，不合併、不關閉、不重新 assign。
 
 ## Output

@@ -7,7 +7,7 @@ import { pageLanguageData, T } from "../../_i18n";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "Failed Test Run Demo — QA Decision Desk",
+  title: "Fail Test Run Demo — QA Decision Desk",
   description: "A demonstration of how a failed Test Case affects its Run, Defect, and Release Decision.",
 };
 
@@ -26,14 +26,14 @@ const cases: Array<{
   { id: "TC-MDQ-018", title: "斷線重連後恢復最新 snapshot", titleEn: "Restore the latest snapshot after reconnecting", priority: "P1", status: "Pass", duration: "0.44s" },
 ];
 
-function Result({ state, children }: { state: "Pass" | "Fail" | "At Risk" | "No-Go"; children: React.ReactNode }) {
+function Result({ state, children }: { state: "Pass" | "Fail" | "At Risk" | "No-Go" | "Blocked"; children: React.ReactNode }) {
   return <span className="fail-result" data-state={state}><span aria-hidden="true">{state === "Pass" ? "✓" : state === "At Risk" ? "!" : "×"}</span>{children}</span>;
 }
 
 export default function FailedRunDemo() {
   return (
     <main className="shell decision-desk ct-shell fail-demo" {...pageLanguageData(
-      { en: "Failed Test Run Demo — QA Decision Desk", zh: "失敗 Test Run Demo — QA Decision Desk" },
+      { en: "Fail Test Run Demo — QA Decision Desk", zh: "失敗 Test Run Demo — QA Decision Desk" },
       { en: "A demonstration of how a failed Test Case affects its Run, Defect, and Release Decision.", zh: "示範 Test Case Fail 時，Run、Defect 與 Release Decision 應如何呈現。" },
     )}>
       <header className="masthead decision-masthead ct-topbar">
@@ -54,12 +54,12 @@ export default function FailedRunDemo() {
           <div className="ct-topbar-right">
             <div className="ct-snapshot-pill ct-snapshot-pill-red">
               <span aria-hidden="true">🛑</span>
-              <T en="Counterfactual Run: DEMO-RUN-FAIL-001 · P0 Blocker DEF-MDQ-004 · Verdict: HOLD / NO-GO" zh="模擬失敗演練：DEMO-RUN-FAIL-001 · P0 阻擋缺陷 DEF-MDQ-004 · 裁決：HOLD / NO-GO" />
+              <T en="Counterfactual Run: DEMO-RUN-FAIL-001 · demo S1 DEF-MDQ-004 · Verdict: Blocked / No-Go" zh="模擬失敗演練：DEMO-RUN-FAIL-001 · 示範 S1 DEF-MDQ-004 · 裁決：Blocked / No-Go" />
             </div>
           </div>
         </div>
         <p className="ct-masthead-sub">
-          <T en="How a single P0 assertion failure (TC-MDQ-017) blocks release, and why a passing rerun still stops at HOLD until owner review." zh="展示單一 P0 關鍵案例（TC-MDQ-017）失敗時如何攔截發布，以及為何「重跑通過」仍須等待負責人 G6 人工簽核。" />
+          <T en="How a confirmed Fail (TC-MDQ-017) and demo S1 block release. A later Pass needs a new Run; it does not erase this Fail." zh="已確認 Fail（TC-MDQ-017）與示範 S1 會擋住發布。之後的 Pass 必須是新 Run，不會抹掉這次 Fail。" />
         </p>
       </header>
 
@@ -72,9 +72,9 @@ export default function FailedRunDemo() {
       <details className="lt-collapsible-section">
         <summary className="lt-collapsible-summary">
           <div>
-            <strong><T en="▸ PART 1 · 4-STAGE COUNTERFACTUAL INCIDENT & GATE PIPELINE (CLICK TO EXPAND)" zh="▸ 展開四步事故因果與門檻攔截鏈摘要 (04–08 模板對應)" /></strong>
+            <strong><T en="▸ PART 1 · 4-STAGE COUNTERFACTUAL INCIDENT & GATE PIPELINE (CLICK TO EXPAND)" zh="▸ 展開四步事故因果與門檻攔截鏈摘要（04–08 模板對應）" /></strong>
             <span className="lt-collapsible-sub">
-              <T en="How TC-MDQ-017 propagates from assertion failure to DEF-MDQ-004 and G6 Hold" zh="點開檢視 TC-MDQ-017 從斷言失敗、缺陷立案到 G6 攔截的四階段卡片" />
+              <T en="How TC-MDQ-017 becomes DEF-MDQ-004 and a Blocked exit" zh="點開檢視 TC-MDQ-017 如何成為 DEF-MDQ-004，並使結束條件為 Blocked" />
             </span>
           </div>
           <code className="ct-badge-hold">DEMO-RUN-FAIL-001 → DEF-MDQ-004</code>
@@ -85,13 +85,13 @@ export default function FailedRunDemo() {
               <div>
                 <header className="ct-stage-head">
                   <div className="ct-stage-step"><span><T en="STAGE 01 · TRIGGER CASE" zh="階段 01 · 觸發失敗案例" /></span><code>04-CASE</code></div>
-                  <h3>TC-MDQ-017 · P0 Required</h3>
+                  <h3>TC-MDQ-017 · case P0</h3>
                   <p><T en="Reject stale-sequence market-data updates" zh="拒絕 sequence 已過期的行情更新" /></p>
                 </header>
                 <div className="ct-card-block">
                   <div className="ct-risk-item"><span><T en="Suite Target" zh="測試套件" /></span><code>test_order_book.py</code></div>
-                  <div className="ct-risk-item"><span><T en="Case Priority" zh="風險等級" /></span><strong className="ct-text-red">P0 Release Gate</strong></div>
-                  <div className="ct-risk-item"><span><T en="Reproducibility" zh="重現率" /></span><strong className="ct-text-red"><T en="3 / 3 Failed" zh="3 / 3 次皆失敗" /></strong></div>
+                  <div className="ct-risk-item"><span><T en="Case priority" zh="案例 Priority" /></span><strong className="ct-text-red">case P0</strong></div>
+                  <div className="ct-risk-item"><span><T en="Reproducibility" zh="重現率" /></span><strong className="ct-text-red"><T en="3 / 3 Fail" zh="3 / 3 次皆 Fail" /></strong></div>
                 </div>
               </div>
               <footer className="ct-artifact-footer">
@@ -123,12 +123,12 @@ export default function FailedRunDemo() {
               <div>
                 <header className="ct-stage-head">
                   <div className="ct-stage-step"><span><T en="STAGE 03 · BLOCKER DEFECT" zh="階段 03 · 阻擋缺陷立案" /></span><code>06-DEFECT</code></div>
-                  <h3>DEF-MDQ-004 (Open)</h3>
-                  <p><T en="High severity · Release-blocking P0 defect" zh="高嚴重度 · 阻擋發布之 P0 缺陷" /></p>
+                  <h3>DEF-MDQ-004 (Triaged)</h3>
+                  <p><T en="QA suggests S1 · demo decision, not a client sign-off" zh="QA 建議 S1 · 示範裁定，不是委託方簽核" /></p>
                 </header>
                 <div className="ct-card-block">
-                  <div className="ct-risk-item"><span>Severity / State</span><strong className="ct-text-red">High · Open</strong></div>
-                  <div className="ct-risk-item"><span>User Impact</span><strong className="ct-text-amber"><T en="Stale market data" zh="顯示過期行情" /></strong></div>
+                  <div className="ct-risk-item"><span>Severity / State</span><strong className="ct-text-red">S1 · Triaged · demo</strong></div>
+                  <div className="ct-risk-item"><span>User Impact</span><strong className="ct-text-amber"><T en="Stale amounts on the book" zh="帳本金額被舊資料覆蓋" /></strong></div>
                   <div className="ct-risk-item"><span>Accountable Owner</span><strong>William (Demo)</strong></div>
                 </div>
               </div>
@@ -147,12 +147,12 @@ export default function FailedRunDemo() {
                 </header>
                 <div className="ct-verdict-banner ct-verdict-banner-hold">
                   <strong className="ct-verdict-big">× NO-GO / HOLD</strong>
-                  <span className="ct-verdict-sub"><T en="Requires Fix + Targeted Rerun + G6 Owner Review" zh="須完成修正 ＋ 重跑驗證 ＋ G6 負責人重審" /></span>
+                  <span className="ct-verdict-sub"><T en="Fix, then a new Run plus same-risk regression" zh="修正後新增 Run，並加跑同風險回歸" /></span>
                 </div>
               </div>
               <footer className="ct-artifact-footer">
                 <span className="ct-art-chip">07-release-quality-summary.md</span>
-                <span className="ct-art-chip">G6 Governance</span>
+                <span className="ct-art-chip">Exit unmet</span>
               </footer>
             </article>
           </div>
@@ -187,17 +187,19 @@ export default function FailedRunDemo() {
 
           <div className="fail-impact-grid ct-impact-cards">
             <article><p><T en="Impact" zh="影響" /></p><strong><T en="Users may see stale market data" zh="使用者可能看到過期的 market data" /></strong></article>
-            <article><p><T en="Risk" zh="風險" /></p><strong>High · Release blocking</strong></article>
-            <article><p><T en="Reproduction" zh="重現" /></p><strong><T en="Failed 3 of 3 times" zh="3/3 次皆失敗" /></strong></article>
+            <article><p><T en="Risk" zh="風險" /></p><strong>RISK-OB-SEQ · S1 demo</strong></article>
+            <article><p><T en="Reproduction" zh="重現" /></p><strong><T en="Fail 3 of 3" zh="3/3 次皆 Fail" /></strong></article>
           </div>
 
           <div className="defect-record ct-defect-card">
             <div><p className="eyebrow">Linked defect</p><h3>DEF-MDQ-004 · Stale update overwrites current state</h3></div>
             <dl className="ct-defect-dl">
-              <div><dt>Status</dt><dd>Open</dd></div>
-              <div><dt>Severity</dt><dd>High</dd></div>
+              <div><dt>Status</dt><dd>Triaged</dd></div>
+              <div><dt><T en="QA suggestion" zh="QA 建議" /></dt><dd><T en="S1 · stale book overwrote amounts · QA · 2026-10-25 demo" zh="S1 · 舊資料覆蓋帳本金額 · QA · 2026-10-25 示範" /></dd></div>
+              <div><dt><T en="Client decision" zh="委託方裁定" /></dt><dd><T en="None recorded · demo/fictional" zh="沒有紀錄 · 示範／虛構" /></dd></div>
+              <div><dt><T en="Final" zh="最終等級" /></dt><dd><T en="S1 · demo only, not a client ruling" zh="S1 · 僅示範，不是委託方裁定" /></dd></div>
               <div><dt>Owner</dt><dd><T en="William (Demo)" zh="William（Demo）" /></dd></div>
-              <div><dt>Next</dt><dd><T en="Fix → targeted rerun → release re-assessment" zh="修正 → targeted rerun → release re-assessment" /></dd></div>
+              <div><dt>Next</dt><dd><T en="New Run for the failed case; original Fail kept. Regression: same RISK-OB-SEQ cases." zh="為失敗案例新增 Run；原 Fail 保留。回歸：同 RISK-OB-SEQ 案例。" /></dd></div>
             </dl>
           </div>
         </div>
@@ -242,9 +244,9 @@ Actual: stale update replaced current state
           </div>
           <div className="fail-summary-grid">
             <article><p>Run Result</p><Result state="Fail">Fail</Result><small>3 Cases · 2 Pass · 1 Fail</small></article>
-            <article><p>Product Status</p><Result state="At Risk">At Risk</Result><small><T en="P0 risk not accepted" zh="P0 風險尚未接受" /></small></article>
-            <article><p>Release Decision</p><Result state="No-Go"><T en="Do not release" zh="不能發布" /></Result><small><T en="Remain No-Go until fixed and rerun" zh="修正並重跑前維持 No-Go" /></small></article>
-            <article><p>Linked Defect</p><strong>DEF-MDQ-004</strong><small>High · Open</small></article>
+            <article><p>Product Status</p><Result state="Blocked">Blocked</Result><small><T en="Confirmed Fail and demo S1; never Ready" zh="已確認 Fail 與示範 S1；不得為 Ready" /></small></article>
+            <article><p>Release Decision</p><Result state="No-Go"><T en="Do not release" zh="不能發布" /></Result><small><T en="Exit unmet until a new Run and regression" zh="新 Run 與回歸完成前，結束條件不成立" /></small></article>
+            <article><p>Linked Defect</p><strong>DEF-MDQ-004</strong><small>S1 · Triaged · demo</small></article>
           </div>
         </section>
 
@@ -254,13 +256,13 @@ Actual: stale update replaced current state
               <p className="eyebrow">Synthetic run record</p>
               <h2 id="failed-run-title">WebSocket ordering checks</h2>
             </div>
-            <Result state="Fail">Run Failed</Result>
+            <Result state="Fail">Fail</Result>
           </header>
           <div className="fail-case-list" role="list" aria-label="Test Case results">
             {cases.map((testCase) => (
               <article className="fail-case-row" data-state={testCase.status} role="listitem" key={testCase.id}>
                 <div><span className="fail-case-id">{testCase.id}</span><strong><T en={testCase.titleEn} zh={testCase.title} /></strong></div>
-                <span>{testCase.priority}</span>
+                <span><T en={`case ${testCase.priority}`} zh={`案例 ${testCase.priority}`} /></span>
                 <span>{testCase.duration}</span>
                 <Result state={testCase.status}>{testCase.status}</Result>
               </article>
@@ -275,8 +277,8 @@ Actual: stale update replaced current state
           <h2 id="fail-rule-title"><T en="Reading rules" zh="閱讀規則" /></h2>
           <ol>
             <li><strong>Test Case Fail</strong><span><T en="Records the actual failure of one check." zh="記錄單一檢查的實際失敗。" /></span></li>
-            <li><strong>Run Fail</strong><span><T en="This Run contains at least one case that did not meet acceptance criteria." zh="這次 Run 至少包含一個不符合接受條件的案例。" /></span></li>
-            <li><strong>Release No-Go</strong><span><T en="This case is a required P0 and its risk is not accepted; not every failure automatically produces the same release decision." zh="因為此案例是必要 P0 且風險未被接受；不是所有 Fail 都會自動得到同一發布決定。" /></span></li>
+            <li><strong>Run Fail</strong><span><T en="This Run contains at least one case that did not meet acceptance criteria. A retest is a new Run; this Fail stays." zh="這次 Run 至少有一個案例不符合接受條件。重測是新 Run；這次 Fail 保留。" /></span></li>
+            <li><strong>Release No-Go</strong><span><T en="Exit is unmet: confirmed Fail and demo S1 DEF-MDQ-004. Case priority is not the ship rule." zh="結束條件不成立：已確認 Fail，以及示範 S1 DEF-MDQ-004。案例 Priority 不是發布判準。" /></span></li>
           </ol>
         </section>
       </div>

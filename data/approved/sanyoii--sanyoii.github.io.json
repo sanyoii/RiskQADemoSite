@@ -31,8 +31,8 @@
   "gates": [
     { "id": "G1", "title": "測試範圍已定義", "note": "TESTPLAN.md · 12 checks", "state": "complete" },
     { "id": "G3", "title": "17 fresh cases passed", "note": "Python 3.14.2 · Chromium", "state": "complete" },
-    { "id": "G5", "title": "Test-gated build passed", "note": "Portfolio + Dashboard checks", "state": "complete" },
-    { "id": "G6", "title": "Pages production verified", "note": "8 routes + CSS · HTTP 200", "state": "complete" },
+    { "id": "G5", "title": "Test-gated build passed", "note": "CI checks only; not an external sign-off", "state": "complete" },
+    { "id": "G6", "title": "Pages routes checked", "note": "HTTP checks only; not a formal Go", "state": "complete" },
     { "id": "Release", "title": "Unknown", "note": "Fresh evidence review required", "state": "unknown" }
   ],
   "runs": [

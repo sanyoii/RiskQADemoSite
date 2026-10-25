@@ -25,7 +25,7 @@ tags:
 - Related risk：
 - Product Area：
 - Persona／actor：
-- Priority：
+- Case priority（案例 Priority，執行優先序；不是缺陷 Severity，也不是發布判準）：
 - Target coverage：`0` / `1` / `1+` / `2` / `2+` / `3`
 
 ## Start state and trigger

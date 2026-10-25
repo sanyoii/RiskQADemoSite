@@ -18,7 +18,7 @@ tags:
 
 # QA Test Request
 
-> 用這份 request 鎖定測試 subject、範圍與要支持的決策。資訊不足時保留 `needs-information`，不要默認 scope。
+> 用這份 request 鎖定測試 subject、範圍與要支援的決策。資訊不足時保留 `needs-information`，不要預設 scope。
 
 ## Decision request
 

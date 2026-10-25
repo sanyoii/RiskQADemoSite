@@ -64,7 +64,9 @@ tags:
 
 | Case ID | Actual result | Status | Defect／blocker | Evidence |
 |---|---|---|---|---|
-| | | `Pass` / `Fail` / `Blocked` / `Skipped` | | |
+| | | `Not Run` / `Skipped`（原因） / `Blocked` / `Pass` / `Fail` | | |
+
+`In Progress` 只用於尚未交付的草稿，不能當最終狀態。重測是新的 Run，原 Fail 保留。
 
 ## Artifacts
 
@@ -77,7 +79,7 @@ tags:
 - Cleanup status：
 - Unexecuted coverage：
 - Limitations：
-- Final run state：`Passed` / `Failed` / `Blocked` / `Incomplete`
+- Final run state：`Not Run` / `Skipped`（原因） / `Blocked` / `Pass` / `Fail`
 - Final state rationale：
 
 ## Review

@@ -17,7 +17,7 @@ tags:
 
 # Test Spec
 
-> 定義這次如何取得足以支持 release decision 的 evidence。測試數量本身不能代表 coverage 或 Ready。
+> 定義這次如何取得足以支援 release decision 的 evidence。測試數量本身不能代表 coverage 或 Ready。
 
 ## Purpose and decision
 
@@ -111,7 +111,7 @@ tags:
 ## Defects, reruns and exceptions
 
 - Defect triage rule：
-- Retest rule：
+- Retest rule：修正後新增 Run 重測失敗案例，並加跑同模型元素／同風險的回歸；原 Fail 保留。
 - Regression rule：
 - Retry／flakiness rule：
 - Waiver／override authority：

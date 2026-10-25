@@ -8,8 +8,8 @@ const actionExamples = [
   { id: "approval", status: "unknown", dataStatus: "fresh", codes: ["RELEASE_EVIDENCE_REQUIRED"], icon: "?", badge: "? UNKNOWN", triggerEn: "Missing linked release packet or undisclosed self-review overlap", triggerZh: "缺少已連結之發布證據包或未揭露自審重疊", title: { en: "Unknown · Approval pending", zh: "待確認 · 核准待完成" } },
   { id: "unreachable", status: "unknown", dataStatus: "unreachable", codes: ["DATA_NOT_FRESH"], icon: "?", badge: "? UNKNOWN", triggerEn: "Source repository or artifact endpoint currently unreachable", triggerZh: "目前無法連上來源專案或證據端點", title: { en: "Unknown · Source unreachable", zh: "待確認 · 無法取得來源" } },
   { id: "both", status: "unknown", dataStatus: "stale", codes: ["EVIDENCE_STALE", "RELEASE_EVIDENCE_REQUIRED"], icon: "?", badge: "? UNKNOWN", triggerEn: "Stale evidence AND unlinked owner review packet", triggerZh: "證據已過期且尚未完成負責人審查證據包", title: { en: "Unknown · Evidence and review needed", zh: "待確認 · 缺少有效證據與審查" } },
-  { id: "blocked", status: "blocked", dataStatus: "fresh", codes: [], icon: "×", badge: "× NO-GO", triggerEn: "Open P0 / P1 release-blocking defect or failed required check", triggerZh: "存在未關閉之 P0/P1 發布阻擋缺陷或必要案例失敗", title: { en: "No-Go · Blocking issue", zh: "不可發布 · 存在阻擋問題" } },
-  { id: "risk", status: "at-risk", dataStatus: "fresh", codes: [], icon: "!", badge: "! AT RISK", triggerEn: "Non-blocking P1/P2 residual risk requires explicit waiver", triggerZh: "存在非阻擋之剩餘風險，須明確評估或揭露", title: { en: "At Risk · Residual risk", zh: "有風險 · 存在剩餘風險" } },
+  { id: "blocked", status: "blocked", dataStatus: "fresh", codes: [], icon: "×", badge: "× NO-GO", triggerEn: "Unresolved S1, unaccepted S2, or a confirmed Fail", triggerZh: "未解決的 S1、未接受的 S2，或已確認的 Fail", title: { en: "No-Go · Blocking issue", zh: "不可發布 · 存在阻擋問題" } },
+  { id: "risk", status: "at-risk", dataStatus: "fresh", codes: [], icon: "!", badge: "! AT RISK", triggerEn: "No blocker, but a remaining defect or accepted risk is still recorded", triggerZh: "沒有阻擋，但仍有剩餘缺陷或已接受的風險", title: { en: "At Risk · Residual risk", zh: "有風險 · 存在剩餘風險" } },
 ];
 
 export const dynamic = "force-static";
@@ -38,7 +38,7 @@ export default function DesignEvolution() {
           <div className="ct-topbar-right">
             <div className="ct-snapshot-pill">
               <span aria-hidden="true">📐</span>
-              <T en="Evolution to Low-Tech Whiteboard v3 (James Bach 1997) · 6 Deterministic Fail-Closed Rules" zh="演進至 Low-Tech 五欄決策白板 v3 (James Bach 1997) · 6 條決定論規則" />
+              <T en="Evolution to Low-Tech Whiteboard v3 (James Bach 1997) · 6 Deterministic Fail-Closed Rules" zh="演進至 Low-Tech 五欄決策白板 v3（James Bach 1997）· 6 條確定性規則" />
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ export default function DesignEvolution() {
       {/* PART 2 (Option B): 6 Deterministic Fail-Closed Policy Scenarios Matrix */}
       <div className="ct-section-bar">
         <div className="ct-section-title">
-          <span><T en="PART 2 · FAIL-CLOSED DECISION ENGINE POLICY MATRIX (6 SYNTHETIC SCENARIOS)" zh="第二部分 · Fail-Closed 決策引擎規則矩陣（6 種合成情境與決定論下一步）" /></span>
+          <span><T en="PART 2 · FAIL-CLOSED DECISION ENGINE POLICY MATRIX (6 SYNTHETIC SCENARIOS)" zh="第二部分 · Fail-Closed 決策引擎規則矩陣（6 種合成情境與確定性下一步）" /></span>
           <code className="ct-section-pill">lib/decision-actions.mjs</code>
         </div>
         <span className="ct-section-note">
@@ -151,7 +151,7 @@ export default function DesignEvolution() {
                   <th><T en="Data Freshness" zh="資料新鮮度" /></th>
                   <th><T en="Reason Codes" zh="觸發原因碼 (Reason Codes)" /></th>
                   <th><T en="Trigger Condition" zh="觸發條件說明" /></th>
-                  <th><T en="Deterministic Next Step" zh="決定論下一步行動 (建議處理)" /></th>
+                  <th><T en="Deterministic Next Step" zh="確定性下一步行動（建議處理）" /></th>
                   <th><T en="Engine Verdict" zh="引擎裁決" /></th>
                 </tr>
               </thead>
@@ -203,7 +203,7 @@ export default function DesignEvolution() {
       </div>
 
       <footer className="footer">
-        <span><T en="Architecture evolution & deterministic policy rules · QA Decision Desk" zh="架構演進與決定論規則庫 · QA Decision Desk" /></span>
+        <span><T en="Architecture evolution & deterministic policy rules · QA Decision Desk" zh="架構演進與確定性規則庫 · QA Decision Desk" /></span>
         <div className="ct-footer-links">
           <a href="https://sanyoii.github.io/"><T en="← sanyoii.github.io Portfolio" zh="← 返回 sanyoii.github.io 主站" /></a>
           <a href={siteHref("/")}><T en="← Current Dashboard" zh="← 回到目前 Dashboard" /></a>

@@ -1,24 +1,26 @@
+**English** | [繁體中文](README.zh-TW.md)
+
 # QA Decision Desk
 
-QA Decision Desk 把 repository、CI、manual check 與 release review 的結果整理成可追溯的發布判斷介面。每個 repo 先回答：現在能不能發、缺什麼、誰要補什麼；歷史決定與證據收在明細，不當成目前核准。
+QA Decision Desk turns repository, CI, manual-check, and release-review results into a traceable release-decision interface. For each repo it answers first: can we ship now, what is missing, and who has to supply it. Historical decisions and evidence stay in the details and are not treated as the current approval.
 
-[Live Dashboard](https://sanyoii.github.io/test-status/) · [Test Cases 與執行記錄](https://sanyoii.github.io/test-status/run-records/) · [Fail 與 Log Demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [Design Samples](https://sanyoii.github.io/test-status/dashboard-demo/) · [Source](https://github.com/sanyoii/RiskQADemoSite)
+[Live Dashboard](https://sanyoii.github.io/test-status/) · [Test Cases and run records](https://sanyoii.github.io/test-status/run-records/) · [Fail and log demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [Design samples](https://sanyoii.github.io/test-status/dashboard-demo/) · [Source](https://github.com/sanyoii/RiskQADemoSite)
 
 ## Idea
 
-測試結果常散在 CI logs、人工紀錄、issue、聊天與個人判斷裡。QA Decision Desk 把這些 evidence 接回同一個 release subject，讓讀者先看到 decision，再按需要展開 Gate Flow、Test Case、Run 與 Defect。
+Test results are often scattered across CI logs, manual notes, issues, chat, and personal judgment. QA Decision Desk ties that evidence back to the same release subject, so a reader sees the decision first and can open Gate Flow, Test Case, Run, and Defect only when needed.
 
-Dashboard 是 sanitized、read-only projection。Release Quality Summary 保留人工作出的判斷；Run Record 保存實際執行；Defect／Risk Log 保存 failure 與 disposition；`.test-dashboard/status.json` 負責 machine-readable projection。畫面不建立第二套真相來源。
+The Dashboard is a sanitized, read-only projection. The Release Quality Summary keeps the human judgment. The Run Record keeps what actually ran. The Defect／Risk Log keeps failures and dispositions. `.test-dashboard/status.json` is the machine-readable projection. The screen does not create a second source of truth.
 
-## 現役流程與驗證入口
+## Active workflow and verification entry points
 
-完整契約、遷移與減量取捨見 [Decision workflow](docs/decision-workflow.md)。主要實作已統一在此 repository，原 TestDashboard pilot 保留為歷史參考。
+The full contract, the migration, and the cuts are in [Decision workflow](docs/decision-workflow.md). The main implementation now lives in this repository. The original TestDashboard pilot remains as a historical reference.
 
-- **QA-Lite 三份記錄**：brief/design、append-only run ledger、human-owned decision。九份模板仍是 library。
-- **填寫內容可驗證**：Requirement → Risk → Design → Case → Run → Review ID 鏈、oracle source hash、artifact 實檔雜湊、同 subject/environment/config、例外期限與審查 input digest。
-- **目前與歷史分開**：`npm test` 驗證軟體與歷史一致性；`npm run gate:release` 驗證目前發布資格。過期 evidence 不靠改日期變綠。
-- **Decision replay / change impact**：畫面只回放已記錄的歷史；synthetic 後續步驟停在核准前。CLI `review:release --previous` 輸出保守的 must-run 清單。
-- **設計減量**：Samples、AC、ABC 已移到設計演進，舊 URL 保留；首頁不再有 effort bars、固定 Level 2+ 或複製的核准文字。
+- **Three QA-Lite records**: brief/design, an append-only run ledger, and a human-owned decision. The nine templates are still the library.
+- **Filled content can be checked**: the Requirement → Risk → Design → Case → Run → Review ID chain, the oracle source hash, the on-file artifact hash, the same subject/environment/config, exception expiry, and the review input digest.
+- **Current and historical stay apart**: `npm test` checks the software and historical consistency. `npm run gate:release` checks current release eligibility. Expired evidence does not turn green because someone edits a date.
+- **Decision replay / change impact**: the screen replays only recorded history. Synthetic later steps stop before approval. The CLI `review:release --previous` prints a conservative must-run list.
+- **Design cuts**: Samples, AC, and ABC moved into design evolution, and the old URLs remain. The home page no longer has effort bars, a fixed Level 2+, or copied approval text.
 
 ## Decision flow
 
@@ -35,51 +37,51 @@ flowchart LR
     STATUS --> DASHBOARD["QA Decision Desk"]
 ```
 
-一次 release 的 evidence chain：
+Evidence chain for one release:
 
-1. Test Request 鎖定 repository、release、full SHA、scope 與 decision question。
-2. Risk Assessment 為每個 Product Area 設定 target coverage。
-3. Test Spec 把風險轉成 automated、manual、exploratory、inspection 或 live checks。
-4. Scenario 與 Test Case 定義使用者路徑、失敗路徑、資料與可觀察結果。
-5. Run Record 追加保存每次 attempt。Fail、Blocked、retry 與後續 Pass 都留在 chronology。
-6. Defect Report 記錄 failure、release impact、修正與 verification。
-7. Release Quality Summary 由 QA owner、reviewer 與 decision owner 形成 recommendation。
-8. Exporter 驗證 contract、freshness 與 public allowlist，產生 status snapshot。
-9. Dashboard 讀取 snapshot；讀者可沿連結回到公開 evidence。
+1. The Test Request locks the repository, release, full SHA, scope, and decision question.
+2. The Risk Assessment sets a target coverage for each Product Area.
+3. The Test Spec turns risks into automated, manual, exploratory, inspection, or live checks.
+4. Scenarios and Test Cases define the user path, the failure path, the data, and the observable result.
+5. The Run Record appends every attempt. Fail, Blocked, retry, and a later Pass all stay in the chronology.
+6. The Defect Report records the failure, the release impact, the fix, and verification.
+7. The Release Quality Summary is where the QA owner, reviewer, and decision owner form the recommendation.
+8. The exporter checks the contract, freshness, and public allowlist, then writes the status snapshot.
+9. The Dashboard reads the snapshot. A reader can follow links back to public evidence.
 
-## Dashboard 怎麼讀
+## How to read the Dashboard
 
-| Element | 回答的問題 | 來源 |
+| Element | Question it answers | Source |
 |---|---|---|
-| Repository | 正在看哪個 release subject？ | repo、release／tag、branch、full SHA |
-| Objective | 這次要支援什麼決策？ | Test Request／Test Spec |
-| Release Decision | 現在能不能發布？ | human-owned Release Quality Summary |
-| Test Effort（明細） | 當時投入多少種測試活動？ | Run inventory＋QA assessment |
-| Coverage | 風險區域測到多深？ | Risk Assessment＋Coverage Inventory |
-| Quality Assessment | 有哪些 warning、blocker 或 residual risk？ | Defect／Risk Log＋QA assessment |
-| Historical Gates（明細） | 原決定當時記錄了什麼？ | G1、G3、G5、G6、Release receipts；不是目前授權 |
-| Records | 判斷可否被重建？ | Test Cases、Run IDs、artifacts、public CI links |
+| Repository | Which release subject is this? | repo, release／tag, branch, full SHA |
+| Objective | Which decision does this run support? | Test Request／Test Spec |
+| Release Decision | Can we release now? | human-owned Release Quality Summary |
+| Test Effort (details) | How many kinds of test activity were used then? | Run inventory plus QA assessment |
+| Coverage | How deep did testing go in each risk area? | Risk Assessment plus Coverage Inventory |
+| Quality Assessment | Which warnings, blockers, or residual risks are recorded? | Defect／Risk Log plus QA assessment |
+| Historical Gates (details) | What did the original decision record at the time? | G1, G3, G5, G6, and release receipts; not a current authorization |
+| Records | Can the judgment be rebuilt? | Test Cases, Run IDs, artifacts, public CI links |
 
-Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是 code coverage 百分比。`Ready` 代表發布條件已由 decision owner 核准；缺陷、限制與 residual risk 仍要保留 disposition。`Unreachable` 表示最新 snapshot 取得失敗，產品狀態需要重新確認。
+Coverage values `0`, `1`, `1+`, `2`, `2+`, and `3` are test depth, not a code-coverage percentage. `Ready` means the decision owner approved the release conditions. Defects, limits, and residual risk still keep a disposition. `Unreachable` means the latest snapshot could not be fetched, and the product status has to be checked again.
 
-## 歷史資料範例（不是目前發布核准）
+## Historical data examples (not a current release approval)
 
 | Repository | Objective | Decision | Effort | Coverage | Quality | Public evidence |
 |---|---|---|---|---|---|---|
-| `cex-market-data-quality-lab` | Release Readiness | 歷史 Ready；目前重新檢查 | High | Level 2+ | 歷史 assessment | [Test Cases 與 Run Records](https://sanyoii.github.io/test-status/run-records/) |
-| `sanyoii.github.io` | Deployment Confidence | 歷史 Ready；目前重新檢查 | Medium | Level 2+ | 歷史 assessment | [Test-gated Pages run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480) |
+| `cex-market-data-quality-lab` | Release Readiness | Historical Ready; rechecked now | High | Level 2+ | Historical assessment | [Test Cases and Run Records](https://sanyoii.github.io/test-status/run-records/) |
+| `sanyoii.github.io` | Deployment Confidence | Historical Ready; rechecked now | Medium | Level 2+ | Historical assessment | [Test-gated Pages run](https://github.com/sanyoii/sanyoii.github.io/actions/runs/32241879480) |
 
-舊 sample 與原始日期仍保留。2026-09-06 已加入限定自動化作品集範圍的 owner-reviewed packets：CEX `fc1e060`（40 deterministic＋5 live），Portfolio `643b017`（22 項本機 Chromium／靜態檢查）。William 自我審查並揭露角色重疊；不是獨立審查或正式產品認證。CEX 核准到期時間為 2026-09-07 20:40、Portfolio 為 2026-09-13 20:40（台灣時間）；目前是否有效仍由 gate 與瀏覽器時間檢查決定，舊 Pass 不會因到期被刪除。
+Old samples and the original dates remain. On 2026-09-06, owner-reviewed packets were added for a limited automated-portfolio scope: CEX `fc1e060` (40 deterministic + 5 live) and Portfolio `643b017` (22 local Chromium／static checks). William self-reviewed and disclosed the role overlap. That is not an independent review or a formal product certification. The CEX approval expiry is 2026-09-07 20:40, and the Portfolio expiry is 2026-09-13 20:40 (Taiwan time). Whether either is still valid is decided by the gate and the browser time check. An old Pass is not deleted when it expires.
 
-每張非 Ready 卡片顯示一項由實際原因產生的下一步；[六種合成範例](https://sanyoii.github.io/test-status/dashboard-demo/#next-action-examples) 用相同規則示範過期、待核准、無法取得來源、缺少證據與審查、No-Go 與 At Risk，不改動真實狀態。
+Each card that is not Ready shows one next step taken from the actual cause. [Six synthetic examples](https://sanyoii.github.io/test-status/dashboard-demo/#next-action-examples) use the same rules to show expiry, waiting for approval, an unreachable source, missing evidence and review, No-Go, and At Risk. They do not change real status.
 
-Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 重測（原 Fail 保留）與 No-Go。它不是目前兩個 repository 的正式結果，也不是簽核。
+The Fail Demo uses synthetic data to show a Test Case Fail, a demo S1, a new Run for the retest (the original Fail stays), and No-Go. It is not the official result of the two repositories, and it is not a sign-off.
 
-## 核心模板與放置位置
+## Core templates and where they go
 
-九個模板是 authoring library。實際套用時，把填好的文件複製進目標 repository，讓 evidence 跟著 release version 一起 review。Public README 只提供內容索引與 repo 落點；private QA vault 的本機位置不公開。
+The nine templates are an authoring library. When you apply them, copy the filled documents into the target repository so the evidence is reviewed with that release version. This public README only indexes the content and the repository locations. The local location of the private QA vault is not published.
 
-| Template | Canonical file | 套用後的 repository 位置 |
+| Template | Canonical file | Repository location after use |
 |---|---|---|
 | [00 QA Test Request](Templates/QA/00-qa-test-request.md) | `Templates/QA/00-qa-test-request.md` | `docs/quality/<release>/quality-decision-brief.md` |
 | [01 Quality Risk Assessment](Templates/QA/01-quality-risk-assessment.md) | `Templates/QA/01-quality-risk-assessment.md` | `docs/quality/<release>/risk-assessment.md` |
@@ -91,75 +93,75 @@ Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 重�
 | [07 Release Quality Summary](Templates/QA/07-release-quality-summary.md) | `Templates/QA/07-release-quality-summary.md` | `docs/quality/<release>/release-quality-summary.md` |
 | [08 Dashboard Status Contract](Templates/QA/08-dashboard-status-contract.md) | `Templates/QA/08-dashboard-status-contract.md` | `.test-dashboard/status.json` |
 
-九份模板不等於每次 release 都要產生九份文件。`QA-Lite` 可以把 request、risk、coverage 與 decision 收在同一份短文件；Test Run Record 與 Release Quality Summary 每次執行都要保留。`QA-Standard`、`QA-High-Risk` 與命中 hard trigger 的範圍，再加入詳細 case 或 conditional templates。
+Nine templates do not mean every release produces nine documents. `QA-Lite` can keep the request, risk, coverage, and decision in one short document. The Test Run Record and the Release Quality Summary are kept for every execution. `QA-Standard`, `QA-High-Risk`, and any scope that hits a hard trigger add detailed cases or conditional templates.
 
 ### 00 QA Test Request
 
-鎖定 requester、release subject、business objective、scope、known risks、限制與要支援的 release question。資訊不足時維持 `needs-information`。
+Locks the requester, release subject, business objective, scope, known risks, limits, and the release question this work supports. If information is missing, the state stays `needs-information`.
 
 ### 01 Quality Risk Assessment
 
-逐一列出 Product Area、failure mode、impact、uncertainty、recoverability、existing controls、target coverage、residual risk 與 owner。Unknown 不會被預設成 Low。
+Lists each Product Area, failure mode, impact, uncertainty, recoverability, existing controls, target coverage, residual risk, and owner. Unknown is not treated as Low by default.
 
 ### 02 Test Spec
 
-定義 tested scope、test types、entry／suspension／exit criteria、環境、test data、execution method、artifact、retention、review 與 limitations。
+Defines the tested scope, test types, entry／suspension／exit criteria, environment, test data, execution method, artifacts, retention, review, and limitations.
 
 ### 03 Test Scenario
 
-以使用者或業務路徑描述 start state、trigger、happy／negative paths、expected outcome 與 risk traceability，不塞入 click-by-click steps。
+Describes the start state, trigger, happy／negative paths, expected outcome, and risk traceability as a user or business path. It does not hold click-by-click steps.
 
 ### 04 Test Case
 
-保存 preconditions、concrete data、連續步驟、observable expected result、cleanup 與 variants。案例 Priority 是執行優先序。Actual result 寫在 Run Record。
+Keeps preconditions, concrete data, ordered steps, the observable expected result, cleanup, and variants. Case priority is execution priority. The actual result is written in the Run Record.
 
 ### 05 Test Run Record
 
-Append-only 保存 full SHA、worktree、environment、exact command／procedure、每次 attempt、exit code、case results、artifact hash、retention 與 final run state。Run 最終狀態只用 Not Run、Skipped（原因）、Blocked、Pass、Fail。重測是新 Run。
+Append-only record of the full SHA, worktree, environment, exact command／procedure, every attempt, exit code, case results, artifact hash, retention, and final run state. The final run state is only Not Run, Skipped (with a reason), Blocked, Pass, or Fail. A retest is a new Run.
 
 ### 06 Defect Report
 
-把 failure 接到 requirement、risk、scenario、case 與 run；清楚區分 suspected cause、confirmed cause、Fixed 與 Verified。
+Connects a failure to the requirement, risk, scenario, case, and run. It separates suspected cause, confirmed cause, Fixed, and Verified.
 
 ### 07 Release Quality Summary
 
-整理 coverage target／actual、run inventory、open defects、accepted risks、waivers、limitations 與 recommendation，再由 decision owner記錄 Go、No-Go 或 Hold。
+Collects coverage target／actual, the run inventory, open defects, accepted risks, waivers, limitations, and the recommendation. The decision owner then records Go, No-Go, or Hold.
 
 ### 08 Dashboard Status Contract
 
-約束 `.test-dashboard/status.json` 的 versions、subject、assessment、timestamps、Data Status、evidence links 與 public disclosure。Schema invalid、evidence stale 或 authority 不符時 fail closed。
+Constrains versions, subject, assessment, timestamps, Data Status, evidence links, and public disclosure in `.test-dashboard/status.json`. An invalid schema, stale evidence, or an authority mismatch fails closed.
 
 ## QA Playbooks
 
-[QA Playbooks](Playbooks/QA/README.md) 是輸入資料與九個核心模板之間的 advisory layer。它們把 requirement、API contract、diff、test inventory 或 defect 整理成 reviewable draft，不直接產生 test result、release decision 或 Dashboard status。
+[QA Playbooks](Playbooks/QA/README.md) are an advisory layer between the input data and the nine core templates. They turn a requirement, API contract, diff, test inventory, or defect into a reviewable draft. They do not themselves produce a test result, a release decision, or a Dashboard status.
 
-| Playbook | 用途 | Reviewed output 落點 |
+| Playbook | Use | Where the reviewed output lands |
 |---|---|---|
-| [Requirement Readiness](Playbooks/QA/requirement-readiness.md) | 找 requirement／AC 缺口與矛盾 | 00、01 |
-| [Coverage Analysis](Playbooks/QA/coverage-analysis.md) | 建立 requirement-to-run traceability | 03 套用後的 `coverage-inventory.md`；07 只引用摘要 |
-| [Regression Selection](Playbooks/QA/regression-selection.md) | 形成 Must-run／Should-run／Skip-with-reason 建議 | 02、05 |
-| [Test Data Design](Playbooks/QA/test-data-design.md) | 設計安全的 valid／invalid／boundary／synthetic data | conditional Test Data Sheet、04 |
-| [API Coverage Design](Playbooks/QA/api-coverage-design.md) | 依 contract 設計 API coverage | 02、03、04 |
-| [Defect Triage](Playbooks/QA/defect-triage.md) | 批次提出 duplicate／priority／owner recommendation | 多份 06 的 triage note |
-| [RCA／Escape Analysis](Playbooks/QA/rca-escape-analysis.md) | 分離 symptom、hypothesis、confirmed cause 與 escape point | 06 appendix／RCA evidence |
+| [Requirement Readiness](Playbooks/QA/requirement-readiness.md) | Find gaps and contradictions in requirements／acceptance criteria | 00, 01 |
+| [Coverage Analysis](Playbooks/QA/coverage-analysis.md) | Build requirement-to-run traceability | `coverage-inventory.md` after 03 is applied; 07 cites the summary only |
+| [Regression Selection](Playbooks/QA/regression-selection.md) | Propose Must-run／Should-run／Skip-with-reason | 02, 05 |
+| [Test Data Design](Playbooks/QA/test-data-design.md) | Design safe valid／invalid／boundary／synthetic data | conditional Test Data Sheet, 04 |
+| [API Coverage Design](Playbooks/QA/api-coverage-design.md) | Design API coverage from the contract | 02, 03, 04 |
+| [Defect Triage](Playbooks/QA/defect-triage.md) | Propose duplicate／priority／owner recommendations in a batch | triage note across several 06 reports |
+| [RCA／Escape Analysis](Playbooks/QA/rca-escape-analysis.md) | Separate symptom, hypothesis, confirmed cause, and escape point | 06 appendix／RCA evidence |
 
-Playbook output 一律先標 draft／recommendation。External input 視為 untrusted data；沒有 run receipt 不能宣告 Pass，沒有 human-owned Release Quality Summary 不能宣告 Ready。Deterministic fixtures 只驗 contract，不等於 model behavior PASS；pilot 記錄見 [test-records/playbook-pilot.md](test-records/playbook-pilot.md)。
+Playbook output is marked draft／recommendation first. External input is untrusted data. Without a run receipt, do not claim Pass. Without a human-owned Release Quality Summary, do not claim Ready. Deterministic fixtures check the contract only. They are not a model-behavior PASS. The pilot record is [test-records/playbook-pilot.md](test-records/playbook-pilot.md).
 
 ## Source of truth and public boundary
 
-| Layer | 保存內容 | 規則 |
+| Layer | What it stores | Rule |
 |---|---|---|
-| QA template library | 可重用的空白模板 | 只定義欄位與流程，不代表已執行 |
-| Repository evidence | release-specific docs、run records、machine results、artifacts | 綁定 full SHA、environment、scope 與 chronology |
-| Status contract | approved assessment 的 machine-readable projection | validator 不猜缺值；failure 保留 last-known-good 並標示 Stale／Invalid／Unreachable |
-| Public Dashboard | 支援決策所需的 sanitized snapshot | 只顯示 allowlist fields 與可公開 links |
+| QA template library | Reusable blank templates | Defines fields and flow only. It does not mean the work was executed. |
+| Repository evidence | Release-specific docs, run records, machine results, artifacts | Bound to the full SHA, environment, scope, and chronology |
+| Status contract | Machine-readable projection of an approved assessment | The validator does not guess missing values. On failure it keeps last-known-good and marks Stale／Invalid／Unreachable. |
+| Public Dashboard | Sanitized snapshot needed to support the decision | Shows allowlist fields and public links only |
 
-Public surface 不包含 raw logs、protected receipts、credentials、test accounts、PII、local paths、private URLs、敏感 test data 或未消毒的 defect details。
+The public surface does not include raw logs, protected receipts, credentials, test accounts, PII, local paths, private URLs, sensitive test data, or unsanitized defect details.
 
 ## Repository map
 
-- [正式 Dashboard](app/page.tsx)
-- [九個核心 QA 模板](Templates/QA/README.md)
+- [Official Dashboard](app/page.tsx)
+- [Nine core QA templates](Templates/QA/README.md)
 - [Status contract schema](schema/test-status.schema.json)
 - [Approved source records](data/approved)
 - [Public snapshot registry](data/repos/index.json)
@@ -167,9 +169,9 @@ Public surface 不包含 raw logs、protected receipts、credentials、test acco
 - [Current decision / historical evidence UI](app/_dashboard.tsx)
 - [Shared decision policy](lib/decision-policy.mjs)
 - [Filled release evidence validator](lib/release-evidence.mjs)
-- [Test Cases 與 Run Records](app/run-records/page.tsx)
+- [Test Cases and Run Records](app/run-records/page.tsx)
 - [Synthetic Fail Demo](app/run-records/fail-demo/page.tsx)
-- [Contract、sync 與 registry tests](tests/status-contract.test.mjs)
+- [Contract, sync, and registry tests](tests/status-contract.test.mjs)
 - [Rendered route tests](tests/rendered-html.test.mjs)
 - [Pages artifact check](docs/reviewed-pages-artifact.md)
 
@@ -184,15 +186,15 @@ npm test
 npm run lint
 ```
 
-`npm test` 驗證 archive registry、contract、chronology、public disclosure boundary、playbooks，再 build 並檢查所有 routes。它不宣告目前的 evidence freshness 或發布核准。
+`npm test` checks the archive registry, contract, chronology, public disclosure boundary, and playbooks, then builds and checks every route. It does not declare current evidence freshness or release approval.
 
-`npm run verify:workflow` 另外記錄 lint、typecheck、Pages build/export 與 release gate；每次執行輸出新的實際 logs、SHA-256 和 source/worktree digest。Raw artifacts 留在忽略的本機資料夾，不打包進公開 UI。`release-gate` 結果獨立保存，軟體 Pass 不掩蓋產品 release Fail。
+`npm run verify:workflow` also records lint, typecheck, the Pages build/export, and the release gate. Each run writes new actual logs, SHA-256 values, and the source/worktree digest. Raw artifacts stay in an ignored local folder and are not packaged into the public UI. The `release-gate` result is stored on its own. A software Pass does not hide a product release Fail.
 
-靜態匯出給 `sanyoii.github.io` 的 `test-status/` 使用。本 repo 不負責上傳。
+The static export is for `test-status/` on `sanyoii.github.io`. This repo does not upload it.
 
 ```bash
 GITHUB_PAGES=true npm run build
 node scripts/prepare-pages-artifact.mjs --source dist/client --output out/test-status-preview
 ```
 
-`out/test-status-preview` 必須是新目錄。產出後自行覆核；不要把這份指令當成已經發布。
+`out/test-status-preview` must be a new directory. Review the output yourself. Do not treat this command as a completed publication.

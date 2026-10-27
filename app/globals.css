@@ -1928,34 +1928,34 @@ html[data-theme="light"] .ct-run-details .case-table th {
   font-size: 0.95rem;
   margin: 0.15rem 0 0.65rem;
 }
-.ct-defect-dl {
-  display: grid !important;
-  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-  gap: 0.55rem !important;
-  margin: 0 !important;
+.defect-record.ct-defect-card > dl.ct-defect-dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
 }
-.ct-defect-dl > div {
-  background: var(--ct-surface-2) !important;
-  border: 1px solid var(--ct-border) !important;
+.defect-record.ct-defect-card > dl.ct-defect-dl > div {
+  background: var(--ct-surface-2);
+  border: 1px solid var(--ct-border);
   border-radius: 6px;
-  padding: 0.5rem 0.65rem !important;
+  padding: 0.5rem 0.65rem;
 }
-.ct-defect-dl > div:last-child {
+.defect-record.ct-defect-card > dl.ct-defect-dl > div:last-child {
   grid-column: 1 / -1;
 }
-.ct-defect-dl dt {
-  color: var(--ct-muted) !important;
+.defect-record.ct-defect-card > dl.ct-defect-dl dt {
+  color: var(--ct-muted);
   font-size: 0.66rem;
   text-transform: uppercase;
 }
-.ct-defect-dl dd {
-  color: var(--ct-heading) !important;
+.defect-record.ct-defect-card > dl.ct-defect-dl dd {
+  color: var(--ct-heading);
   font-size: 0.82rem;
   font-weight: 700;
   margin: 0.15rem 0 0;
 }
-@media (max-width: 48rem) {
-  .ct-defect-dl { grid-template-columns: 1fr !important; }
+@media (max-width: 64rem) {
+  .defect-record.ct-defect-card > dl.ct-defect-dl { grid-template-columns: 1fr; }
 }
 
 /* Subpage 3: ADR Evolution Board & Policy Cards Grid */

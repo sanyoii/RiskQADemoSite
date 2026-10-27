@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { spawn } from "node:child_process";
 import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { existsSync } from "node:fs";
+import { statSync } from "node:fs";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -15,9 +15,30 @@ test("collapsed details stay aria-expanded false when open is still the previous
   assert.equal(detailsIsOpen({ open: true }, undefined), true);
 });
 
-function chromeBin() {
-  const candidates = [process.env.CHROME_PATH, "/usr/local/bin/google-chrome", "/usr/bin/google-chrome", "/usr/bin/chromium", "/usr/bin/chromium-browser"].filter(Boolean);
-  return candidates.find((path) => existsSync(path)) ?? null;
+const CHROME_FALLBACKS = ["/usr/local/bin/google-chrome", "/usr/bin/google-chrome", "/usr/bin/chromium", "/usr/bin/chromium-browser"];
+
+function isFile(path) {
+  try {
+    return statSync(path).isFile();
+  } catch {
+    return false;
+  }
+}
+
+function resolveChromeBin() {
+  const requested = process.env.CHROME_PATH;
+  if (requested) {
+    if (!isFile(requested)) {
+      throw new Error(`CHROME_PATH is set to ${JSON.stringify(requested)} but that path is not a file. Refusing to fall back to another browser.`);
+    }
+    return requested;
+  }
+  const found = CHROME_FALLBACKS.find((path) => isFile(path));
+  if (found) return found;
+  if (process.env.CI === "true") {
+    throw new Error(`CI=true but no Chrome binary was found. Checked: ${CHROME_FALLBACKS.join(", ")}. Set CHROME_PATH to the Chrome executable.`);
+  }
+  return null;
 }
 
 function listen(server) {
@@ -114,11 +135,12 @@ async function readState(send) {
 }
 
 test("decision bar summary aria-expanded follows open for Enter and Space", { timeout: 60_000 }, async (t) => {
-  const bin = chromeBin();
+  const bin = resolveChromeBin();
   if (!bin) {
     t.skip("Chrome is not installed");
     return;
   }
+  console.log(`Chrome binary: ${bin}`);
   const html = `<!doctype html><meta charset="utf-8"><title>decision bar</title>
 <details class="decision-bar-compact">
   <summary class="decision-bar-summary" aria-expanded="false">Hold · Archived demo · 2</summary>

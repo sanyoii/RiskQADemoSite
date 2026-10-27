@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { access, readFile } from "node:fs/promises";
 import test from "node:test";
+import { comparisonTone } from "../lib/homepage-brief.mjs";
 
 const projectRoot = new URL("../", import.meta.url);
 const runIds = [
@@ -367,6 +368,68 @@ test("shared nav links only to routes that exist in the build", async () => {
     const response = await render(pathname);
     assert.equal(response.status, 200, href);
   }
+});
+
+function homeSection(html, name) {
+  const match = html.match(new RegExp(`<section\\b(?=[^>]*\\bdata-home-section="${name}")[^>]*>[\\s\\S]*?</section>`));
+  assert.ok(match, name);
+  return match[0];
+}
+
+test("homepage brief shows four exit criteria, S1 risks, comparison lamps, and board quality lamps", async () => {
+  const html = await (await render("/")).text();
+  const exitCriteria = homeSection(html, "exit-criteria");
+  assert.equal(exitCriteria.includes('data-met="0"'), true);
+  assert.match(exitCriteria, /data-not-met="6"/);
+  assert.match(exitCriteria, /data-unknown="2"/);
+  for (const id of ["EC-1", "EC-2", "EC-3", "EC-4"]) assert.match(exitCriteria, new RegExp(`data-criterion="${id}"`));
+  assert.doesNotMatch(exitCriteria, /G1|G3|G6|V1/);
+  for (const name of ["cex-market-data-quality-lab", "sanyoii.github.io"]) {
+    assert.match(exitCriteria, new RegExp(`data-repository="${name}"`));
+  }
+  assert.match(exitCriteria, /data-en="See all" data-zh="看全部"/);
+  assert.match(exitCriteria, /data-pending-route="\/exit-criteria"/);
+  assert.doesNotMatch(exitCriteria, /href="[^"]*exit-criteria/);
+
+  const risks = homeSection(html, "risks");
+  assert.match(risks, /data-s1-count="2"/);
+  assert.match(risks, /data-other-risks="4"/);
+  assert.match(risks, /data-risk-id="RISK-approval-expired-cex"/);
+  assert.match(risks, /data-risk-id="RISK-approval-expired-portfolio"/);
+  assert.doesNotMatch(risks, /RISK-auth-orders-funds|RISK-deterministic|RISK-live|RISK-chromium|S2|S3/);
+  assert.doesNotMatch(risks, /範例資料|Sample data/);
+  assert.match(risks, /data-zh="看風險頁（其餘 4 項）"/);
+  assert.match(risks, /data-pending-route="\/risks"/);
+  assert.doesNotMatch(risks, /href="[^"]*\/risks/);
+  assert.doesNotMatch(html, /href="[^"]*\/exit-criteria|href="[^"]*\/risks(?:\/|")/);
+
+  const comparison = homeSection(html, "previous-comparison");
+  assert.equal((html.match(/data-home-section="previous-comparison"/g) ?? []).length, 1);
+  assert.match(comparison, /data-repository="cex-market-data-quality-lab"/);
+  assert.doesNotMatch(comparison, /sanyoii\.github\.io/);
+  const lamps = [...comparison.matchAll(/<span class="status-lamp status-lamp--(good|warning|bad|unknown)"[\s\S]*?data-zh="([^"]+)"/g)];
+  assert.ok(lamps.length >= 4);
+  for (const [, tone, zh] of lamps) assert.equal(tone, comparisonTone(zh), zh);
+  assert.ok(lamps.some(([lamp, tone, zh]) => lamp && tone === "bad" && zh === "↑ 延後，但已過期"));
+  assert.match(comparison, /status-lamp-symbol[\s\S]*?✕[\s\S]*?data-zh="↑ 延後，但已過期"/);
+
+  const table = html.match(/<table class="lt-bach-table"[\s\S]*?<\/table>/)?.[0];
+  assert.ok(table);
+  const cells = [...table.matchAll(/<td data-board-quality="([^"]+)">([\s\S]*?)<\/td>/g)];
+  assert.ok(cells.length >= 6);
+  const toneFor = { good: "good", warn: "warning", bad: "bad", oos: "unknown" };
+  for (const [, quality, inner] of cells) {
+    assert.match(inner, new RegExp(`status-lamp status-lamp--${toneFor[quality]}`));
+    assert.match(inner, /status-lamp-symbol/);
+    assert.match(inner, /status-lamp-text/);
+  }
+  assert.ok(cells.some(([, quality]) => quality === "warn"));
+  assert.ok(cells.some(([, quality]) => quality === "oos"));
+
+  const bar = html.match(/<section class="decision-bar-shell"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.doesNotMatch(bar, /範例資料|Sample data/);
+  assert.doesNotMatch(bar, /<summary\b[^>]*\brole="button"/);
+  assert.doesNotMatch(html, /class="decision-next-action"[\s\S]{0,240}範例資料|範例資料[\s\S]{0,80}class="decision-next-action"/);
 });
 
 test("public navigation reaches the offline QA sample entry", async () => {

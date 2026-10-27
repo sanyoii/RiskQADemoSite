@@ -6,6 +6,8 @@ import { dashboardData, statusLabels } from "./dashboard-data";
 import { T, type LocalizedText } from "./_i18n";
 import { siteHref } from "./_site";
 import { suggestedAction } from "../lib/decision-actions.mjs";
+import { StatusLamp } from "./_status-lamp";
+import { boardQualityTone } from "../lib/homepage-brief.mjs";
 
 const verdicts = {
   ready: { en: "Ready", zh: "可發布", icon: "✓" },
@@ -35,6 +37,11 @@ function Label({ value }: { value: string }) {
 }
 function EvidenceLink({ href, children, className }: { href: string; children: React.ReactNode; className?: string }) {
   return safeEvidenceUrl(href) ? <a className={className} href={href.startsWith("/") ? siteHref(href) : href}>{children}</a> : <span><T en="Link withheld" zh="連結已隱藏" /></span>;
+}
+
+function qualityLampLabel(label: LocalizedText): LocalizedText {
+  const strip = (value: string) => value.replace(/^[●▲×◌■]+\s*/, "");
+  return { en: strip(label.en), zh: strip(label.zh) };
 }
 
 interface MilestoneChip {
@@ -756,10 +763,8 @@ export function DecisionDashboard() {
                             ))}
                           </div>
                         </td>
-                        <td>
-                          <span className={`lt-q-pill lt-q-${activeQualityTone}`}>
-                            <T {...activeQualityLabel} />
-                          </span>
+                        <td data-board-quality={activeQualityTone}>
+                          <StatusLamp tone={boardQualityTone(activeQualityTone)} label={qualityLampLabel(activeQualityLabel)} />
                         </td>
                         <td>
                           <div className="lt-comment-cell">

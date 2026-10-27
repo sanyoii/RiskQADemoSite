@@ -3,19 +3,23 @@ import { readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
-import { projectPublicStatus } from "../lib/status-contract.mjs";
+import { projectPublicStatus, projectRegistryArchive } from "../lib/status-contract.mjs";
 import { checkRegistryRelease } from "../lib/release-files.mjs";
-import { POLICY_VERSION } from "../lib/decision-policy.mjs";
+import { decisionView, POLICY_VERSION } from "../lib/decision-policy.mjs";
+import { suggestedAction } from "../lib/decision-actions.mjs";
 
 const registryPath = fileURLToPath(new URL("../data/repos/index.json", import.meta.url));
 const registry = JSON.parse(await readFile(registryPath, "utf8"));
 const releaseRecords = JSON.parse(await readFile(new URL("../data/release-records.json", import.meta.url), "utf8"));
+const riskCatalog = JSON.parse(await readFile(new URL("../data/risks.json", import.meta.url), "utf8"));
+const risks = Array.isArray(riskCatalog.risks) ? riskCatalog.risks : [];
+const evaluatedAt = new Date();
 const repositories = [];
 for (const entry of registry.repositories) {
   const snapshot = projectPublicStatus(JSON.parse(await readFile(resolve(dirname(registryPath), entry.snapshot), "utf8")), { historical: true });
   if (entry.url !== snapshot.repository.url) throw new Error("REGISTRY_URL_MISMATCH");
   let releaseReview;
-  try { releaseReview = await checkRegistryRelease(entry, registryPath, snapshot); }
+  try { releaseReview = await checkRegistryRelease(entry, registryPath, snapshot, { now: evaluatedAt }); }
   catch { releaseReview = { eligible: false, codes: ["RELEASE_REVIEW_INVALID"] }; }
   const matchedRecord = releaseRecords.find(record => record.repository === snapshot.repository.name);
   if (matchedRecord && matchedRecord.subjectSha !== snapshot.repository.fullSha) {
@@ -44,8 +48,32 @@ for (const entry of registry.repositories) {
     latestChecksTotal: latestSnapshotRuns.reduce((sum, r) => sum + r.total, 0),
     runs: recordRuns,
   };
+  const archive = projectRegistryArchive(entry);
+  const repoRisks = risks.filter(risk => risk.repository === snapshot.repository.name);
+  const view = decisionView(snapshot, {
+    now: evaluatedAt,
+    clockConfirmed: true,
+    enforceReview: true,
+    releaseReview,
+    risks: repoRisks,
+    archived: archive.archived,
+  });
+  const decision = { ...view };
+  delete decision.checkedAt;
   repositories.push({
     snapshot,
+    archived: archive.archived,
+    archivedNote: archive.archivedNote,
+    risksRef: archive.risks,
+    risks: repoRisks,
+    decision,
+    decisionBar: {
+      decisionOwner: snapshot.releaseAssessment.decisionOwner,
+      decidedAt: snapshot.releaseAssessment.decidedAt,
+      expiresAt: snapshot.releaseAssessment.expiresAt,
+      status: decision.status,
+      nextStep: suggestedAction(decision),
+    },
     releaseReview,
     runMetrics,
     snapshotDigest: createHash("sha256").update(JSON.stringify(snapshot)).digest("hex"),

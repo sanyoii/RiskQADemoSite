@@ -45,6 +45,21 @@ try {
     if (snapshot.repository.url !== entry.url) {
       throw new Error(`REGISTRY_URL_MISMATCH:repositories[${index}].url`);
     }
+    if ("archived" in entry && typeof entry.archived !== "boolean") {
+      throw new Error(`REGISTRY_ENTRY_INVALID:repositories[${index}].archived`);
+    }
+    if ("archivedNote" in entry) {
+      const note = entry.archivedNote;
+      if (!note || typeof note.zh !== "string" || !note.zh.trim() || typeof note.en !== "string" || !note.en.trim()) {
+        throw new Error(`REGISTRY_ENTRY_INVALID:repositories[${index}].archivedNote`);
+      }
+    }
+    if (entry.archived === true && (!entry.archivedNote?.zh || !entry.archivedNote?.en)) {
+      throw new Error(`REGISTRY_ENTRY_INVALID:repositories[${index}].archivedNote`);
+    }
+    if ("risks" in entry && (typeof entry.risks !== "string" || !entry.risks.endsWith(`#${snapshot.repository.name}`))) {
+      throw new Error(`REGISTRY_ENTRY_INVALID:repositories[${index}].risks`);
+    }
     names.push(snapshot.repository.name);
   }
 

@@ -1,4 +1,4 @@
-# Decision workflow · policy 2.1.0
+# Decision workflow · policy 3.0.0
 
 ## One maintained implementation
 
@@ -106,12 +106,18 @@ The real Dashboard replay lists only recorded runs, the original decision and ex
 Pages export now refuses existing output directories rather than recursively deleting them. Export to a fresh named directory. No deployment workflow, branch protection, hosted account or publication settings were modified.
 
 
-## Criteria changes, known issues and recovery (2.1.0)
+## Criteria changes, known issues and recovery (3.0.0)
 
 When a retained previous packet is supplied, affected required cases from `changeImpact.mustRun` must have a new Run after the previous decision. Replacing only the review digest, renaming an old Run or adding a waiver cannot satisfy this requirement. Unchanged cases retain their evidence subject to existing freshness and review checks. Subsequent releases must supply `--previous` or the controlled registry `previousReleaseEvidence`; without a retained previous packet the tool cannot detect an omitted earlier version. Case/oracle/data-contract versions remain in the existing records; this change does not rewrite past packets or introduce a second ledger.
 
-Current Ready cannot coexist with a recorded Warning/residual risk. Known coherent Blocked/At Risk for the same subject remains visible alongside stale/missing evidence or approval. Malformed, unsafe or subject-mismatched input remains Unknown; it cannot establish a product fact. Historical validation preserves old decisions under their recorded terms, while current policy is stricter. The original assessment and Runs are never rewritten. A valid owner-reviewed packet alone is not proof that every current Ready condition holds.
+Policy 3.0.0 adds **Hold**. `EXPIRED_APPROVAL_PRECEDENCE` must be `"blocked-first"`. Any other value, including undefined, is invalid: `decisionView` throws `EXPIRED_APPROVAL_PRECEDENCE_INVALID` and does not return a status. The rank order is Blocked, then Hold or Unknown at the same rank, then At Risk, then Ready. 優先順序：Blocked，其次 Hold 或 Unknown，再來 At Risk，最後 Ready。
 
-The four dimensions are known issues, execution completeness, exit decision and untested scope. Ready is test-delivery readiness; deployment still requires the separate Go decision and release gate. A historical, subsequently resolved Fail is not a permanent blocker. An unresolved S1, unaccepted S2 or confirmed critical-path nonconformance is blocking. Accepted S2 or remaining S3/S4 is At Risk, even if execution is incomplete. Explaining missing critical execution does not satisfy exit.
+An expired approval (`expiresAt <= now`) is at least Hold. Ready or At Risk plus expiry becomes Hold. A coherent Blocked record stays Blocked when the approval is also expired. An unresolved S1 likewise prevents Ready and is Hold when the snapshot is otherwise trusted. Approval expiry is `APPROVAL_EXPIRED`. `EVIDENCE_STALE` is not that finding; it remains only the run-evidence freshness code.
+
+Every triggering reason is listed. Omitting a lighter reason because a more severe state won is not allowed. Each reason has a suggested action in English and Traditional Chinese. When Hold and Unknown both apply, both reasons stay in the list and the displayed state is Unknown. Blocked plus untrusted data, for example a subject SHA mismatch, an unsafe evidence URL, or a corrupt structure, is downgraded to Unknown. The trust-failure reason is listed with its suggested action. The recorded Blocked status is not treated as a fact.
+
+Current Ready cannot coexist with a recorded Warning/residual risk. Historical validation preserves old decisions under their recorded terms, while current policy is stricter. The original assessment and Runs are never rewritten. A valid owner-reviewed packet alone is not proof that every current Ready condition holds.
+
+The four dimensions are known issues, execution completeness, exit decision and untested scope. Ready is test-delivery readiness; deployment still requires the separate Go decision and release gate. A historical, subsequently resolved Fail is not a permanent blocker. An unresolved S1 prevents Ready and is Hold on a trusted record. A recorded Blocked decision stays Blocked only when the snapshot is trusted. Accepted S2 or remaining S3 does not by itself replace that decision with At Risk. Explaining missing critical execution does not satisfy an 結束條件.
 
 Design/result review, disagreements, AI calibration and misjudgment recovery use the existing [Playbook contract](../Playbooks/QA/playbook-contract.md#review-and-recovery). These are procedures, not proof of independent human acceptance or model accuracy. [HTML samples](../public/qa-templates/index.html) show the same document ownership with explicitly synthetic data.

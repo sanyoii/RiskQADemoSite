@@ -11,7 +11,7 @@ Command: `npm run verify:workflow`, Windows, Node v24.19.0, branch `codex/fix-na
 - `node node_modules/typescript/bin/tsc --noEmit --incremental false`: Pass, exit 0.
 - `GITHUB_PAGES=true npm run build`: Pass, exit 0; 7 prerendered routes.
 - Pages export to a fresh run-specific directory: Pass, exit 0.
-- `npm run gate:release`: Fail, exit 1, `EVIDENCE_STALE:releaseAssessment.expiresAt`. Historical product evidence was not renewed.
+- `npm run gate:release`: Fail, exit 1, `EVIDENCE_STALE:releaseAssessment.expiresAt`. Historical product evidence was not renewed. Policy 3.0.0 reports that approval-expiry finding as `APPROVAL_EXPIRED`; this line keeps the 2026-09-06 result.
 - `git diff --check`: Pass before staging.
 
 Earlier verification and the uncommitted-subject release packet remain historical records, not approval for this publication.

@@ -1,5 +1,5 @@
 {
-  "policyVersion": "2.1.0",
+  "policyVersion": "3.0.0",
   "repositories": [
     {
       "snapshot": {
@@ -118,13 +118,238 @@
         "dataStatus": "fresh",
         "publicDisclosure": "public"
       },
+      "archived": true,
+      "archivedNote": {
+        "zh": "封存展示。本次不重新核准，改版上線後重測。",
+        "en": "Archived display. This revision does not re-approve it; retest after the revamp launches."
+      },
+      "risksRef": "../risks.json#cex-market-data-quality-lab",
+      "risks": [
+        {
+          "id": "RISK-approval-expired-cex",
+          "repository": "cex-market-data-quality-lab",
+          "severity": "S1",
+          "title": {
+            "zh": "核准過期",
+            "en": "Approval expired"
+          },
+          "owner": "William",
+          "handling": {
+            "zh": "封存展示，本次不重新核准，改版上線後重測",
+            "en": "Archived display. Do not re-approve in this revision; retest after the revamp launches."
+          },
+          "dueAt": null,
+          "relatedExitCriterion": "EC-4",
+          "source": "refs/decided-decisions 2026-10-27 15:38"
+        },
+        {
+          "id": "RISK-auth-orders-funds",
+          "repository": "cex-market-data-quality-lab",
+          "severity": "S2",
+          "title": {
+            "zh": "已登入帳戶、下單與資金未測",
+            "en": "Authenticated accounts, orders, and funds were not tested"
+          },
+          "owner": "William",
+          "handling": {
+            "zh": "改版上線後跟封存的兩個 repo 一起重測",
+            "en": "Retest together with the two archived repos after the revamp launches."
+          },
+          "dueAt": null,
+          "relatedExitCriterion": null,
+          "source": "William 2026-10-27 17:28 Asia/Taipei"
+        },
+        {
+          "id": "RISK-deterministic",
+          "repository": "cex-market-data-quality-lab",
+          "severity": "S3",
+          "title": {
+            "zh": "決定性檢查證據已過期",
+            "en": "Deterministic check evidence has expired"
+          },
+          "owner": "William",
+          "handling": {
+            "zh": "改版上線後跟封存的兩個 repo 一起重測",
+            "en": "Retest together with the two archived repos after the revamp launches."
+          },
+          "dueAt": null,
+          "relatedExitCriterion": "EC-1",
+          "source": "refs/decided-decisions 2026-10-27 15:43"
+        },
+        {
+          "id": "RISK-live",
+          "repository": "cex-market-data-quality-lab",
+          "severity": "S3",
+          "title": {
+            "zh": "即時檢查證據已過期",
+            "en": "Live check evidence has expired"
+          },
+          "owner": "William",
+          "handling": {
+            "zh": "改版上線後跟封存的兩個 repo 一起重測",
+            "en": "Retest together with the two archived repos after the revamp launches."
+          },
+          "dueAt": null,
+          "relatedExitCriterion": "EC-1",
+          "source": "refs/decided-decisions 2026-10-27 15:43"
+        }
+      ],
+      "decision": {
+        "policyVersion": "3.0.0",
+        "status": "hold",
+        "historicalStatus": "ready",
+        "dataStatus": "stale",
+        "reasons": [
+          {
+            "code": "APPROVAL_EXPIRED",
+            "path": "releaseAssessment.expiresAt",
+            "title": {
+              "en": "Approval expired",
+              "zh": "核准已過期"
+            },
+            "action": {
+              "en": "Do not re-approve in this revision. Retest after the revamp launches and record a new approval period; keep the historical approval.",
+              "zh": "本次不重新核准。改版上線後重測，並重新記錄核准與效期；保留歷史核准。"
+            },
+            "owner": "William"
+          },
+          {
+            "code": "UNRESOLVED_S1",
+            "path": "risks.RISK-approval-expired-cex",
+            "title": {
+              "en": "Unresolved S1: RISK-approval-expired-cex",
+              "zh": "未解決的 S1：RISK-approval-expired-cex"
+            },
+            "action": {
+              "zh": "封存展示，本次不重新核准，改版上線後重測",
+              "en": "Archived display. Do not re-approve in this revision; retest after the revamp launches."
+            },
+            "owner": "William"
+          },
+          {
+            "code": "ARCHIVED",
+            "path": "registry.archived",
+            "title": {
+              "en": "Archived display",
+              "zh": "封存展示"
+            },
+            "action": {
+              "en": "Keep the archived display. Do not re-approve it in this revision; retest after the revamp launches.",
+              "zh": "維持封存展示。本次不重新核准，改版上線後重測。"
+            },
+            "owner": "William"
+          },
+          {
+            "code": "RELEASE_REVIEW_INVALID",
+            "path": "releaseEvidence",
+            "title": {
+              "en": "Release review is not current",
+              "zh": "發布審查目前無效"
+            },
+            "action": {
+              "en": "Resolve the release-packet findings and obtain an approval for the exact subject.",
+              "zh": "處理發布證據包問題，並取得針對此受測版本的核准。"
+            },
+            "owner": "William"
+          }
+        ],
+        "exitCriteria": [
+          {
+            "id": "EC-1",
+            "title": {
+              "zh": "有效執行證據",
+              "en": "Valid execution evidence"
+            },
+            "result": "not-met",
+            "evidence": {
+              "zh": "執行證據已超過有效期限，或必要執行未完成，不能滿足這項結束條件。",
+              "en": "Execution evidence is outside its validity window or required execution is incomplete, so this exit criterion is not met.",
+              "links": [
+                "/run-records/#RUN-20260906-cex-deterministic-1",
+                "/run-records/#RUN-20260906-cex-live-1",
+                "/run-records/#RUN-20260907-cex-deterministic-1",
+                "/run-records/#RUN-20260907-cex-live-1"
+              ]
+            }
+          },
+          {
+            "id": "EC-2",
+            "title": {
+              "zh": "無未解決 S1",
+              "en": "No unresolved S1"
+            },
+            "result": "not-met",
+            "evidence": {
+              "zh": "仍有未解決的 S1，這項結束條件未滿足。",
+              "en": "An unresolved S1 remains, so this exit criterion is not met.",
+              "links": [
+                "/run-records/#RUN-20260906-cex-deterministic-1",
+                "/run-records/#RUN-20260906-cex-live-1",
+                "/run-records/#RUN-20260907-cex-deterministic-1",
+                "/run-records/#RUN-20260907-cex-live-1"
+              ]
+            }
+          },
+          {
+            "id": "EC-3",
+            "title": {
+              "zh": "追溯矩陣",
+              "en": "Traceability matrix"
+            },
+            "result": "unknown",
+            "evidence": {
+              "zh": "本輪沒有逐條核對追溯矩陣，這項結束條件待確認。",
+              "en": "This round did not check the traceability matrix line by line, so this exit criterion is unknown.",
+              "links": [
+                "/run-records/#RUN-20260906-cex-deterministic-1",
+                "/run-records/#RUN-20260906-cex-live-1",
+                "/run-records/#RUN-20260907-cex-deterministic-1",
+                "/run-records/#RUN-20260907-cex-live-1"
+              ]
+            }
+          },
+          {
+            "id": "EC-4",
+            "title": {
+              "zh": "核准仍在效期內",
+              "en": "Approval still within its validity period"
+            },
+            "result": "not-met",
+            "evidence": {
+              "zh": "核准到期時間 2026-09-08T23:59:00+08:00 已過，結束條件「核准仍在效期內」未滿足。",
+              "en": "Approval expiresAt 2026-09-08T23:59:00+08:00 is no longer in the future, so this exit criterion is not met.",
+              "links": [
+                "/run-records/#RUN-20260906-cex-deterministic-1",
+                "/run-records/#RUN-20260906-cex-live-1",
+                "/run-records/#RUN-20260907-cex-deterministic-1",
+                "/run-records/#RUN-20260907-cex-live-1"
+              ]
+            }
+          }
+        ],
+        "approvalValidity": {
+          "expiresAt": "2026-09-08T23:59:00+08:00",
+          "expired": true
+        },
+        "archived": true
+      },
+      "decisionBar": {
+        "decisionOwner": "William",
+        "decidedAt": "2026-09-07T15:11:54.526Z",
+        "expiresAt": "2026-09-08T23:59:00+08:00",
+        "status": "hold",
+        "nextStep": {
+          "en": "Do not re-approve in this revision. Retest after the revamp launches and record a new approval period; keep the historical approval.",
+          "zh": "本次不重新核准。改版上線後重測，並重新記錄核准與效期；保留歷史核准。"
+        }
+      },
       "releaseReview": {
         "eligible": false,
         "codes": [
           "RUN_STALE",
           "REVIEW_TIME_INVALID"
         ],
-        "policyVersion": "2.1.0",
+        "policyVersion": "3.0.0",
         "inputDigest": "c3766a1063a53f06210816083ae45a314549dd86ab0ce9fb4db76520c0562223",
         "sourceSha": "fc1e0604f96206e1f9dbbc58308031b5ff2f4c4f",
         "expiresAt": "2026-09-08T23:59:00+08:00"
@@ -280,13 +505,196 @@
         "dataStatus": "fresh",
         "publicDisclosure": "public"
       },
+      "archived": true,
+      "archivedNote": {
+        "zh": "封存展示。本次不重新核准，改版上線後重測。",
+        "en": "Archived display. This revision does not re-approve it; retest after the revamp launches."
+      },
+      "risksRef": "../risks.json#sanyoii.github.io",
+      "risks": [
+        {
+          "id": "RISK-approval-expired-portfolio",
+          "repository": "sanyoii.github.io",
+          "severity": "S1",
+          "title": {
+            "zh": "核准過期",
+            "en": "Approval expired"
+          },
+          "owner": "William",
+          "handling": {
+            "zh": "封存展示，本次不重新核准，改版上線後重測",
+            "en": "Archived display. Do not re-approve in this revision; retest after the revamp launches."
+          },
+          "dueAt": null,
+          "relatedExitCriterion": "EC-4",
+          "source": "refs/decided-decisions 2026-10-27 15:38"
+        },
+        {
+          "id": "RISK-chromium",
+          "repository": "sanyoii.github.io",
+          "severity": "S3",
+          "title": {
+            "zh": "Chromium 檢查證據已過期",
+            "en": "Chromium check evidence has expired"
+          },
+          "owner": "William",
+          "handling": {
+            "zh": "改版上線後跟封存的兩個 repo 一起重測",
+            "en": "Retest together with the two archived repos after the revamp launches."
+          },
+          "dueAt": null,
+          "relatedExitCriterion": "EC-1",
+          "source": "refs/decided-decisions 2026-10-27 15:43"
+        }
+      ],
+      "decision": {
+        "policyVersion": "3.0.0",
+        "status": "hold",
+        "historicalStatus": "ready",
+        "dataStatus": "stale",
+        "reasons": [
+          {
+            "code": "APPROVAL_EXPIRED",
+            "path": "releaseAssessment.expiresAt",
+            "title": {
+              "en": "Approval expired",
+              "zh": "核准已過期"
+            },
+            "action": {
+              "en": "Do not re-approve in this revision. Retest after the revamp launches and record a new approval period; keep the historical approval.",
+              "zh": "本次不重新核准。改版上線後重測，並重新記錄核准與效期；保留歷史核准。"
+            },
+            "owner": "William"
+          },
+          {
+            "code": "UNRESOLVED_S1",
+            "path": "risks.RISK-approval-expired-portfolio",
+            "title": {
+              "en": "Unresolved S1: RISK-approval-expired-portfolio",
+              "zh": "未解決的 S1：RISK-approval-expired-portfolio"
+            },
+            "action": {
+              "zh": "封存展示，本次不重新核准，改版上線後重測",
+              "en": "Archived display. Do not re-approve in this revision; retest after the revamp launches."
+            },
+            "owner": "William"
+          },
+          {
+            "code": "ARCHIVED",
+            "path": "registry.archived",
+            "title": {
+              "en": "Archived display",
+              "zh": "封存展示"
+            },
+            "action": {
+              "en": "Keep the archived display. Do not re-approve it in this revision; retest after the revamp launches.",
+              "zh": "維持封存展示。本次不重新核准，改版上線後重測。"
+            },
+            "owner": "William"
+          },
+          {
+            "code": "RELEASE_REVIEW_INVALID",
+            "path": "releaseEvidence",
+            "title": {
+              "en": "Release review is not current",
+              "zh": "發布審查目前無效"
+            },
+            "action": {
+              "en": "Resolve the release-packet findings and obtain an approval for the exact subject.",
+              "zh": "處理發布證據包問題，並取得針對此受測版本的核准。"
+            },
+            "owner": "William"
+          }
+        ],
+        "exitCriteria": [
+          {
+            "id": "EC-1",
+            "title": {
+              "zh": "有效執行證據",
+              "en": "Valid execution evidence"
+            },
+            "result": "not-met",
+            "evidence": {
+              "zh": "執行證據已超過有效期限，或必要執行未完成，不能滿足這項結束條件。",
+              "en": "Execution evidence is outside its validity window or required execution is incomplete, so this exit criterion is not met.",
+              "links": [
+                "/run-records/#RUN-20260906-portfolio-chromium-initial",
+                "/run-records/#RUN-20260906-portfolio-chromium-retry"
+              ]
+            }
+          },
+          {
+            "id": "EC-2",
+            "title": {
+              "zh": "無未解決 S1",
+              "en": "No unresolved S1"
+            },
+            "result": "not-met",
+            "evidence": {
+              "zh": "仍有未解決的 S1，這項結束條件未滿足。",
+              "en": "An unresolved S1 remains, so this exit criterion is not met.",
+              "links": [
+                "/run-records/#RUN-20260906-portfolio-chromium-initial",
+                "/run-records/#RUN-20260906-portfolio-chromium-retry"
+              ]
+            }
+          },
+          {
+            "id": "EC-3",
+            "title": {
+              "zh": "追溯矩陣",
+              "en": "Traceability matrix"
+            },
+            "result": "unknown",
+            "evidence": {
+              "zh": "本輪沒有逐條核對追溯矩陣，這項結束條件待確認。",
+              "en": "This round did not check the traceability matrix line by line, so this exit criterion is unknown.",
+              "links": [
+                "/run-records/#RUN-20260906-portfolio-chromium-initial",
+                "/run-records/#RUN-20260906-portfolio-chromium-retry"
+              ]
+            }
+          },
+          {
+            "id": "EC-4",
+            "title": {
+              "zh": "核准仍在效期內",
+              "en": "Approval still within its validity period"
+            },
+            "result": "not-met",
+            "evidence": {
+              "zh": "核准到期時間 2026-09-13T20:40:00+08:00 已過，結束條件「核准仍在效期內」未滿足。",
+              "en": "Approval expiresAt 2026-09-13T20:40:00+08:00 is no longer in the future, so this exit criterion is not met.",
+              "links": [
+                "/run-records/#RUN-20260906-portfolio-chromium-initial",
+                "/run-records/#RUN-20260906-portfolio-chromium-retry"
+              ]
+            }
+          }
+        ],
+        "approvalValidity": {
+          "expiresAt": "2026-09-13T20:40:00+08:00",
+          "expired": true
+        },
+        "archived": true
+      },
+      "decisionBar": {
+        "decisionOwner": "William",
+        "decidedAt": "2026-09-06T12:51:34.447Z",
+        "expiresAt": "2026-09-13T20:40:00+08:00",
+        "status": "hold",
+        "nextStep": {
+          "en": "Do not re-approve in this revision. Retest after the revamp launches and record a new approval period; keep the historical approval.",
+          "zh": "本次不重新核准。改版上線後重測，並重新記錄核准與效期；保留歷史核准。"
+        }
+      },
       "releaseReview": {
         "eligible": false,
         "codes": [
           "RUN_STALE",
           "REVIEW_TIME_INVALID"
         ],
-        "policyVersion": "2.1.0",
+        "policyVersion": "3.0.0",
         "inputDigest": "5ff7e3e3cc32f5b1a54b221819ea0a04f695fb33e58923a2a8a2cb0ed7987d7e",
         "sourceSha": "643b01720959dad2b1ccc9c8fcbe4f493f89bf0b",
         "expiresAt": "2026-09-13T20:40:00+08:00"

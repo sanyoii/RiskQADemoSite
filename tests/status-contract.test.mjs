@@ -73,7 +73,7 @@ test("fails closed when a Ready assessment has expired", () => {
   assert.equal(result.ok, false);
   assert.equal(result.dataStatus, "stale");
   assert.equal(result.effectiveProductStatus, "unknown");
-  assert.deepEqual(result.errors, [{ code: "EVIDENCE_STALE", path: "releaseAssessment.expiresAt" }]);
+  assert.deepEqual(result.errors, [{ code: "APPROVAL_EXPIRED", path: "releaseAssessment.expiresAt" }]);
 });
 
 test("downgrades Ready when product-area evidence contains a blocker", () => {
@@ -131,6 +131,20 @@ test("rejects provenance that points at a different release subject", () => {
 
   assert.equal(result.ok, false);
   assert.deepEqual(result.errors, [{ code: "SUBJECT_SHA_MISMATCH", path: "provenance.sourceSha" }]);
+});
+
+test("schema 1.1.0 accepts hold and still accepts a 1.0.0 snapshot", () => {
+  const schema = JSON.parse(readFileSync(new URL("../schema/test-status.schema.json", import.meta.url), "utf8"));
+  assert.deepEqual(schema.properties.contractVersion.enum, ["1.0.0", "1.1.0"]);
+  assert.ok(schema.properties.releaseAssessment.properties.status.enum.includes("hold"));
+  assert.match(schema.description, /1\.1\.0/);
+
+  const held = validStatus();
+  held.contractVersion = "1.1.0";
+  held.releaseAssessment.status = "hold";
+  const result = validateStatus(held, { now: new Date("2026-08-19T10:00:00+08:00") });
+  assert.equal(result.ok, true, JSON.stringify(result.errors));
+  assert.equal(result.effectiveProductStatus, "hold");
 });
 
 test("keeps the public status template example compatible with the validator", () => {

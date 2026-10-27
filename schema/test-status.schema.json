@@ -2,11 +2,12 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/sanyoii/RiskQADemoSite/schema/test-status.schema.json",
   "title": "QA Decision Desk public repository snapshot",
+  "description": "Schema 1.1.0. contractVersion 1.0.0 remains valid so existing snapshots keep passing. 1.1.0 adds releaseAssessment.status hold.",
   "type": "object",
   "additionalProperties": false,
   "required": ["contractVersion", "snapshotId", "repository", "objective", "environment", "testedScope", "excludedScope", "releaseAssessment", "summary", "productAreas", "gates", "runs", "provenance", "dataStatus", "publicDisclosure"],
   "properties": {
-    "contractVersion": { "const": "1.0.0" },
+    "contractVersion": { "enum": ["1.0.0", "1.1.0"] },
     "snapshotId": { "type": "string", "minLength": 1 },
     "repository": {
       "type": "object",
@@ -29,7 +30,7 @@
       "additionalProperties": false,
       "required": ["status", "rationale", "decidedAt", "expiresAt", "qaOwner", "reviewer", "decisionOwner"],
       "properties": {
-        "status": { "enum": ["ready", "at-risk", "blocked", "unknown"] },
+        "status": { "enum": ["ready", "at-risk", "blocked", "hold", "unknown"] },
         "rationale": { "type": "string", "minLength": 1 },
         "decidedAt": { "type": "string", "format": "date-time" },
         "expiresAt": { "type": "string", "format": "date-time" },

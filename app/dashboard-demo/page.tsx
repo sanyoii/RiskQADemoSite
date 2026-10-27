@@ -4,10 +4,10 @@ import { ControlTowerNav } from "../_shared-nav";
 import { suggestedAction } from "../../lib/decision-actions.mjs";
 
 const actionExamples = [
-  { id: "expired", status: "unknown", dataStatus: "stale", codes: ["EVIDENCE_STALE"], icon: "?", badge: "? UNKNOWN", triggerEn: "Evidence TTL window expired (Pinned historical snapshot preserved)", triggerZh: "證據有效期已過（仍保留鎖定之歷史通過快照）", title: { en: "Unknown · Evidence expired", zh: "待確認 · 證據到期" } },
+  { id: "expired", status: "hold", dataStatus: "stale", codes: ["APPROVAL_EXPIRED"], icon: "⏸", badge: "⏸ HOLD", triggerEn: "Approval expiresAt has passed (Pinned historical snapshot preserved)", triggerZh: "核准效期已過（仍保留鎖定之歷史通過快照）", title: { en: "Hold · Approval expired", zh: "暫緩 · 核准已過期" } },
   { id: "approval", status: "unknown", dataStatus: "fresh", codes: ["RELEASE_EVIDENCE_REQUIRED"], icon: "?", badge: "? UNKNOWN", triggerEn: "Missing linked release packet or undisclosed self-review overlap", triggerZh: "缺少已連結之發布證據包或未揭露自審重疊", title: { en: "Unknown · Approval pending", zh: "待確認 · 核准待完成" } },
   { id: "unreachable", status: "unknown", dataStatus: "unreachable", codes: ["DATA_NOT_FRESH"], icon: "?", badge: "? UNKNOWN", triggerEn: "Source repository or artifact endpoint currently unreachable", triggerZh: "目前無法連上來源專案或證據端點", title: { en: "Unknown · Source unreachable", zh: "待確認 · 無法取得來源" } },
-  { id: "both", status: "unknown", dataStatus: "stale", codes: ["EVIDENCE_STALE", "RELEASE_EVIDENCE_REQUIRED"], icon: "?", badge: "? UNKNOWN", triggerEn: "Stale evidence AND unlinked owner review packet", triggerZh: "證據已過期且尚未完成負責人審查證據包", title: { en: "Unknown · Evidence and review needed", zh: "待確認 · 缺少有效證據與審查" } },
+  { id: "both", status: "hold", dataStatus: "stale", codes: ["APPROVAL_EXPIRED", "RELEASE_EVIDENCE_REQUIRED"], icon: "⏸", badge: "⏸ HOLD", triggerEn: "Expired approval AND unlinked owner review packet", triggerZh: "核准已過期，且尚未連結負責人審查證據包", title: { en: "Hold · Approval expired and review needed", zh: "暫緩 · 核准已過期且審查未完成" } },
   { id: "blocked", status: "blocked", dataStatus: "fresh", codes: [], icon: "×", badge: "× NO-GO", triggerEn: "Unresolved S1, unaccepted S2, or a confirmed Fail", triggerZh: "未解決的 S1、未接受的 S2，或已確認的 Fail", title: { en: "No-Go · Blocking issue", zh: "不可發布 · 存在阻擋問題" } },
   { id: "risk", status: "at-risk", dataStatus: "fresh", codes: [], icon: "!", badge: "! AT RISK", triggerEn: "No blocker, but a remaining defect or accepted risk is still recorded", triggerZh: "沒有阻擋，但仍有剩餘缺陷或已接受的風險", title: { en: "At Risk · Residual risk", zh: "有風險 · 存在剩餘風險" } },
 ];

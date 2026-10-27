@@ -216,7 +216,7 @@ status_blank="""〔必填〕Assessment source／版本、contractVersion、schem
 〔必填〕productAreas：id／name／effortLevel／executionState／coverage／targetCoverage／quality／comment／evidenceLinks：[ ]
 〔必填〕gates：id／title／note／state；runs：runId／executedAt／evidenceUrl：[ ]
 〔必填〕provenance：generatedAt／syncedAt／sourceSha；dataStatus／publicDisclosure：[ ]
-〔必填〕檢查：subject 相符、來源授權、schema／版本、時效、阻斷／waiver、allowlist／連結、秘密／PII、atomic manifest／last-known-good：[ ]
+〔必填〕檢查：subject 相符、來源授權、schema／版本、時效、阻斷／waiver、allowlist／連結、祕密／PII、atomic manifest／last-known-good：[ ]
 〔必填〕公開覆核人／結果／時間、允許與禁止欄位：[ ]
 〔必填〕發布與修正：產生／同步時間、manifest／hash、last-known-good、修正／撤回程序、rollback owner、發布後 smoke 證據：[ ]
 由核准的 07 產生唯讀投影，不另填第二份決策；無核准不輸出可發布 snapshot。"""

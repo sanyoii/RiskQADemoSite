@@ -1,16 +1,19 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
+import { bindDetailsExpanded } from "../lib/details-expanded.mjs";
 
 export function DecisionBarDetails({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const details = ref.current;
+    if (!details) return undefined;
+    return bindDetailsExpanded(details);
+  }, []);
+
   return (
-    <details
-      className="decision-bar-compact"
-      onToggle={(event) => {
-        const details = event.currentTarget;
-        details.querySelector("summary")?.setAttribute("aria-expanded", details.open ? "true" : "false");
-      }}
-    >
+    <details ref={ref} className="decision-bar-compact">
       {children}
     </details>
   );

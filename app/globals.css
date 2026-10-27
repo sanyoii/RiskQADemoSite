@@ -2733,3 +2733,66 @@ table.lt-bach-table {
   .decision-bar-full { display: block !important; }
   .decision-bar-shell { position: static; }
 }
+
+.home-brief {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0 0 1.15rem;
+  min-width: 0;
+}
+.home-brief-card {
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--ct-border, var(--rule));
+  border-radius: 0.75rem;
+  background: var(--ct-surface, var(--paper));
+}
+.home-brief-card h2,
+.home-brief-card h3 {
+  margin: 0.85rem 0 0.35rem;
+  font-size: 1.05rem;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
+.home-brief-card h2 { margin-top: 0; }
+.home-brief-lead,
+.home-pending-note {
+  margin: 0;
+  color: var(--ct-muted, var(--muted));
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+.home-pending-link {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.75rem;
+  margin: 0.75rem 0 0;
+}
+.home-brief-list {
+  margin: 0.45rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.home-brief-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.35rem 0.7rem;
+  min-width: 0;
+  padding: 0.4rem 0;
+  border-top: 1px solid var(--ct-border, var(--rule));
+}
+.home-page-link {
+  font-weight: 700;
+}
+.home-page-link.is-pending {
+  text-decoration: underline dotted;
+}
+.home-brief .status-lamp,
+.lt-bach-table .status-lamp {
+  white-space: normal;
+}
+@media (max-width: 480px) {
+  .home-brief-card { padding: 0.75rem; }
+}

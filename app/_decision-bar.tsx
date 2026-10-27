@@ -135,7 +135,7 @@ export function DecisionBar() {
         <DecisionRows repos={repos} />
       </div>
       <DecisionBarDetails>
-        <summary className="decision-bar-summary" role="button" aria-expanded="false">
+        <summary className="decision-bar-summary" aria-expanded="false">
           <T en={summary.en} zh={summary.zh} />
         </summary>
         <div className="decision-bar-compact-body">

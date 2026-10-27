@@ -1788,6 +1788,16 @@ html:not([data-theme="light"]) .defect-record dl > div {
   border-color: var(--ct-red);
   color: var(--ct-heading);
 }
+.ct-replay-btn.is-active .ct-badge-hold {
+  background: #3b0712;
+  color: #ffe4e6;
+  border-color: #fda4af;
+}
+html[data-theme="light"] .ct-replay-btn.is-active .ct-badge-hold {
+  background: #fff1f2;
+  color: #9f1239;
+  border-color: #9f1239;
+}
 .ct-replay-stage {
   background: var(--ct-surface-2);
   border: 1px solid var(--ct-red-border);
@@ -2757,6 +2767,7 @@ table.lt-bach-table {
 .decision-bar-compact-body { margin-top: 0.6rem; }
 @media (max-width: 480px) {
   :root { --anchor-scroll-offset: 8rem; }
+  .ct-split-inspector { grid-template-columns: 1fr; }
   .ct-shell,
   .ct-matrix-panel,
   .ct-matrix-scroll,

@@ -26,7 +26,7 @@ async function render(pathname = "/") {
 }
 
 test("server-renders the bilingual contract on every public route", async () => {
-  const routes = ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"];
+  const routes = ["/", "/exit-criteria", "/risks", "/run-records", "/run-records/fail-demo", "/templates", "/history", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc"];
 
   for (const route of routes) {
     const response = await render(route);
@@ -51,7 +51,7 @@ test("server-renders a bilingual not-found page", async () => {
 });
 
 test("English page content has no untranslated Chinese, including collapsed evidence", async () => {
-  for (const route of ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"]) {
+  for (const route of ["/", "/exit-criteria", "/risks", "/run-records", "/run-records/fail-demo", "/templates", "/history", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc"]) {
     const html = await (await render(route)).text();
     const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
     assert.ok(main, `missing main content: ${route}`);
@@ -292,15 +292,14 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
 
 
 test("shared shell renders lamps, the decision bar, enabled nav items, and the language toggle", async () => {
-  const routes = ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"];
+  const routes = ["/", "/exit-criteria", "/risks", "/run-records", "/run-records/fail-demo", "/templates", "/history", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc"];
   const lamps = [
     ["good", "✓", "Good", "良好"],
     ["warning", "!", "Attention", "注意"],
     ["bad", "✕", "Poor", "差"],
     ["unknown", "?", "Unknown", "未知"],
   ];
-  const navLabels = ["Decision", "Run records", "Failure drill", "QA templates"];
-  const hiddenNavLabels = ["Exit criteria", "Risks", "Design history"];
+  const navLabels = ["Decision", "Exit criteria", "Risks", "Run records", "Failure drill", "QA templates", "Design history"];
 
   for (const route of routes) {
     const html = await (await render(route)).text();
@@ -344,29 +343,47 @@ test("shared shell renders lamps, the decision bar, enabled nav items, and the l
     assert.ok(nav, `${route} nav`);
     assert.equal((nav.match(/class="ct-nav-pill(?:\s|")/g) ?? []).length, navLabels.length, route);
     for (const label of navLabels) assert.ok(nav.includes(`data-en="${label}"`), `${route} ${label}`);
-    for (const label of hiddenNavLabels) assert.equal(nav.includes(`data-en="${label}"`), false, `${route} still shows ${label}`);
-    assert.doesNotMatch(nav, /\/exit-criteria|\/risks(?:\/|$)|\/history(?:\/|$)/);
   }
 });
 
-test("shared nav links only to routes that exist in the build", async () => {
-  const html = await (await render("/")).text();
-  const nav = html.match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0];
-  assert.ok(nav);
-  const hrefs = [...nav.matchAll(/\b(?:href|data-href-en|data-href-zh)="([^"]+)"/g)].map((match) => match[1]);
-  assert.ok(hrefs.length > 0);
+test("shared nav and the seven pages link only to routes that exist in the build", async () => {
+  const pages = ["/", "/exit-criteria", "/risks", "/run-records", "/run-records/fail-demo", "/templates", "/history"];
+  const htmlByPath = new Map();
+  const hrefs = [];
+  for (const page of pages) {
+    const response = await render(page);
+    assert.equal(response.status, 200, page);
+    const html = await response.text();
+    htmlByPath.set(page, html);
+    assert.match(html, /<section class="decision-bar-shell"/, page);
+    hrefs.push(...[...html.matchAll(/\b(?:href|data-href-en|data-href-zh)="([^"]+)"/g)].map((match) => match[1]));
+  }
+  const homeNav = htmlByPath.get("/").match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0] ?? "";
+  for (const path of ["/exit-criteria/", "/risks/", "/templates/", "/history/"]) assert.match(homeNav, new RegExp(`href="${path}"`));
+  assert.equal(hrefs.length > 0, true);
+  const seen = new Set();
   for (const href of hrefs) {
-    assert.doesNotMatch(href, /\/exit-criteria|\/risks(?:\/|$)|\/history(?:\/|$)/, href);
-    const withoutHash = href.split("#")[0];
+    if (seen.has(href) || !href.startsWith("/") || href.startsWith("//")) continue;
+    seen.add(href);
+    const hashAt = href.indexOf("#");
+    const withoutHash = hashAt === -1 ? href : href.slice(0, hashAt);
+    const hash = hashAt === -1 ? "" : href.slice(hashAt + 1);
+    if (withoutHash.startsWith("/_next/") || /\.(?:css|js|png|jpe?g|svg|ico|woff2?)$/i.test(withoutHash)) continue;
     if (withoutHash.startsWith("/qa-templates/")) {
       const relative = withoutHash.slice(1);
       const builtPath = relative.endsWith("/") ? `${relative}index.html` : relative;
       await access(new URL(`../dist/client/${builtPath}`, import.meta.url));
       continue;
     }
-    const pathname = withoutHash === "/" ? "/" : withoutHash.replace(/\/$/, "");
-    const response = await render(pathname);
-    assert.equal(response.status, 200, href);
+    const pathname = withoutHash === "/" || withoutHash === "" ? "/" : withoutHash.replace(/\/$/, "") || "/";
+    let target = htmlByPath.get(pathname);
+    if (!target) {
+      const response = await render(pathname);
+      assert.equal(response.status, 200, href);
+      target = await response.text();
+      htmlByPath.set(pathname, target);
+    }
+    if (hash) assert.match(target, new RegExp(`id="${hash}"`), href);
   }
 });
 
@@ -388,8 +405,8 @@ test("homepage brief shows four exit criteria, S1 risks, comparison lamps, and b
     assert.match(exitCriteria, new RegExp(`data-repository="${name}"`));
   }
   assert.match(exitCriteria, /data-en="See all" data-zh="看全部"/);
-  assert.match(exitCriteria, /data-pending-route="\/exit-criteria"/);
-  assert.doesNotMatch(exitCriteria, /href="[^"]*exit-criteria/);
+  assert.match(exitCriteria, /href="\/exit-criteria\/"/);
+  assert.doesNotMatch(exitCriteria, /data-pending-route/);
 
   const risks = homeSection(html, "risks");
   assert.match(risks, /data-s1-count="2"/);
@@ -399,9 +416,9 @@ test("homepage brief shows four exit criteria, S1 risks, comparison lamps, and b
   assert.doesNotMatch(risks, /RISK-auth-orders-funds|RISK-deterministic|RISK-live|RISK-chromium|S2|S3/);
   assert.doesNotMatch(risks, /範例資料|Sample data/);
   assert.match(risks, /data-zh="看風險頁（其餘 4 項）"/);
-  assert.match(risks, /data-pending-route="\/risks"/);
-  assert.doesNotMatch(risks, /href="[^"]*\/risks/);
-  assert.doesNotMatch(html, /href="[^"]*\/exit-criteria|href="[^"]*\/risks(?:\/|")/);
+  assert.match(risks, /href="\/risks\/"/);
+  assert.doesNotMatch(risks, /data-pending-route/);
+  assert.match(html, /href="\/exit-criteria\/"/);
 
   const comparison = homeSection(html, "previous-comparison");
   assert.equal((html.match(/data-home-section="previous-comparison"/g) ?? []).length, 1);
@@ -432,10 +449,54 @@ test("homepage brief shows four exit criteria, S1 risks, comparison lamps, and b
   assert.doesNotMatch(html, /class="decision-next-action"[\s\S]{0,240}範例資料|範例資料[\s\S]{0,80}class="decision-next-action"/);
 });
 
-test("public navigation reaches the offline QA sample entry", async () => {
-  const html = await (await render("/")).text();
-  assert.match(html, /href="\/qa-templates\/index.en.html"/);
-  assert.match(html, /data-href-en="\/qa-templates\/index.en.html" data-href-zh="\/qa-templates\/"/);
-  const entry = await readFile(new URL("../dist/client/qa-templates/index.html", import.meta.url), "utf8");
-  assert.match(entry, /test-case-template.html#sample/);
+test("QA template page links to nine readable copies", async () => {
+  const html = await (await render("/templates")).text();
+  const ids = [...html.matchAll(/data-template-id="(\d\d)"/g)].map((match) => match[1]);
+  assert.deepEqual(ids, ["00", "01", "02", "03", "04", "05", "06", "07", "08"]);
+  const hrefs = [...html.matchAll(/data-href-en="([^"]+)" data-href-zh="([^"]+)"/g)];
+  assert.equal(hrefs.length, 9);
+  for (const [, en, zh] of hrefs) {
+    for (const href of [en, zh]) {
+      await access(new URL(`../dist/client${href}`, import.meta.url));
+    }
+  }
+  const sample = await readFile(new URL("../dist/client/qa-templates/test-case-template.html", import.meta.url), "utf8");
+  assert.match(sample, /id="sample"/);
+});
+
+test("exit criteria, risks, and design history pages match the P3 contract", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.exit-criteria-row\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*minmax\(0,\s*1\.25fr\)/);
+
+  const exitHtml = await (await render("/exit-criteria")).text();
+  for (const name of ["cex-market-data-quality-lab", "sanyoii.github.io"]) {
+    for (const id of ["EC-1", "EC-2", "EC-3", "EC-4"]) {
+      assert.match(exitHtml, new RegExp(`id="${name}-${id}"`));
+    }
+  }
+  assert.match(exitHtml, /data-zh="核准仍在效期內"/);
+  assert.match(exitHtml, /href="\/run-records\/#RUN-20260906-cex-deterministic-1"/);
+  assert.match(exitHtml, /href="\/run-records\/#RUN-20260906-portfolio-chromium-initial"/);
+
+  const riskHtml = await (await render("/risks")).text();
+  const severities = [...riskHtml.matchAll(/data-severity="(S\d)"/g)].map((match) => match[1]);
+  assert.deepEqual(severities, ["S1", "S1", "S2", "S3", "S3", "S3"]);
+  assert.equal((riskHtml.match(/data-zh="待上線日決定"/g) ?? []).length, 6);
+  const excluded = riskHtml.match(/<section class="exclusion-block"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(excluded, /data-zh="排除範圍"/);
+  assert.match(excluded, /Load and production reconnect testing/);
+  assert.match(excluded, /Browsers other than Chromium/);
+  assert.doesNotMatch(excluded, /data-severity|Severity|>S1<|>S2<|>S3</);
+  assert.doesNotMatch(riskHtml, /範例資料|Sample data/);
+
+  const historyHtml = await (await render("/history")).text();
+  assert.match(historyHtml, /data-archive-state="archived"/);
+  assert.match(historyHtml, /data-zh="已封存"/);
+  assert.match(historyHtml, /href="\/dashboard-demo\/"/);
+  assert.match(historyHtml, /href="\/dashboard-demo\/abc\/"/);
+  assert.match(historyHtml, /href="\/dashboard-demo\/ac\/"/);
+  assert.match(historyHtml, /\/test-status\/history\//);
+  assert.match(historyHtml, /data-zh="否"/);
+  assert.match(historyHtml, /data-synthetic="true"/);
+  assert.match(historyHtml, /data-zh="範例資料"/);
 });

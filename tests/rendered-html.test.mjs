@@ -290,7 +290,7 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
 
 
 
-test("shared shell renders lamps, the decision bar, seven nav items, and the language toggle", async () => {
+test("shared shell renders lamps, the decision bar, enabled nav items, and the language toggle", async () => {
   const routes = ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"];
   const lamps = [
     ["good", "✓", "Good", "良好"],
@@ -298,7 +298,8 @@ test("shared shell renders lamps, the decision bar, seven nav items, and the lan
     ["bad", "✕", "Poor", "差"],
     ["unknown", "?", "Unknown", "未知"],
   ];
-  const navLabels = ["Decision", "Exit criteria", "Risks", "Run records", "Failure drill", "QA templates", "Design history"];
+  const navLabels = ["Decision", "Run records", "Failure drill", "QA templates"];
+  const hiddenNavLabels = ["Exit criteria", "Risks", "Design history"];
 
   for (const route of routes) {
     const html = await (await render(route)).text();
@@ -340,8 +341,31 @@ test("shared shell renders lamps, the decision bar, seven nav items, and the lan
 
     const nav = html.match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0];
     assert.ok(nav, `${route} nav`);
-    assert.equal((nav.match(/class="ct-nav-pill(?:\s|")/g) ?? []).length, 7, route);
+    assert.equal((nav.match(/class="ct-nav-pill(?:\s|")/g) ?? []).length, navLabels.length, route);
     for (const label of navLabels) assert.ok(nav.includes(`data-en="${label}"`), `${route} ${label}`);
+    for (const label of hiddenNavLabels) assert.equal(nav.includes(`data-en="${label}"`), false, `${route} still shows ${label}`);
+    assert.doesNotMatch(nav, /\/exit-criteria|\/risks(?:\/|$)|\/history(?:\/|$)/);
+  }
+});
+
+test("shared nav links only to routes that exist in the build", async () => {
+  const html = await (await render("/")).text();
+  const nav = html.match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0];
+  assert.ok(nav);
+  const hrefs = [...nav.matchAll(/\b(?:href|data-href-en|data-href-zh)="([^"]+)"/g)].map((match) => match[1]);
+  assert.ok(hrefs.length > 0);
+  for (const href of hrefs) {
+    assert.doesNotMatch(href, /\/exit-criteria|\/risks(?:\/|$)|\/history(?:\/|$)/, href);
+    const withoutHash = href.split("#")[0];
+    if (withoutHash.startsWith("/qa-templates/")) {
+      const relative = withoutHash.slice(1);
+      const builtPath = relative.endsWith("/") ? `${relative}index.html` : relative;
+      await access(new URL(`../dist/client/${builtPath}`, import.meta.url));
+      continue;
+    }
+    const pathname = withoutHash === "/" ? "/" : withoutHash.replace(/\/$/, "");
+    const response = await render(pathname);
+    assert.equal(response.status, 200, href);
   }
 });
 

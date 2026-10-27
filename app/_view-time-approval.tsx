@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { entryDecisionAt } from "../lib/approval-expiry.mjs";
 import { exitCriteriaByRepo } from "../lib/p3-pages.mjs";
 import { dashboardData, homepagePreviousComparisons } from "./dashboard-data";
@@ -27,12 +27,29 @@ function runId(link: string) {
   return link.split("#")[1] ?? link;
 }
 
+function subscribeViewClock() {
+  return () => {};
+}
+
+let clientViewNow = 0;
+
+function viewClockOnClient() {
+  if (clientViewNow === 0) clientViewNow = Date.now();
+  return clientViewNow;
+}
+
+function viewClockOnServer() {
+  return 0;
+}
+
+function useViewNow() {
+  const now = useSyncExternalStore(subscribeViewClock, viewClockOnClient, viewClockOnServer);
+  return now === 0 ? null : now;
+}
+
 export function ApprovalComputedNote({ computedOn }: { computedOn: string }) {
-  const [live, setLive] = useState(false);
-  useEffect(() => {
-    setLive(true);
-  }, []);
-  if (live) return null;
+  const now = useViewNow();
+  if (now !== null) return null;
   return (
     <p className="approval-computed-on" data-computed-on={computedOn}>
       <T en={`computed on ${computedOn}`} zh={`計算於 ${computedOn}`} />
@@ -41,12 +58,9 @@ export function ApprovalComputedNote({ computedOn }: { computedOn: string }) {
 }
 
 export function LiveDecisionLamp({ repositoryName, buildStatus }: { repositoryName: string; buildStatus: string }) {
-  const [status, setStatus] = useState(buildStatus);
-  useEffect(() => {
-    const entry = dashboardData.repositories.find((item) => item.snapshot.repository.name === repositoryName);
-    if (!entry) return;
-    setStatus(entryDecisionAt(entry, new Date()).status);
-  }, [repositoryName]);
+  const now = useViewNow();
+  const entry = dashboardData.repositories.find((item) => item.snapshot.repository.name === repositoryName);
+  const status = now === null || !entry ? buildStatus : entryDecisionAt(entry, new Date(now)).status;
   const lamp = lampFor(status);
   return <StatusLamp tone={lamp.tone} label={{ en: lamp.en, zh: lamp.zh }} />;
 }
@@ -58,13 +72,10 @@ export function LiveExpiryComparison({
   repository: string;
   initial: { tone: LampTone; label: LocalizedText };
 }) {
-  const [row, setRow] = useState(initial);
-  useEffect(() => {
-    const section = homepagePreviousComparisons(new Date()).find((item) => item.repository === repository);
-    const expiry = section?.rows.find((item) => item.id === "expiry");
-    if (!expiry) return;
-    setRow({ tone: expiry.tone as LampTone, label: expiry.label });
-  }, [repository]);
+  const now = useViewNow();
+  const section = now === null ? null : homepagePreviousComparisons(new Date(now)).find((item) => item.repository === repository);
+  const expiry = section?.rows.find((item) => item.id === "expiry");
+  const row = expiry ? { tone: expiry.tone as LampTone, label: expiry.label } : initial;
   return <StatusLamp tone={row.tone} label={row.label} />;
 }
 
@@ -79,22 +90,16 @@ type CriterionItem = {
 };
 
 export function ExitCriterionArticle({ repository, item }: { repository: string; item: CriterionItem }) {
-  const [view, setView] = useState({ tone: item.tone, label: item.resultLabel, evidence: item.evidence });
-  useEffect(() => {
-    const entry = dashboardData.repositories.find((row) => row.snapshot.repository.name === repository);
-    if (!entry) return;
-    const pages = exitCriteriaByRepo([{
-      repository,
-      decision: entryDecisionAt(entry, new Date()).view,
-    }]);
-    const criterion = pages[0]?.criteria.find((row: { id: string }) => row.id === item.id);
-    if (!criterion) return;
-    setView({
-      tone: criterion.tone as LampTone,
-      label: criterion.resultLabel,
-      evidence: criterion.evidence,
-    });
-  }, [repository, item.id]);
+  const now = useViewNow();
+  const built = { tone: item.tone, label: item.resultLabel, evidence: item.evidence };
+  const entry = now === null ? null : dashboardData.repositories.find((row) => row.snapshot.repository.name === repository);
+  const criterion = now === null || !entry ? null : exitCriteriaByRepo([{
+    repository,
+    decision: entryDecisionAt(entry, new Date(now)).view,
+  }])[0]?.criteria.find((row: { id: string }) => row.id === item.id);
+  const view = criterion
+    ? { tone: criterion.tone as LampTone, label: criterion.resultLabel, evidence: criterion.evidence }
+    : built;
 
   return (
     <article className="exit-criteria-row" data-criterion={item.id} id={item.anchorId}>

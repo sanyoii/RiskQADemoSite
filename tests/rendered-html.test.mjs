@@ -201,7 +201,7 @@ test("old design URLs meta-refresh to the archived history page", async () => {
     const html = await response.text();
     assert.match(html, /http-equiv="refresh"/, route);
     assert.match(html, /content="0; url=\/test-status\/history\/"/, route);
-    assert.match(html, /rel="canonical"/, route);
+    assert.equal(html.match(/rel="canonical"/g)?.length, 1, route);
     assert.match(html, /href="https:\/\/sanyoii\.github\.io\/test-status\/history\/"/, route);
     assert.match(html, /<a href="\/test-status\/history\/">/, route);
     const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";

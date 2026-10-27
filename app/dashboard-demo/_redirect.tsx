@@ -19,7 +19,6 @@ export function LegacyRedirect({ from }: { from: string }) {
       { en: `${from} now opens the archived design history.`, zh: `${from} 現在會開啟已封存的設計演進。` },
     )}>
       <meta httpEquiv="refresh" content={`0; url=${HISTORY_URL}`} />
-      <link rel="canonical" href={HISTORY_CANONICAL} />
       <header className="masthead decision-masthead ct-topbar">
         <div className="ct-topbar-main">
           <div className="ct-topbar-left">

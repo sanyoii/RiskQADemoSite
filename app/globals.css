@@ -1178,9 +1178,24 @@ html[data-theme="light"] {
 .ct-matrix-scroll,
 .ct-repo-runs-grid,
 .ct-run-card,
-.case-table-wrap {
+.case-table-wrap,
+.ct-workbench-box,
+.ct-wb-groups,
+.ct-wb-group-card,
+.ct-split-inspector,
+.ct-inspector-left,
+.ct-inspector-right,
+.execution-log {
   min-width: 0;
   max-width: 100%;
+}
+.execution-log {
+  overflow-x: auto;
+}
+.ct-shell .execution-log code,
+.ct-shell .execution-log pre {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .ct-matrix-scroll {
   overflow-x: auto;
@@ -2742,7 +2757,6 @@ table.lt-bach-table {
 .decision-bar-compact-body { margin-top: 0.6rem; }
 @media (max-width: 480px) {
   :root { --anchor-scroll-offset: 8rem; }
-  html, body { overflow-x: clip; }
   .ct-shell,
   .ct-matrix-panel,
   .ct-matrix-scroll,

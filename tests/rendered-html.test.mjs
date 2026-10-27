@@ -198,7 +198,8 @@ test("design evolution is secondary and contains no duplicated current status", 
   assert.equal(response.status, 200);
   const html = await response.text();
   for (const value of ["Design evolution", "Objective Cards", "Release Gate Flow", "Repo Portfolio Matrix", "retired as live dashboards"]) assert.ok(html.includes(value));
-  assert.doesNotMatch(html, /cex-market-data-quality-lab|Formal Go approved|aria-label="Coverage: Level 2/);
+  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+  assert.doesNotMatch(main, /cex-market-data-quality-lab|Formal Go approved|aria-label="Coverage: Level 2/);
   assert.match(html,/Six synthetic scenarios/);
   assert.equal((html.match(/class="decision-next-action"/g) ?? []).length,6);
 });
@@ -288,6 +289,85 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
 });
 
 
+
+test("shared shell renders lamps, the decision bar, enabled nav items, and the language toggle", async () => {
+  const routes = ["/", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc", "/run-records", "/run-records/fail-demo"];
+  const lamps = [
+    ["good", "✓", "Good", "良好"],
+    ["warning", "!", "Attention", "注意"],
+    ["bad", "✕", "Poor", "差"],
+    ["unknown", "?", "Unknown", "未知"],
+  ];
+  const navLabels = ["Decision", "Run records", "Failure drill", "QA templates"];
+  const hiddenNavLabels = ["Exit criteria", "Risks", "Design history"];
+
+  for (const route of routes) {
+    const html = await (await render(route)).text();
+    assert.match(html, /<html[^>]*\blang="en"/, route);
+    const enButton = html.match(/<button\b(?=[^>]*\bid="qaLanguageEn")(?=[^>]*\baria-pressed="(true|false)")[^>]*>/);
+    const zhButton = html.match(/<button\b(?=[^>]*\bid="qaLanguageZh")(?=[^>]*\baria-pressed="(true|false)")[^>]*>/);
+    assert.equal(enButton?.[1], "true", `${route} English toggle`);
+    assert.equal(zhButton?.[1], "false", `${route} Chinese toggle`);
+    assert.notEqual(enButton?.[1], zhButton?.[1], route);
+
+    const bar = html.match(/<section class="decision-bar-shell"[\s\S]*?<\/section>/)?.[0];
+    assert.ok(bar, `${route} decision bar`);
+    assert.match(bar, /<details class="decision-bar-compact">/);
+    assert.doesNotMatch(bar, /<details class="decision-bar-compact"[^>]*\bopen/);
+    assert.match(bar, /<summary\b(?=[^>]*\bclass="decision-bar-summary")(?=[^>]*\baria-expanded="false")[^>]*>/);
+    for (const name of ["cex-market-data-quality-lab", "sanyoii.github.io", "William"]) assert.ok(bar.includes(name), `${route} ${name}`);
+    assert.match(bar, /data-en="Hold" data-zh="暫緩"/);
+    assert.match(bar, /data-marker="archived-demo"/);
+    assert.match(bar, /data-en="Archived demo" data-zh="封存展示"/);
+    assert.match(bar, /data-en="Decision maker" data-zh="決策人"/);
+    assert.match(bar, /data-en="Decision date" data-zh="決策日"/);
+    assert.match(bar, /data-en="Expiry" data-zh="到期日"/);
+    assert.match(bar, /data-en="Next step" data-zh="下一步"/);
+    assert.ok(bar.includes("2026-09-07 23:11 (Taipei time)"));
+    assert.ok(bar.includes("2026-09-07 23:11（台北時間）"));
+    assert.ok(bar.includes("2026-09-08 23:59 (Taipei time)"));
+    assert.ok(bar.includes("2026-09-06 20:51 (Taipei time)"));
+    assert.ok(bar.includes("2026-09-13 20:40 (Taipei time)"));
+    assert.ok(bar.includes("Do not re-approve in this revision. Retest after the revamp launches and record a new approval period; keep the historical approval."));
+    assert.ok(bar.includes("本次不重新核准。改版上線後重測，並重新記錄核准與效期；保留歷史核准。"));
+    assert.ok(bar.includes("Hold · Archived demo · 2"));
+    assert.doesNotMatch(bar, /範例資料|Sample data|同範圍重測後重新核准/);
+    for (const [tone, symbol, en, zh] of lamps) {
+      const escaped = symbol.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const lamp = new RegExp(`class="status-lamp status-lamp--${tone}"[\\s\\S]{0,240}?${escaped}[\\s\\S]{0,240}?data-en="${en}" data-zh="${zh}"`);
+      assert.match(bar, lamp, `${route} ${tone}`);
+    }
+    assert.match(bar, /data-en="Hold" data-zh="暫緩"/);
+
+    const nav = html.match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0];
+    assert.ok(nav, `${route} nav`);
+    assert.equal((nav.match(/class="ct-nav-pill(?:\s|")/g) ?? []).length, navLabels.length, route);
+    for (const label of navLabels) assert.ok(nav.includes(`data-en="${label}"`), `${route} ${label}`);
+    for (const label of hiddenNavLabels) assert.equal(nav.includes(`data-en="${label}"`), false, `${route} still shows ${label}`);
+    assert.doesNotMatch(nav, /\/exit-criteria|\/risks(?:\/|$)|\/history(?:\/|$)/);
+  }
+});
+
+test("shared nav links only to routes that exist in the build", async () => {
+  const html = await (await render("/")).text();
+  const nav = html.match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0];
+  assert.ok(nav);
+  const hrefs = [...nav.matchAll(/\b(?:href|data-href-en|data-href-zh)="([^"]+)"/g)].map((match) => match[1]);
+  assert.ok(hrefs.length > 0);
+  for (const href of hrefs) {
+    assert.doesNotMatch(href, /\/exit-criteria|\/risks(?:\/|$)|\/history(?:\/|$)/, href);
+    const withoutHash = href.split("#")[0];
+    if (withoutHash.startsWith("/qa-templates/")) {
+      const relative = withoutHash.slice(1);
+      const builtPath = relative.endsWith("/") ? `${relative}index.html` : relative;
+      await access(new URL(`../dist/client/${builtPath}`, import.meta.url));
+      continue;
+    }
+    const pathname = withoutHash === "/" ? "/" : withoutHash.replace(/\/$/, "");
+    const response = await render(pathname);
+    assert.equal(response.status, 200, href);
+  }
+});
 
 test("public navigation reaches the offline QA sample entry", async () => {
   const html = await (await render("/")).text();

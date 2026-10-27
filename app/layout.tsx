@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DecisionBar } from "./_decision-bar";
 import { LanguageToggle } from "./_language-toggle";
 
 const deploymentOrigin = "https://sanyoii.github.io/test-status";
@@ -32,6 +33,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" suppressHydrationWarning>
       <body>
         <LanguageToggle />
+        <DecisionBar />
         {children}
       </body>
     </html>

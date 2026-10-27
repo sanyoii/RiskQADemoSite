@@ -487,6 +487,11 @@ test("exit criteria, risks, and design history pages match the P3 contract", asy
   assert.match(excluded, /Load and production reconnect testing/);
   assert.match(excluded, /Browsers other than Chromium/);
   assert.doesNotMatch(excluded, /data-severity|Severity|>S1<|>S2<|>S3</);
+  const accounts = excluded.match(/Authenticated accounts, orders and funds[\s\S]*?<\/li>/)?.[0] ?? "";
+  assert.match(accounts, /data-en="also listed as S2" data-zh="另列 S2"/);
+  assert.match(accounts, /href="#RISK-auth-orders-funds"/);
+  assert.match(riskHtml, /<tr\b[^>]*\bid="RISK-auth-orders-funds"[^>]*\bdata-severity="S2"/);
+  assert.equal((excluded.match(/data-zh="另列 S2"/g) ?? []).length, 1);
   assert.doesNotMatch(riskHtml, /範例資料|Sample data/);
 
   const historyHtml = await (await render("/history")).text();

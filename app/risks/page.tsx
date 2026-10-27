@@ -24,8 +24,17 @@ function Cell({ en, zh, children }: { en: string; zh: string; children: ReactNod
   return <td data-label={en} data-label-en={en} data-label-zh={zh}>{children}</td>;
 }
 
+const S2_ACCOUNTS_ID = "RISK-auth-orders-funds";
+
+function exclusionAlsoListedAsS2(item: { repository: string; en: string }, s2: RiskRow | undefined) {
+  return s2?.id === S2_ACCOUNTS_ID
+    && item.repository === s2.repository
+    && item.en === "Authenticated accounts, orders and funds";
+}
+
 export default function RisksPage() {
   const rows = sortRisks(catalog.risks) as RiskRow[];
+  const s2Accounts = rows.find((risk) => risk.id === S2_ACCOUNTS_ID);
   const excluded = exclusionScope(dashboardData.repositories) as Array<{ repository: string; en: string; zh: string }>;
   return (
     <RecordPage
@@ -59,7 +68,7 @@ export default function RisksPage() {
           </thead>
           <tbody>
             {rows.map((risk) => (
-              <tr data-risk-id={risk.id} data-severity={risk.severity} data-synthetic={risk.synthetic ? "true" : "false"} key={risk.id}>
+              <tr id={risk.id} data-risk-id={risk.id} data-severity={risk.severity} data-synthetic={risk.synthetic ? "true" : "false"} key={risk.id}>
                 <Cell en="Severity" zh="嚴重度"><code>{risk.severity}</code></Cell>
                 <Cell en="Repository" zh="專案">{risk.repository}</Cell>
                 <Cell en="Risk" zh="風險"><T en={risk.title.en} zh={risk.title.zh} /></Cell>
@@ -89,6 +98,9 @@ export default function RisksPage() {
             <li data-repository={item.repository} key={`${item.repository}-${item.en}`}>
               <span>{item.repository}</span>
               <T en={item.en} zh={item.zh} />
+              {exclusionAlsoListedAsS2(item, s2Accounts) ? (
+                <a href={`#${S2_ACCOUNTS_ID}`}><T en="also listed as S2" zh="另列 S2" /></a>
+              ) : null}
             </li>
           ))}
         </ul>

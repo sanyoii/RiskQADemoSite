@@ -152,12 +152,12 @@
           },
           "owner": "William",
           "handling": {
-            "zh": "維持排除；改版上線後重測時再評估",
-            "en": "Keep the exclusion; reassess it when retesting after the revamp launches."
+            "zh": "改版上線後跟封存的兩個 repo 一起重測",
+            "en": "Retest together with the two archived repos after the revamp launches."
           },
           "dueAt": null,
-          "relatedExitCriterion": "EC-2",
-          "source": "refs/decided-decisions 2026-10-27 15:38"
+          "relatedExitCriterion": null,
+          "source": "William 2026-10-27 17:28 Asia/Taipei"
         },
         {
           "id": "RISK-deterministic",

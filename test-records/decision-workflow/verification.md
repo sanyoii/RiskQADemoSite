@@ -17,7 +17,7 @@ Raw receipts/logs: `artifacts/2026-09-06T10-06-44-646Z/receipt.json` and its six
 | `node node_modules/typescript/bin/tsc --noEmit --incremental false` | Pass, exit 0 |
 | `GITHUB_PAGES=true npm run build` | Pass, exit 0; 7 prerendered routes including 404 |
 | `node scripts/prepare-pages-artifact.mjs --source dist/client --output out/pages-2026-09-06T10-06-44-646Z` | Pass, exit 0; directory routes and prefixed assets exported |
-| `npm run gate:release` | **Fail, exit 1**: `EVIDENCE_STALE:releaseAssessment.expiresAt`; expected unresolved product evidence, not a software regression |
+| `npm run gate:release` | **Fail, exit 1**: `EVIDENCE_STALE:releaseAssessment.expiresAt`; expected unresolved product evidence, not a software regression. Policy 3.0.0 reports approval expiry as `APPROVAL_EXPIRED`. This cell keeps the 2026-09-06 result. |
 
 The earlier recorded full run remains at `artifacts/2026-09-06T10-04-38-864Z/receipt.json`; it had 41 contract tests before the final uncommitted-subject defense/test was added. It is not silently replaced by this later run.
 

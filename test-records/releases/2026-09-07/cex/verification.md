@@ -33,7 +33,7 @@ Commands ran in this repository:
 ## Limits and delivery state
 
 - Initial Git reads were Blocked by repository ownership under both sandbox and user identities. Command-scoped `safe.directory` allowed read-only checks; no global Git configuration or ownership change was made.
-- The preceding diagnosis returned `EVIDENCE_STALE:releaseAssessment.expiresAt` for the old packet. This remains valid historical evidence; its dates were not rewritten.
+- The preceding diagnosis returned `EVIDENCE_STALE:releaseAssessment.expiresAt` for the old packet. This remains valid historical evidence; its dates were not rewritten. Policy 3.0.0 reports approval expiry as `APPROVAL_EXPIRED` and does not rename this historical result.
 - No fresh human/manual, independent review, production trading-system, load, or production reconnect verification is claimed.
 - Browser interaction and production read-back: Skipped in this renewal; no deployment was authorized. The preceding turn's HTTP/TLS failures are not evidence of a successful online check.
 - Existing Portfolio approval was not renewed. No CEX source code changed.

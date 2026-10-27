@@ -6,7 +6,7 @@ Environment: installed Chrome with existing user extensions; local Vinext at por
 
 | Check | Actual result |
 |---|---|
-| Dashboard hydration | Initial Unknown/unverified became Unknown/expired after the current clock check; both repositories showed `EVIDENCE_STALE` and `RELEASE_EVIDENCE_REQUIRED` |
+| Dashboard hydration | Initial Unknown/unverified became Unknown/expired after the current clock check; both repositories showed `EVIDENCE_STALE` and `RELEASE_EVIDENCE_REQUIRED`. Policy 3.0.0 now reports approval expiry as `APPROVAL_EXPIRED` and at least Hold. This cell keeps the 2026-09-06 observation. |
 | Homepage EN→ZH and reload | `lang=zh-Hant`, `目前 0 / 2 個就緒`; zero mismatches against `data-zh` after hydration |
 | Dynamic replay in Chinese | Proposed fix → Hold / `no-rerun`; keyboard Enter on hypothetical passing rerun → Hold / `no-owner-approval`; zero localized-text mismatches |
 | Desktop English replay | Hold retained on language change; zero localized-text mismatches; no horizontal overflow at viewport 1280 |

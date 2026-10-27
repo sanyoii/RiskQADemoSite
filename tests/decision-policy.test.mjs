@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
-import { policyErrors, decisionView, safeEvidenceUrl, POLICY_VERSION, EXPIRED_APPROVAL_PRECEDENCE, EXIT_CRITERIA, STATUS_PRECEDENCE_NOTE, isSyntheticExample } from "../lib/decision-policy.mjs";
+import { policyErrors, decisionView, safeEvidenceUrl, POLICY_VERSION, EXPIRED_APPROVAL_PRECEDENCE, EXIT_CRITERIA, STATUS_PRECEDENCE_NOTE, isSyntheticExample, requireExpiredApprovalPrecedence } from "../lib/decision-policy.mjs";
 import { replayDecision } from "../lib/replay-policy.mjs";
 import { suggestedAction } from "../lib/decision-actions.mjs";
 
@@ -12,6 +12,7 @@ test("non-Ready suggestions reflect the cause without changing the decision", ()
   assert.equal(suggestedAction(view("ready")), null);
   for (const [state, expected] of [
     [view("unknown", ["EVIDENCE_STALE"]), /Rerun time-sensitive/],
+    [view("hold", ["APPROVAL_EXPIRED"]), /Retest/],
     [view("unknown", ["RELEASE_EVIDENCE_REQUIRED"]), /owner review/],
     [view("unknown", ["DATA_NOT_FRESH", "RELEASE_REVIEW_INVALID"]), /Refresh evidence/],
     [view("unknown", ["DATA_NOT_FRESH"], "unreachable"), /Restore the evidence source/],
@@ -117,6 +118,28 @@ function assertActions(view) {
   }
 }
 
+test("blocked plus untrusted data is downgraded to Unknown", () => {
+  const snapshot = structuredClone(base);
+  snapshot.releaseAssessment.status = "blocked";
+  snapshot.provenance.sourceSha = "f".repeat(40);
+  const view = decisionView(snapshot, { now });
+  assert.equal(view.status, "unknown");
+  const mismatch = view.reasons.find(reason => reason.code === "SUBJECT_SHA_MISMATCH");
+  assert.ok(mismatch);
+  assert.match(mismatch.action.en, /\S/);
+  assert.match(mismatch.action.zh, /\p{Script=Han}/u);
+  assert.equal(view.reasons.some(reason => reason.code === "BLOCKED_RECORDED"), false);
+});
+
+test("undefined or invalid EXPIRED_APPROVAL_PRECEDENCE fails closed", () => {
+  assert.equal(EXPIRED_APPROVAL_PRECEDENCE, "blocked-first");
+  assert.doesNotThrow(() => requireExpiredApprovalPrecedence("blocked-first"));
+  for (const value of [undefined, null, "", "ready-first", "blocked"]) {
+    assert.throws(() => requireExpiredApprovalPrecedence(value), /EXPIRED_APPROVAL_PRECEDENCE_INVALID/);
+    assert.throws(() => decisionView(base, { now, precedence: value }), /EXPIRED_APPROVAL_PRECEDENCE_INVALID/);
+  }
+});
+
 test("expired approval precedence is blocked-first and lists every reason", () => {
   assert.equal(POLICY_VERSION, "3.0.0");
   assert.equal(EXPIRED_APPROVAL_PRECEDENCE, "blocked-first");
@@ -166,6 +189,14 @@ test("historical snapshots still validate and both current repositories are Hold
   const catalog = JSON.parse(readFileSync(new URL("../data/risks.json", import.meta.url)));
   assert.equal(isSyntheticExample({ synthetic: true }), true);
   assert.equal(isSyntheticExample({ synthetic: false }), false);
+  const accounts = catalog.risks.find(risk => risk.id === "RISK-auth-orders-funds");
+  assert.equal(accounts.repository, "cex-market-data-quality-lab");
+  assert.equal(accounts.severity, "S2");
+  assert.equal(accounts.owner, "William");
+  assert.equal(accounts.dueAt, null);
+  assert.equal(accounts.relatedExitCriterion, null);
+  assert.equal(accounts.handling.zh, "改版上線後跟封存的兩個 repo 一起重測");
+  assert.equal(accounts.handling.en, "Retest together with the two archived repos after the revamp launches.");
   assert.equal(catalog.risks.length, 6);
   assert.equal(catalog.risks.some(risk => isSyntheticExample(risk) || /範例資料/.test(JSON.stringify(risk))), false);
   const s2 = catalog.risks.filter(risk => risk.severity === "S2");

@@ -10,7 +10,7 @@
     "build": "vinext build",
     "start": "vinext start",
     "validate:data": "node scripts/validate-registry.mjs data/repos/index.json",
-    "test:contract": "node --test tests/status-contract.test.mjs tests/status-cli.test.mjs tests/sync-status.test.mjs tests/registry.test.mjs tests/pages-artifact.test.mjs tests/template-contract.test.mjs tests/decision-policy.test.mjs tests/release-evidence.test.mjs tests/release-files.test.mjs tests/homepage-brief.test.mjs tests/decision-bar-expanded.test.mjs",
+    "test:contract": "node --test tests/status-contract.test.mjs tests/status-cli.test.mjs tests/sync-status.test.mjs tests/registry.test.mjs tests/pages-artifact.test.mjs tests/template-contract.test.mjs tests/decision-policy.test.mjs tests/release-evidence.test.mjs tests/release-files.test.mjs tests/homepage-brief.test.mjs tests/decision-bar-expanded.test.mjs tests/risks-schema.test.mjs tests/p3-pages.test.mjs",
     "test:playbooks": "node --test tests/playbooks/playbook-contract.test.mjs && node tests/playbooks/validate-fixture.mjs tests/playbooks/fixtures",
     "test:rendered": "npm run build && node --test tests/rendered-html.test.mjs",
     "test": "npm run validate:archive && npm run test:contract && npm run test:playbooks && npm run test:rendered",

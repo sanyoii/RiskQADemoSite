@@ -10,12 +10,12 @@ export const NAV_ITEMS: Array<{
   bilingualTemplates?: boolean;
 }> = [
   { id: "dashboard", en: "Decision", zh: "決策", path: "/", enabled: true },
-  { id: "exit-criteria", en: "Exit criteria", zh: "結束條件", path: "/exit-criteria", enabled: false },
-  { id: "risks", en: "Risks", zh: "風險", path: "/risks", enabled: false },
+  { id: "exit-criteria", en: "Exit criteria", zh: "結束條件", path: "/exit-criteria", enabled: true },
+  { id: "risks", en: "Risks", zh: "風險", path: "/risks", enabled: true },
   { id: "run-records", en: "Run records", zh: "執行紀錄", path: "/run-records", enabled: true },
   { id: "fail-demo", en: "Failure drill", zh: "失敗演練", path: "/run-records/fail-demo", enabled: true },
-  { id: "templates", en: "QA templates", zh: "QA 範本", path: "/qa-templates/", enabled: true, bilingualTemplates: true },
-  { id: "dashboard-demo", en: "Design history", zh: "設計演進", path: "/history", enabled: false },
+  { id: "templates", en: "QA templates", zh: "QA 範本", path: "/templates", enabled: true },
+  { id: "dashboard-demo", en: "Design history", zh: "設計演進", path: "/history", enabled: true },
 ];
 
 export function navRoute(id: ActivePageId): { enabled: boolean; path: string } {

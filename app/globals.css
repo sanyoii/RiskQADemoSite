@@ -1954,6 +1954,9 @@ html[data-theme="light"] .ct-run-details .case-table th {
   font-weight: 700;
   margin: 0.15rem 0 0;
 }
+@media (max-width: 48rem) {
+  .ct-defect-dl { grid-template-columns: 1fr !important; }
+}
 
 /* Subpage 3: ADR Evolution Board & Policy Cards Grid */
 .ct-adr-board {

@@ -26,19 +26,49 @@ function listen(server) {
   });
 }
 
-async function waitForPage(port) {
-  for (let attempt = 0; attempt < 50; attempt += 1) {
-    try {
-      const response = await fetch(`http://127.0.0.1:${port}/json/list`);
-      const pages = await response.json();
-      const page = pages.find((item) => item.type === "page" && item.webSocketDebuggerUrl);
-      if (page) return page.webSocketDebuggerUrl;
-    } catch {
-      // Chrome is still starting.
+const DEBUG_PORT_WAIT_MS = 25_000;
+
+function collectStderr(stream) {
+  let text = "";
+  stream.setEncoding("utf8");
+  stream.on("data", (chunk) => {
+    text += chunk;
+    if (text.length > 16_000) text = text.slice(-16_000);
+  });
+  return () => text.trim();
+}
+
+async function waitForPage(userData, chrome, stderr) {
+  const deadline = Date.now() + DEBUG_PORT_WAIT_MS;
+  const portFile = join(userData, "DevToolsActivePort");
+  let port = 0;
+  while (Date.now() < deadline) {
+    if (chrome.exitCode !== null) break;
+    if (!port) {
+      try {
+        const parsed = Number.parseInt(await readFile(portFile, "utf8"), 10);
+        if (Number.isInteger(parsed) && parsed > 0) port = parsed;
+      } catch {
+        // DevToolsActivePort is not written yet.
+      }
+    }
+    if (port) {
+      try {
+        const response = await fetch(`http://127.0.0.1:${port}/json/list`);
+        if (response.ok) {
+          const pages = await response.json();
+          const page = pages.find((item) => item.type === "page" && item.webSocketDebuggerUrl);
+          if (page) return page.webSocketDebuggerUrl;
+        }
+      } catch {
+        // Chrome is still starting.
+      }
     }
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
-  throw new Error("Chrome debugging port did not open");
+  const detail = stderr().trim();
+  const exited = chrome.exitCode !== null ? ` Chrome exited with code ${chrome.exitCode}.` : "";
+  throw new Error(`Chrome debugging port did not open.${exited}${detail ? `\n${detail}` : ""}`);
 }
 
 function connect(wsUrl) {
@@ -83,7 +113,7 @@ async function readState(send) {
   return JSON.parse(evaluated.result.value);
 }
 
-test("decision bar summary aria-expanded follows open for Enter and Space", { timeout: 30_000 }, async (t) => {
+test("decision bar summary aria-expanded follows open for Enter and Space", { timeout: 60_000 }, async (t) => {
   const bin = chromeBin();
   if (!bin) {
     t.skip("Chrome is not installed");
@@ -111,18 +141,18 @@ test("decision bar summary aria-expanded follows open for Enter and Space", { ti
   });
   const pagePort = await listen(server);
   const userData = await mkdtemp(join(tmpdir(), "decision-bar-"));
-  const debugPort = 20000 + Math.floor(Math.random() * 20000);
   const chrome = spawn(bin, [
     "--headless=new",
     "--disable-gpu",
     "--no-sandbox",
     "--disable-dev-shm-usage",
-    `--remote-debugging-port=${debugPort}`,
+    "--remote-debugging-port=0",
     `--user-data-dir=${userData}`,
     "about:blank",
-  ], { stdio: "ignore" });
+  ], { stdio: ["ignore", "ignore", "pipe"] });
+  const stderr = collectStderr(chrome.stderr);
   try {
-    const send = await connect(await waitForPage(debugPort));
+    const send = await connect(await waitForPage(userData, chrome, stderr));
     await send("Page.enable");
     await send("Runtime.enable");
     await send("Emulation.setFocusEmulationEnabled", { enabled: true });
@@ -151,6 +181,10 @@ test("decision bar summary aria-expanded follows open for Enter and Space", { ti
       await press(send, " ", "Space", 32, " ");
       assert.deepEqual(await readState(send), { open: false, expanded: "false" }, `Space collapses ${cycle}`);
     }
+  } catch (error) {
+    const detail = stderr().trim();
+    if (detail && error instanceof Error && !error.message.includes(detail)) error.message = `${error.message}\n${detail}`;
+    throw error;
   } finally {
     chrome.kill();
     server.close();

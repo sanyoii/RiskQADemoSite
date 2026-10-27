@@ -45,71 +45,57 @@ export function ControlTowerThemeSwitch() {
   );
 }
 
-export type ActivePageId = "dashboard" | "run-records" | "fail-demo" | "dashboard-demo";
+export type ActivePageId = "dashboard" | "exit-criteria" | "risks" | "run-records" | "fail-demo" | "templates" | "dashboard-demo";
+
+const NAV_ITEMS: Array<{
+  id: ActivePageId;
+  en: string;
+  zh: string;
+  path: string;
+  bilingualTemplates?: boolean;
+}> = [
+  { id: "dashboard", en: "Decision", zh: "決策", path: "/" },
+  { id: "exit-criteria", en: "Exit criteria", zh: "結束條件", path: "/exit-criteria" },
+  { id: "risks", en: "Risks", zh: "風險", path: "/risks" },
+  { id: "run-records", en: "Run records", zh: "執行紀錄", path: "/run-records" },
+  { id: "fail-demo", en: "Failure drill", zh: "失敗演練", path: "/run-records/fail-demo" },
+  { id: "templates", en: "QA templates", zh: "QA 範本", path: "/qa-templates/", bilingualTemplates: true },
+  { id: "dashboard-demo", en: "Design history", zh: "設計演進", path: "/dashboard-demo" },
+];
 
 export function ControlTowerNav({ active }: { active: ActivePageId }) {
+  const items = NAV_ITEMS.map((item) => {
+    if (item.bilingualTemplates) {
+      const hrefEn = `${siteHref(item.path)}index.en.html`;
+      return { ...item, href: hrefEn, hrefEn, hrefZh: siteHref(item.path) };
+    }
+    return { ...item, href: siteHref(item.path), hrefEn: undefined, hrefZh: undefined };
+  });
   return (
     <nav className="decision-nav ct-nav ct-hybrid-nav" aria-label="Primary navigation" data-aria-label-en="Primary navigation" data-aria-label-zh="主要導覽">
       <div className="ct-nav-pills">
-        <a className="ct-nav-pill" href={`${siteHref("/qa-templates/")}index.en.html`} data-href-en={`${siteHref("/qa-templates/")}index.en.html`} data-href-zh={siteHref("/qa-templates/")}>
-          <strong><T en="QA templates and examples" zh="QA 文件範本與示例" /></strong>
-          <code className="ct-nav-badge">v1.3 · EN / ZH</code>
-        </a>
-        {active === "dashboard" ? (
-          <span className="ct-nav-pill is-active" aria-current="page">
-            <span className="ct-nav-step">00</span>
-            <strong><T en="Low-Tech Board" zh="主控白板" /></strong>
-            <code className="ct-nav-badge ct-nb-blue">2 Unknown · 1 Hold</code>
-          </span>
-        ) : (
-          <a className="ct-nav-pill" href={siteHref("/")}>
-            <span className="ct-nav-step">00</span>
-            <strong><T en="Low-Tech Board" zh="主控白板" /></strong>
-            <code className="ct-nav-badge ct-nb-blue">2 Unknown · 1 Hold</code>
-          </a>
-        )}
-
-        {active === "run-records" ? (
-          <span className="ct-nav-pill is-active" aria-current="page">
-            <span className="ct-nav-step">01</span>
-            <strong><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></strong>
-            <code className="ct-nav-badge ct-nb-green">67 Checks · 34 Cases</code>
-          </span>
-        ) : (
-          <a className="ct-nav-pill" href={siteHref("/run-records")}>
-            <span className="ct-nav-step">01</span>
-            <strong><T en="Test Cases and Run Records" zh="Test Cases 與執行記錄" /></strong>
-            <code className="ct-nav-badge ct-nb-green">67 Checks · 34 Cases</code>
-          </a>
-        )}
-
-        {active === "fail-demo" ? (
-          <span className="ct-nav-pill is-active" aria-current="page">
-            <span className="ct-nav-step">02</span>
-            <strong><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></strong>
-            <code className="ct-nav-badge ct-nb-red">DEF-MDQ-004 · Hold</code>
-          </span>
-        ) : (
-          <a className="ct-nav-pill" href={siteHref("/run-records/fail-demo")}>
-            <span className="ct-nav-step">02</span>
-            <strong><T en="Failure and Decision Replay" zh="失敗案例與決定回放" /></strong>
-            <code className="ct-nav-badge ct-nb-red">DEF-MDQ-004 · Hold</code>
-          </a>
-        )}
-
-        {active === "dashboard-demo" ? (
-          <span className="ct-nav-pill is-active" aria-current="page">
-            <span className="ct-nav-step">03</span>
-            <strong><T en="Design evolution" zh="設計演進" /></strong>
-            <code className="ct-nav-badge ct-nb-purple">Low-Tech v3 · 6 Rules</code>
-          </span>
-        ) : (
-          <a className="ct-nav-pill" href={siteHref("/dashboard-demo")}>
-            <span className="ct-nav-step">03</span>
-            <strong><T en="Design evolution" zh="設計演進" /></strong>
-            <code className="ct-nav-badge ct-nb-purple">Low-Tech v3 · 6 Rules</code>
-          </a>
-        )}
+        {items.map((item) => {
+          const label = <strong><T en={item.en} zh={item.zh} /></strong>;
+          if (item.id === active) {
+            return (
+              <span className="ct-nav-pill is-active" aria-current="page" key={item.id}>
+                {label}
+              </span>
+            );
+          }
+          if (item.hrefEn && item.hrefZh) {
+            return (
+              <a className="ct-nav-pill" href={item.href} data-href-en={item.hrefEn} data-href-zh={item.hrefZh} key={item.id}>
+                {label}
+              </a>
+            );
+          }
+          return (
+            <a className="ct-nav-pill" href={item.href} key={item.id}>
+              {label}
+            </a>
+          );
+        })}
       </div>
       <ControlTowerThemeSwitch />
     </nav>

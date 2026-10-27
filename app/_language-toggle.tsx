@@ -1,12 +1,39 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useSyncExternalStore } from "react";
+import {
+  LANGUAGE_STORAGE_KEY,
+  htmlLangFor,
+  languageFromHtmlLang,
+  parseStoredLanguage,
+  type SiteLanguage,
+} from "./_i18n";
 
-type Language = "en" | "zh";
+const LANGUAGE_CHANGE = "qa-language-change";
+let memoryLanguage: SiteLanguage | null = null;
 
-const STORE = "wl-lang";
+function subscribeLanguage(callback: () => void) {
+  window.addEventListener("storage", callback);
+  window.addEventListener(LANGUAGE_CHANGE, callback);
+  return () => {
+    window.removeEventListener("storage", callback);
+    window.removeEventListener(LANGUAGE_CHANGE, callback);
+  };
+}
 
-function applyLanguage(language: Language) {
+function readLanguage(): SiteLanguage {
+  try {
+    return parseStoredLanguage(localStorage.getItem(LANGUAGE_STORAGE_KEY));
+  } catch {
+    return memoryLanguage ?? "en";
+  }
+}
+
+function serverLanguage(): SiteLanguage {
+  return "en";
+}
+
+function applyLanguage(language: SiteLanguage) {
   const key = language === "zh" ? "zh" : "en";
 
   document.querySelectorAll<HTMLElement>("[data-en][data-zh]").forEach((node) => {
@@ -38,58 +65,61 @@ function applyLanguage(language: Language) {
     if (meta && description) meta.content = description;
   }
 
-  document.documentElement.lang = key === "zh" ? "zh-Hant" : "en";
-  const button = document.getElementById("qaLanguageToggle");
+  document.documentElement.lang = htmlLangFor(key);
   const enTab = document.getElementById("qaLanguageEn");
   const zhTab = document.getElementById("qaLanguageZh");
+  enTab?.setAttribute("aria-pressed", key === "en" ? "true" : "false");
+  zhTab?.setAttribute("aria-pressed", key === "zh" ? "true" : "false");
   enTab?.classList.toggle("is-active", key === "en");
   zhTab?.classList.toggle("is-active", key === "zh");
-  button?.setAttribute("aria-label", key === "en" ? "Switch to Chinese / 切換為中文" : "切換為英文 / Switch to English");
   return key;
 }
 
 export function LanguageToggle() {
+  const language = useSyncExternalStore(subscribeLanguage, readLanguage, serverLanguage);
+
   useEffect(() => {
-    let saved: string | null = null;
-    try {
-      saved = localStorage.getItem(STORE);
-    } catch {
-      saved = null;
-    }
-    const initial = saved === "zh" ? "zh" : "en";
-    applyLanguage(initial);
-    // Dynamic clock/replay updates must keep the selected language too.
+    applyLanguage(language);
+  }, [language]);
+
+  useEffect(() => {
     const options = { subtree: true, childList: true, attributes: true, attributeFilter: ["data-en", "data-zh", "data-aria-label-en", "data-aria-label-zh", "data-href-en", "data-href-zh"] };
     const observer = new MutationObserver(() => {
       observer.disconnect();
-      applyLanguage(document.documentElement.lang === "zh-Hant" ? "zh" : "en");
+      applyLanguage(languageFromHtmlLang(document.documentElement.lang));
       observer.observe(document.body, options);
     });
     observer.observe(document.body, options);
     return () => observer.disconnect();
   }, []);
 
-  function toggleLanguage() {
-    const next = document.documentElement.lang === "zh-Hant" ? "en" : "zh";
-    applyLanguage(next);
+  function selectLanguage(next: SiteLanguage) {
+    memoryLanguage = next;
     try {
-      localStorage.setItem(STORE, next);
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, next);
     } catch {
-      return;
+      // Storage can be blocked. The in-memory choice still drives this page.
     }
+    applyLanguage(next);
+    window.dispatchEvent(new Event(LANGUAGE_CHANGE));
   }
 
   return (
-    <button
+    <div
       className="qa-language-toggle"
       id="qaLanguageToggle"
-      type="button"
-      onClick={toggleLanguage}
-      aria-label="Switch to Chinese / 切換為中文"
+      role="group"
+      aria-label="Language"
+      data-aria-label-en="Language"
+      data-aria-label-zh="語言"
     >
-      <span className="is-active" id="qaLanguageEn">EN</span>
+      <button type="button" id="qaLanguageEn" aria-pressed={language === "en"} onClick={() => selectLanguage("en")}>
+        EN
+      </button>
       <span className="qa-language-separator" aria-hidden="true">/</span>
-      <span id="qaLanguageZh">中</span>
-    </button>
+      <button type="button" id="qaLanguageZh" aria-pressed={language === "zh"} onClick={() => selectLanguage("zh")}>
+        中文
+      </button>
+    </div>
   );
 }

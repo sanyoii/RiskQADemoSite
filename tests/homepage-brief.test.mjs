@@ -29,9 +29,10 @@ test("comparison lamp color follows the row text, and the postponed expiry is re
   assert.equal(rows.find((row) => row.id === "results").tone, "good");
 });
 
-test("a postponed expiry that is still inside the validity period is not the red phrase", () => {
+test("a postponed expiry that is still within its validity period is not the red phrase", () => {
   const rows = comparisonRows(previous, current, new Date("2026-09-08T12:00:00+08:00"));
   const expiry = rows.find((row) => row.id === "expiry");
+  assert.equal(expiry.label.en, "↑ Postponed, still within its validity period");
   assert.equal(expiry.label.zh, "↑ 延後，仍在效期內");
   assert.equal(expiry.tone, "good");
   assert.equal(expiry.tone, comparisonTone(expiry.label.zh));

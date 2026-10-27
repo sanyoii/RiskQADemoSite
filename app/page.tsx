@@ -6,6 +6,7 @@ import { ControlTowerNav } from "./_shared-nav";
 import { homepageExitCriteria, homepagePreviousComparisons, homepageRisks } from "./dashboard-data";
 import { navRoute, type ActivePageId } from "./_nav-items";
 import { StatusLamp, type LampTone } from "./_status-lamp";
+import { LiveExpiryComparison } from "./_view-time-approval";
 
 function PendingPageLink({ id, children }: { id: ActivePageId; children: ReactNode }) {
   const route = navRoute(id);
@@ -81,7 +82,9 @@ function HomeBrief() {
             {section.rows.map((row) => (
               <li className="home-compare-row" data-comparison-row={row.id} key={row.id}>
                 <span><T en={row.field.en} zh={row.field.zh} /></span>
-                <StatusLamp tone={row.tone as LampTone} label={row.label} />
+                {row.id === "expiry"
+                  ? <LiveExpiryComparison repository={section.repository} initial={{ tone: row.tone as LampTone, label: row.label }} />
+                  : <StatusLamp tone={row.tone as LampTone} label={row.label} />}
               </li>
             ))}
           </ul>

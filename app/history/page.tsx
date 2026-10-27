@@ -29,8 +29,8 @@ export default function HistoryPage() {
       </p>
       <p>
         <T
-          en="This page is archived. The three previous URLs still open their original pages in this build, and they do not redirect yet. A later change will send them to /test-status/history/. This page is that destination."
-          zh="此頁已封存。三個舊網址在這個版本仍開啟原本的頁面，不會自動跳轉。之後會改為跳到 /test-status/history/。本頁就是那個目標。"
+          en="This page is archived. The three previous addresses now use a meta refresh to /test-status/history/, with a canonical link and a link you can click. This page is that destination."
+          zh="此頁已封存。三個舊網址現在用 meta refresh 轉到 /test-status/history/，並附上 canonical 與可點連結。本頁就是那個目標。"
         />
       </p>
       <table className="history-url-table">
@@ -43,12 +43,12 @@ export default function HistoryPage() {
           </tr>
         </thead>
         <tbody>
-          {history.previous.map((item: { shortName: string; route: string; published: string; en: string; zh: string }) => (
+          {history.previous.map((item: { shortName: string; route: string; published: string; en: string; zh: string; redirectsNow: boolean }) => (
             <tr data-history-route={item.route} key={item.route}>
               <td><code>{item.shortName}</code><p><T en={item.en} zh={item.zh} /></p></td>
               <td><a href={siteHref(item.route)}>{item.route}</a></td>
               <td><code>{item.published}</code></td>
-              <td><T en="No" zh="否" /></td>
+              <td data-redirects={item.redirectsNow ? "yes" : "no"}><T en={item.redirectsNow ? "Yes" : "No"} zh={item.redirectsNow ? "是" : "否"} /></td>
             </tr>
           ))}
         </tbody>

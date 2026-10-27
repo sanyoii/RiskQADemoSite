@@ -1,17 +1,8 @@
 import { dashboardData } from "./dashboard-data";
+import { ApprovalComputedNote, LiveDecisionLamp } from "./_view-time-approval";
 import { DecisionBarDetails } from "./_decision-bar-details";
 import { T, type LocalizedText } from "./_i18n";
-import { StatusLamp, type LampTone } from "./_status-lamp";
-
-type DecisionStatus = "ready" | "at-risk" | "hold" | "blocked" | "unknown";
-
-const STATUS_LAMP: Record<DecisionStatus, { tone: LampTone } & LocalizedText> = {
-  ready: { tone: "good", en: "Ready", zh: "就緒" },
-  "at-risk": { tone: "warning", en: "At risk", zh: "有風險" },
-  hold: { tone: "warning", en: "Hold", zh: "暫緩" },
-  blocked: { tone: "bad", en: "Blocked", zh: "受阻" },
-  unknown: { tone: "unknown", en: "Unknown", zh: "未知" },
-};
+import { StatusLamp } from "./_status-lamp";
 
 type BarRepo = {
   name: string;
@@ -38,11 +29,6 @@ function formatTaipei(iso: string): LocalizedText {
   return { en: `${stamp} (Taipei time)`, zh: `${stamp}（台北時間）` };
 }
 
-function statusLamp(status: string) {
-  if (status in STATUS_LAMP) return STATUS_LAMP[status as DecisionStatus];
-  return STATUS_LAMP.unknown;
-}
-
 function barSummary(repos: BarRepo[]): LocalizedText {
   const count = repos.length;
   const allHold = repos.every((repo) => repo.status === "hold");
@@ -63,12 +49,11 @@ function DecisionRows({ repos }: { repos: BarRepo[] }) {
   return (
     <ol className="decision-bar-rows">
       {repos.map((repo) => {
-        const lamp = statusLamp(repo.status);
         const decided = formatTaipei(repo.decidedAt);
         const expires = formatTaipei(repo.expiresAt);
         return (
           <li className="decision-bar-row" data-status={repo.status} key={repo.name}>
-            <StatusLamp tone={lamp.tone} label={{ en: lamp.en, zh: lamp.zh }} />
+            <LiveDecisionLamp repositoryName={repo.name} buildStatus={repo.status} />
             {repo.archived ? (
               <span className="archived-demo" data-marker="archived-demo">
                 <T en="Archived demo" zh="封存展示" />
@@ -130,6 +115,7 @@ export function DecisionBar() {
       data-aria-label-zh="發布決策"
     >
       <h2 className="decision-bar-title"><T en="Release decisions" zh="發布決策" /></h2>
+      <ApprovalComputedNote computedOn={dashboardData.evaluatedOn} />
       <div className="decision-bar-full">
         <LampKey />
         <DecisionRows repos={repos} />

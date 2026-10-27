@@ -68,7 +68,7 @@ For subsequent releases, add `previousReleaseEvidence` to the separately control
 
 A software-green archive site may accurately display expired evidence. Publishing that truthful archive and approving a product release are different decisions. This change does not authorize either publication or a new product Go.
 
-The browser checks validity every 30 seconds and on focus/visibility change. Without JavaScript or a confirmed clock it shows Unknown, never build-time Ready. Browser time is advisory and can be wrong; run the CLI gate with the trusted execution clock immediately before an actual release. A built page is a snapshot, not a live poller of repositories.
+Approval expiry is calculated again when a browser views the page. The decision bar, the exit-criteria lamps, and the homepage expiry comparison call the same policy with that clock. Without JavaScript those surfaces keep the build-time result and show `computed on YYYY-MM-DD` (the Taipei calendar date stored as `evaluatedOn`). Lamps keep a symbol and the status text. The hidden repository cards still recheck every 30 seconds and on focus or visibility change; until that clock is confirmed they stay Unknown. Browser time is advisory and can be wrong; run the CLI gate with the trusted execution clock immediately before an actual release. A built page is a snapshot, not a live poller of repositories.
 
 ## Snapshot activation and failure recovery
 
@@ -97,7 +97,7 @@ The real Dashboard replay lists only recorded runs, the original decision and ex
 | Pilot `src/status-policy.js`, `trusted-authority.js` | Preserve as historical reference; migrate rules, not fixed pilot subject or private trust anchors |
 | Pilot append-only runs/events and snapshot sync | Ported to release-packet comparison, ordered attempts, content-addressed snapshots and failure receipts |
 | Hardcoded per-repo result translations/counts | Removed; source facts come from snapshots, current explanation from policy |
-| Sample A/B/C, AC, ABC active dashboards | Replaced with design evolution + compatible links; no duplicate status source |
+| Sample A/B/C, AC, ABC active dashboards | Archived design history. `/dashboard-demo`, `/dashboard-demo/abc`, and `/dashboard-demo/ac` meta-refresh to `/test-status/history/` |
 | Shared `_template-parts.tsx` and unused sample CSS | Removed after the formal page no longer imports them |
 | First-screen effort bars / fixed Level 2+ | Removed; actual area levels and effort remain in expandable evidence details |
 | Nine forms per small release | Replaced by three-record QA-Lite guidance; template library retained |
@@ -112,7 +112,7 @@ When a retained previous packet is supplied, affected required cases from `chang
 
 Policy 3.0.0 adds **Hold**. `EXPIRED_APPROVAL_PRECEDENCE` must be `"blocked-first"`. Any other value, including undefined, is invalid: `decisionView` throws `EXPIRED_APPROVAL_PRECEDENCE_INVALID` and does not return a status. The rank order is Blocked, then Hold or Unknown at the same rank, then At Risk, then Ready. 優先順序：Blocked，其次 Hold 或 Unknown，再來 At Risk，最後 Ready。
 
-An expired approval (`expiresAt <= now`) is at least Hold. Ready or At Risk plus expiry becomes Hold. A coherent Blocked record stays Blocked when the approval is also expired. An unresolved S1 likewise prevents Ready and is Hold when the snapshot is otherwise trusted. Approval expiry is `APPROVAL_EXPIRED`. `EVIDENCE_STALE` is not that finding; it remains only the run-evidence freshness code.
+An expired approval (`expiresAt <= now`) is at least Hold. Ready or At Risk plus expiry becomes Hold. A coherent Blocked record stays Blocked when the approval is also expired. An unresolved S1 likewise prevents Ready and is Hold when the snapshot is otherwise trusted. Approval expiry is `APPROVAL_EXPIRED`. `EVIDENCE_STALE` is not that finding. `policyErrors` does not emit `EVIDENCE_STALE`: a public snapshot run has no freshness field, so the snapshot policy has nothing to compare with the clock. The public snapshot does not detect stale run evidence. Time-sensitive run freshness is `RUN_STALE` on the release packet (`lib/release-evidence.mjs`), and that code already feeds exit criterion EC-1 when the packet review reports it. The suggestion list still understands `EVIDENCE_STALE` when a caller supplies the code. This revision does not add a second detector.
 
 Every triggering reason is listed. Omitting a lighter reason because a more severe state won is not allowed. Each reason has a suggested action in English and Traditional Chinese. When Hold and Unknown both apply, both reasons stay in the list and the displayed state is Unknown. Blocked plus untrusted data, for example a subject SHA mismatch, an unsafe evidence URL, or a corrupt structure, is downgraded to Unknown. The trust-failure reason is listed with its suggested action. The recorded Blocked status is not treated as a fact.
 

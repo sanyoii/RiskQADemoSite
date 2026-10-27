@@ -65,7 +65,7 @@ test("design history names the three previous URLs and the later published desti
   const history = historyRoutes();
   assert.equal(history.archived.zh, "已封存");
   assert.equal(history.destination, "/test-status/history/");
-  assert.equal(history.redirectsInThisBuild, false);
+  assert.equal(history.redirectsInThisBuild, true);
   assert.deepEqual(history.previous.map((item) => item.route), [
     "/dashboard-demo",
     "/dashboard-demo/abc",
@@ -74,6 +74,6 @@ test("design history names the three previous URLs and the later published desti
   assert.deepEqual(history.previous.map((item) => item.shortName), ["/dashboard-demo", "/abc", "/ac"]);
   for (const item of history.previous) {
     assert.match(item.published, /^\/test-status\/dashboard-demo\/(abc\/|ac\/)?$/);
-    assert.equal(item.redirectsNow, false);
+    assert.equal(item.redirectsNow, true);
   }
 });

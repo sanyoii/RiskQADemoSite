@@ -4,7 +4,7 @@
 
 QA Decision Desk 把 repository、CI、manual check 與 release review 的結果整理成可追溯的發布判斷介面。每個 repo 先回答：「現在能不能發、缺什麼、誰要補什麼。」歷史決定與證據收在明細，不當成「目前核准」。
 
-[線上儀表板](https://sanyoii.github.io/test-status/) · [Test Cases 與執行記錄](https://sanyoii.github.io/test-status/run-records/) · [Fail 與 Log Demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [設計樣本](https://sanyoii.github.io/test-status/dashboard-demo/) · [原始碼](https://github.com/sanyoii/RiskQADemoSite)
+[線上儀表板](https://sanyoii.github.io/test-status/) · [Test Cases 與執行記錄](https://sanyoii.github.io/test-status/run-records/) · [Fail 與 Log Demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [設計演進](https://sanyoii.github.io/test-status/history/) · [原始碼](https://github.com/sanyoii/RiskQADemoSite)
 
 ## 構想
 
@@ -73,7 +73,7 @@ Coverage 的 `0`、`1`、`1+`、`2`、`2+`、`3` 是測試深度，不是程式�
 
 舊 sample 與原始日期仍保留。2026-09-06 已加入限定自動化作品集範圍的 owner-reviewed packets：CEX `fc1e060`（40 deterministic＋5 live），Portfolio `643b017`（22 項本機 Chromium／靜態檢查）。William 自我審查並揭露角色重疊。這不是獨立審查，也不是正式產品認證。CEX 核准到期時間為 2026-09-07 20:40，Portfolio 為 2026-09-13 20:40（台灣時間）。目前是否有效仍由 gate 與瀏覽器時間檢查決定。舊的 Pass 不會因到期被刪除。
 
-每張不是 Ready 的卡片顯示一項由實際原因產生的下一步。[六種合成範例](https://sanyoii.github.io/test-status/dashboard-demo/#next-action-examples) 用相同規則示範過期、待核准、無法取得來源、缺少證據與審查、No-Go 與 At Risk，不改動真實狀態。
+每張不是 Ready 的卡片顯示一項由實際原因產生的下一步。文案來自該原因，不改動真實狀態。`/dashboard-demo`、`/dashboard-demo/abc`、`/dashboard-demo/ac` 會以 meta refresh 轉到[設計演進](https://sanyoii.github.io/test-status/history/)。
 
 Fail Demo 使用合成資料，示範 Test Case Fail、示範 S1、新 Run 重測（原 Fail 保留）與 No-Go。它不是目前兩個 repository 的正式結果，也不是簽核。
 

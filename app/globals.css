@@ -24,7 +24,16 @@
   --lamp-warning-border: rgba(146, 86, 0, 0.5);
   --lamp-bad-border: rgba(132, 43, 43, 0.5);
   --lamp-unknown-border: rgba(79, 88, 99, 0.5);
+  --anchor-scroll-offset: 43rem;
 }
+
+@media (min-width: 521px) { :root { --anchor-scroll-offset: 40rem; } }
+@media (min-width: 561px) { :root { --anchor-scroll-offset: 36rem; } }
+@media (min-width: 641px) { :root { --anchor-scroll-offset: 32rem; } }
+@media (min-width: 761px) { :root { --anchor-scroll-offset: 25rem; } }
+@media (min-width: 1001px) { :root { --anchor-scroll-offset: 22rem; } }
+@media (min-width: 1201px) { :root { --anchor-scroll-offset: 20rem; } }
+@media (min-width: 1400px) { :root { --anchor-scroll-offset: 18rem; } }
 
 * { box-sizing: border-box; }
 html { background: var(--paper); color: var(--ink); scroll-behavior: smooth; }
@@ -141,7 +150,7 @@ p { max-width: 70ch; }
 .record-intro { max-width: 62rem; }
 .record-subject { margin-top: 1.5rem; padding: 1rem; border: 1px solid var(--rule); background: var(--panel); }
 .run-record-list { display: grid; gap: 1.5rem; }
-.run-record { scroll-margin-top: 1rem; padding: 1.25rem; border: 1px solid var(--ink); background: var(--panel); box-shadow: var(--shadow); }
+.run-record { scroll-margin-top: var(--anchor-scroll-offset); padding: 1.25rem; border: 1px solid var(--ink); background: var(--panel); box-shadow: var(--shadow); }
 .run-record:target { outline: 4px solid var(--signal); outline-offset: 4px; }
 .run-record-heading { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; }
 .run-record-heading p { margin: .35rem 0 0; }
@@ -1165,8 +1174,22 @@ html[data-theme="light"] {
   padding: 0.75rem 1rem;
   margin-bottom: 1.5rem;
 }
+.ct-matrix-panel,
+.ct-matrix-scroll,
+.ct-repo-runs-grid,
+.ct-run-card,
+.case-table-wrap {
+  min-width: 0;
+  max-width: 100%;
+}
 .ct-matrix-scroll {
   overflow-x: auto;
+}
+/* scroll-margin only. Pairing it with scroll-padding-top stacks in Chrome and doubles the offset. */
+details[id],
+tr[id],
+.exit-criteria-row[id] {
+  scroll-margin-top: var(--anchor-scroll-offset);
 }
 table.ct-sig-table {
   width: 100%;
@@ -2630,6 +2653,12 @@ table.lt-bach-table {
   letter-spacing: 0;
   line-height: 1.3;
 }
+.approval-computed-on {
+  margin: 0.35rem 0 0.6rem;
+  color: var(--muted);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 0.75rem;
+}
 .decision-bar-legend,
 .decision-bar-row {
   display: flex;
@@ -2712,6 +2741,24 @@ table.lt-bach-table {
 .decision-bar-compact summary::-webkit-details-marker { display: none; }
 .decision-bar-compact-body { margin-top: 0.6rem; }
 @media (max-width: 480px) {
+  :root { --anchor-scroll-offset: 8rem; }
+  html, body { overflow-x: clip; }
+  .ct-shell,
+  .ct-matrix-panel,
+  .ct-matrix-scroll,
+  .ct-repo-runs-grid,
+  .ct-run-card,
+  .case-table-wrap,
+  .ct-topbar,
+  .ct-section-bar,
+  .ct-chronology-index,
+  .ct-chrono-card { min-width: 0; max-width: 100%; }
+  .ct-matrix-scroll,
+  .case-table-wrap { overflow-x: auto; }
+  .ct-inspect-link,
+  .ct-repo-cell-title,
+  .ct-chrono-card strong,
+  .ct-section-title { white-space: normal; }
   .decision-bar-shell { padding-right: 7.75rem; }
   .decision-bar-compact summary { font-size: 0.82rem; line-height: 1.4; }
   .decision-bar-title {

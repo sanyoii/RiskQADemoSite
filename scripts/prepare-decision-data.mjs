@@ -14,6 +14,12 @@ const releaseRecords = JSON.parse(await readFile(new URL("../data/release-record
 const riskCatalog = JSON.parse(await readFile(new URL("../data/risks.json", import.meta.url), "utf8"));
 const risks = Array.isArray(riskCatalog.risks) ? riskCatalog.risks : [];
 const evaluatedAt = new Date();
+const evaluatedOn = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "Asia/Taipei",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(evaluatedAt);
 const repositories = [];
 for (const entry of registry.repositories) {
   const snapshot = projectPublicStatus(JSON.parse(await readFile(resolve(dirname(registryPath), entry.snapshot), "utf8")), { historical: true });
@@ -79,5 +85,5 @@ for (const entry of registry.repositories) {
     snapshotDigest: createHash("sha256").update(JSON.stringify(snapshot)).digest("hex"),
   });
 }
-await writeFile(new URL("../data/decision-index.json", import.meta.url), JSON.stringify({ policyVersion: POLICY_VERSION, repositories }, null, 2) + "\n");
+await writeFile(new URL("../data/decision-index.json", import.meta.url), JSON.stringify({ policyVersion: POLICY_VERSION, evaluatedOn, repositories }, null, 2) + "\n");
 console.log(`PREPARED ${repositories.length} sanitized historical snapshots with unified run metrics; current eligibility is checked again in the browser.`);

@@ -194,35 +194,19 @@ test("failure result icon styles do not constrain localized text", async () => {
   assert.match(css, /\.fail-result\s*>\s*span\[aria-hidden="true"\]\s*\{/);
 });
 
-test("design evolution is secondary and contains no duplicated current status", async () => {
-  const response = await render("/dashboard-demo");
-  assert.equal(response.status, 200);
-  const html = await response.text();
-  for (const value of ["Design evolution", "Objective Cards", "Release Gate Flow", "Repo Portfolio Matrix", "retired as live dashboards"]) assert.ok(html.includes(value));
-  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
-  assert.doesNotMatch(main, /cex-market-data-quality-lab|Formal Go approved|aria-label="Coverage: Level 2/);
-  assert.match(html,/Six synthetic scenarios/);
-  assert.equal((html.match(/class="decision-next-action"/g) ?? []).length,6);
-});
-
-test("legacy A+C URL remains compatible without a duplicate dashboard", async () => {
-  const response = await render("/dashboard-demo/ac");
-  assert.equal(response.status, 200);
-  const html = await response.text();
-  assert.match(html, /A \+ C/);
-  assert.match(html, /Retired sample/);
-  assert.match(html, /href="\/"/);
-  assert.doesNotMatch(html, /st-merged|17 fresh cases|data-status="ready"/);
-});
-
-test("legacy A+B+C URL remains compatible without a duplicate dashboard", async () => {
-  const response = await render("/dashboard-demo/abc");
-  assert.equal(response.status, 200);
-  const html = await response.text();
-  assert.ok(html.includes("A + B + C"));
-  assert.match(html, /Retired sample/);
-  assert.match(html, /href="\/dashboard-demo\/"/);
-  assert.doesNotMatch(html, /st-merged|17 fresh cases|data-status="ready"/);
+test("old design URLs meta-refresh to the archived history page", async () => {
+  for (const route of ["/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc"]) {
+    const response = await render(route);
+    assert.equal(response.status, 200, route);
+    const html = await response.text();
+    assert.match(html, /http-equiv="refresh"/, route);
+    assert.match(html, /content="0; url=\/test-status\/history\/"/, route);
+    assert.match(html, /rel="canonical"/, route);
+    assert.match(html, /href="https:\/\/sanyoii\.github\.io\/test-status\/history\/"/, route);
+    assert.match(html, /<a href="\/test-status\/history\/">/, route);
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
+    assert.doesNotMatch(main, /cex-market-data-quality-lab|Formal Go approved|data-status="ready"/, route);
+  }
 });
 
 test("removes starter-only files and keeps public metadata complete", async () => {
@@ -467,6 +451,11 @@ test("QA template page links to nine readable copies", async () => {
 test("exit criteria, risks, and design history pages match the P3 contract", async () => {
   const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
   assert.match(css, /\.exit-criteria-row\s*\{[^}]*grid-template-columns:\s*minmax\(0,\s*1fr\)\s*minmax\(0,\s*1\.25fr\)/);
+  assert.match(css, /--anchor-scroll-offset:\s*43rem/);
+  assert.match(css, /@media \(min-width:\s*1400px\)\s*\{\s*:root\s*\{\s*--anchor-scroll-offset:\s*18rem;\s*\}\s*\}/);
+  assert.match(css, /@media \(max-width:\s*480px\)\s*\{[^}]*--anchor-scroll-offset:\s*8rem/);
+  assert.match(css, /details\[id\],\s*tr\[id\],\s*\.exit-criteria-row\[id\]\s*\{[^}]*scroll-margin-top:\s*var\(--anchor-scroll-offset\)/);
+  assert.doesNotMatch(css, /scroll-padding-top:\s*var\(--anchor-scroll-offset\)/);
 
   const exitHtml = await (await render("/exit-criteria")).text();
   for (const name of ["cex-market-data-quality-lab", "sanyoii.github.io"]) {
@@ -501,7 +490,21 @@ test("exit criteria, risks, and design history pages match the P3 contract", asy
   assert.match(historyHtml, /href="\/dashboard-demo\/abc\/"/);
   assert.match(historyHtml, /href="\/dashboard-demo\/ac\/"/);
   assert.match(historyHtml, /\/test-status\/history\//);
-  assert.match(historyHtml, /data-zh="否"/);
+  assert.match(historyHtml, /data-redirects="yes"/);
+  assert.match(historyHtml, /data-zh="是"/);
+  assert.doesNotMatch(historyHtml, /不會自動跳轉/);
   assert.match(historyHtml, /data-synthetic="true"/);
   assert.match(historyHtml, /data-zh="範例資料"/);
+});
+
+test("approval expiry keeps the build-time lamp and a computed-on label before JavaScript runs", async () => {
+  const index = JSON.parse(await readFile(new URL("../data/decision-index.json", import.meta.url), "utf8"));
+  assert.match(index.evaluatedOn, /^\d{4}-\d{2}-\d{2}$/);
+  const html = await (await render("/")).text();
+  const bar = html.match(/<section class="decision-bar-shell"[\s\S]*?<\/section>/)?.[0] ?? "";
+  assert.match(bar, new RegExp(`data-en="computed on ${index.evaluatedOn}"`));
+  assert.match(bar, new RegExp(`data-zh="計算於 ${index.evaluatedOn}"`));
+  assert.match(bar, /class="status-lamp-symbol"/);
+  assert.match(bar, /data-en="Hold" data-zh="暫緩"/);
+  assert.match(bar, /class="status-lamp-text"/);
 });

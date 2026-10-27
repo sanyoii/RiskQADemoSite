@@ -4,7 +4,7 @@
 
 QA Decision Desk turns repository, CI, manual-check, and release-review results into a traceable release-decision interface. For each repo it answers first: can we ship now, what is missing, and who has to supply it. Historical decisions and evidence stay in the details and are not treated as the current approval.
 
-[Live Dashboard](https://sanyoii.github.io/test-status/) · [Test Cases and run records](https://sanyoii.github.io/test-status/run-records/) · [Fail and log demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [Design samples](https://sanyoii.github.io/test-status/dashboard-demo/) · [Source](https://github.com/sanyoii/RiskQADemoSite)
+[Live Dashboard](https://sanyoii.github.io/test-status/) · [Test Cases and run records](https://sanyoii.github.io/test-status/run-records/) · [Fail and log demo](https://sanyoii.github.io/test-status/run-records/fail-demo/) · [Design history](https://sanyoii.github.io/test-status/history/) · [Source](https://github.com/sanyoii/RiskQADemoSite)
 
 ## Idea
 
@@ -73,7 +73,7 @@ Coverage values `0`, `1`, `1+`, `2`, `2+`, and `3` are test depth, not a code-co
 
 Old samples and the original dates remain. On 2026-09-06, owner-reviewed packets were added for a limited automated-portfolio scope: CEX `fc1e060` (40 deterministic + 5 live) and Portfolio `643b017` (22 local Chromium／static checks). William self-reviewed and disclosed the role overlap. That is not an independent review or a formal product certification. The CEX approval expiry is 2026-09-07 20:40, and the Portfolio expiry is 2026-09-13 20:40 (Taiwan time). Whether either is still valid is decided by the gate and the browser time check. An old Pass is not deleted when it expires.
 
-Each card that is not Ready shows one next step taken from the actual cause. [Six synthetic examples](https://sanyoii.github.io/test-status/dashboard-demo/#next-action-examples) use the same rules to show expiry, waiting for approval, an unreachable source, missing evidence and review, No-Go, and At Risk. They do not change real status.
+Each card that is not Ready shows one next step taken from the actual cause. The wording comes from that cause and does not change real status. `/dashboard-demo`, `/dashboard-demo/abc`, and `/dashboard-demo/ac` meta-refresh to [design history](https://sanyoii.github.io/test-status/history/).
 
 The Fail Demo uses synthetic data to show a Test Case Fail, a demo S1, a new Run for the retest (the original Fail stays), and No-Go. It is not the official result of the two repositories, and it is not a sign-off.
 

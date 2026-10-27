@@ -1,0 +1,88 @@
+{
+  "risks": [
+    {
+      "id": "RISK-approval-expired-cex",
+      "repository": "cex-market-data-quality-lab",
+      "severity": "S1",
+      "title": { "zh": "核准過期", "en": "Approval expired" },
+      "owner": "William",
+      "handling": {
+        "zh": "封存展示，本次不重新核准，改版上線後重測",
+        "en": "Archived display. Do not re-approve in this revision; retest after the revamp launches."
+      },
+      "dueAt": null,
+      "relatedExitCriterion": "EC-4",
+      "source": "refs/decided-decisions 2026-10-27 15:38"
+    },
+    {
+      "id": "RISK-approval-expired-portfolio",
+      "repository": "sanyoii.github.io",
+      "severity": "S1",
+      "title": { "zh": "核准過期", "en": "Approval expired" },
+      "owner": "William",
+      "handling": {
+        "zh": "封存展示，本次不重新核准，改版上線後重測",
+        "en": "Archived display. Do not re-approve in this revision; retest after the revamp launches."
+      },
+      "dueAt": null,
+      "relatedExitCriterion": "EC-4",
+      "source": "refs/decided-decisions 2026-10-27 15:38"
+    },
+    {
+      "id": "RISK-auth-orders-funds",
+      "repository": "cex-market-data-quality-lab",
+      "severity": "S2",
+      "title": { "zh": "已登入帳戶、下單與資金未測", "en": "Authenticated accounts, orders, and funds were not tested" },
+      "owner": "William",
+      "handling": {
+        "zh": "維持排除；改版上線後重測時再評估",
+        "en": "Keep the exclusion; reassess it when retesting after the revamp launches."
+      },
+      "dueAt": null,
+      "relatedExitCriterion": "EC-2",
+      "source": "refs/decided-decisions 2026-10-27 15:38"
+    },
+    {
+      "id": "RISK-deterministic",
+      "repository": "cex-market-data-quality-lab",
+      "severity": "S3",
+      "title": { "zh": "決定性檢查證據已過期", "en": "Deterministic check evidence has expired" },
+      "owner": "William",
+      "handling": {
+        "zh": "改版上線後跟封存的兩個 repo 一起重測",
+        "en": "Retest together with the two archived repos after the revamp launches."
+      },
+      "dueAt": null,
+      "relatedExitCriterion": "EC-1",
+      "source": "refs/decided-decisions 2026-10-27 15:43"
+    },
+    {
+      "id": "RISK-live",
+      "repository": "cex-market-data-quality-lab",
+      "severity": "S3",
+      "title": { "zh": "即時檢查證據已過期", "en": "Live check evidence has expired" },
+      "owner": "William",
+      "handling": {
+        "zh": "改版上線後跟封存的兩個 repo 一起重測",
+        "en": "Retest together with the two archived repos after the revamp launches."
+      },
+      "dueAt": null,
+      "relatedExitCriterion": "EC-1",
+      "source": "refs/decided-decisions 2026-10-27 15:43"
+    },
+    {
+      "id": "RISK-chromium",
+      "repository": "sanyoii.github.io",
+      "severity": "S3",
+      "title": { "zh": "Chromium 檢查證據已過期", "en": "Chromium check evidence has expired" },
+      "owner": "William",
+      "handling": {
+        "zh": "改版上線後跟封存的兩個 repo 一起重測",
+        "en": "Retest together with the two archived repos after the revamp launches."
+      },
+      "dueAt": null,
+      "relatedExitCriterion": "EC-1",
+      "source": "refs/decided-decisions 2026-10-27 15:43"
+    }
+  ]
+}

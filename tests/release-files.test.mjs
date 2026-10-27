@@ -36,9 +36,12 @@ test("approved owner packets bind artifacts and expire without rewriting histori
     assert.equal(ready.status,"ready");
     assert.equal(suggestedAction(ready),null);
     const expired = decisionView(snapshot,{now:new Date(snapshot.releaseAssessment.expiresAt),enforceReview:true,releaseReview:review});
-    assert.equal(expired.status,"unknown");
+    assert.equal(expired.status,"hold");
     assert.equal(expired.historicalStatus,"ready");
-    assert.match(suggestedAction(expired).en,/Refresh evidence|Rerun/);
+    assert.equal(expired.approvalValidity.expired,true);
+    assert.ok(expired.reasons.some(reason => reason.code === "APPROVAL_EXPIRED"));
+    assert.match(suggestedAction(expired).en,/Retest/);
+    assert.match(suggestedAction(expired).zh,/重測/);
     assert.equal((await checkRegistryRelease(entry,registryPath,snapshot,{now:new Date(snapshot.releaseAssessment.expiresAt)})).eligible,false);
     if (snapshot.repository.name === "sanyoii.github.io") {
       assert.deepEqual(packet.runs.map(r=>r.status),["Blocked","Pass"]);

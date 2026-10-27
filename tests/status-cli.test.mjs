@@ -19,5 +19,5 @@ test("validate-status exits non-zero for an expired Ready snapshot", () => {
   });
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /EVIDENCE_STALE\treleaseAssessment\.expiresAt/);
+  assert.match(result.stderr, /APPROVAL_EXPIRED\treleaseAssessment\.expiresAt/);
 });

@@ -13,7 +13,7 @@ export function DecisionBarDetails({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <details ref={ref} className="decision-bar-compact">
+    <details ref={ref} className="decision-bar-details">
       {children}
     </details>
   );

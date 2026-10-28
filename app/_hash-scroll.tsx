@@ -5,9 +5,8 @@ import { useEffect } from "react";
 const CLEARANCE = 24;
 
 function coverBottom() {
-  const bar = document.querySelector(".decision-bar-shell")?.getBoundingClientRect().bottom ?? 0;
   const toggle = document.querySelector(".qa-language-toggle")?.getBoundingClientRect().bottom ?? 0;
-  return Math.max(bar, toggle, 0);
+  return Math.max(toggle, 0);
 }
 
 function alignHash(force: boolean) {
@@ -31,9 +30,9 @@ export function HashScroll() {
     const correctIfCovered = () => alignHash(false);
     const force = () => alignHash(true);
     const frame = requestAnimationFrame(force);
-    const bar = document.querySelector(".decision-bar-shell");
+    const toggle = document.querySelector(".qa-language-toggle");
     const observer = new ResizeObserver(correctIfCovered);
-    if (bar) observer.observe(bar);
+    if (toggle) observer.observe(toggle);
     window.addEventListener("hashchange", force);
     window.addEventListener("resize", correctIfCovered);
     document.fonts?.ready.then(correctIfCovered).catch(() => {});

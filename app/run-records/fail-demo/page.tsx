@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteHref } from "../../_site";
+import { DecisionBar } from "../../_decision-bar";
 import { ControlTowerNav } from "../../_shared-nav";
 import { DecisionReplay } from "./_decision-replay";
 import { pageLanguageData, T } from "../../_i18n";
@@ -62,7 +63,7 @@ export default function FailedRunDemo() {
           <T en="How a confirmed Fail (TC-MDQ-017) and demo S1 block release. A later Pass needs a new Run; it does not erase this Fail." zh="已確認 Fail（TC-MDQ-017）與示範 S1 會擋住發布。之後的 Pass 必須是新 Run，不會抹掉這次 Fail。" />
         </p>
       </header>
-
+      <DecisionBar />
       <ControlTowerNav active="fail-demo" />
 
       {/* Primary Hero Interactive State Machine: 3-Step Decision Replay */}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { historyRoutes } from "../../lib/p3-pages.mjs";
 import { pageLanguageData, T } from "../_i18n";
+import { DecisionBar } from "../_decision-bar";
 import { ControlTowerNav } from "../_shared-nav";
 
 const history = historyRoutes();
@@ -35,6 +36,7 @@ export function LegacyRedirect({ from }: { from: string }) {
           </div>
         </div>
       </header>
+      <DecisionBar />
       <ControlTowerNav active="dashboard-demo" />
       <p>
         <T

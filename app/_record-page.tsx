@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { siteHref } from "./_site";
 import { pageLanguageData, T, type LocalizedText } from "./_i18n";
+import { DecisionBar } from "./_decision-bar";
 import { ControlTowerNav, type ActivePageId } from "./_shared-nav";
 
 export function RecordPage({
@@ -36,6 +37,7 @@ export function RecordPage({
           </div>
         </div>
       </header>
+      <DecisionBar />
       <ControlTowerNav active={active} />
       <div className="record-page">{children}</div>
       <footer className="footer">

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { DecisionBar } from "./_decision-bar";
 import { HashScroll } from "./_hash-scroll";
 import { LanguageToggle } from "./_language-toggle";
 
@@ -35,7 +34,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <LanguageToggle />
         <HashScroll />
-        <DecisionBar />
         {children}
       </body>
     </html>

@@ -1917,11 +1917,11 @@ html[data-theme="light"] .ct-diff-actual {
 html[data-theme="light"] .ct-run-details .case-table th {
   background: var(--ct-surface-2) !important;
 }
-.ct-defect-card {
-  background: var(--ct-surface) !important;
-  border: 1px solid var(--ct-red-border) !important;
+div.defect-record.ct-defect-card {
+  background: var(--ct-surface);
+  border: 1px solid var(--ct-red-border);
   border-radius: 10px;
-  padding: 0.95rem 1.05rem !important;
+  padding: 0.95rem 1.05rem;
 }
 .ct-defect-card h3 {
   color: var(--ct-heading) !important;

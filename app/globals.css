@@ -72,6 +72,7 @@ a:hover { color: var(--signal); }
   backdrop-filter: blur(.5rem);
 }
 .qa-language-toggle:hover { color: var(--signal); }
+html[data-theme="light"] .qa-language-toggle:hover { color: #b63c26; }
 .qa-language-toggle:active { transform: translateY(1px); }
 .qa-language-toggle button {
   min-width: 2.75rem;
@@ -87,6 +88,8 @@ a:hover { color: var(--signal); }
 }
 .qa-language-toggle button[aria-pressed="true"],
 .qa-language-toggle .is-active { color: var(--signal); }
+html[data-theme="light"] .qa-language-toggle button[aria-pressed="true"],
+html[data-theme="light"] .qa-language-toggle .is-active { color: #b63c26; }
 .qa-language-toggle .qa-language-separator { padding-inline: 0; color: var(--rule); }
 
 @media print {
@@ -2897,6 +2900,7 @@ table.lt-bach-table {
 .exit-criteria-evidence a { overflow-wrap: anywhere; }
 .risk-table-wrap,
 .history-url-table { max-width: 100%; }
+.risk-table-wrap { overflow-x: auto; }
 .risk-table,
 .history-url-table { width: 100%; border-collapse: collapse; }
 .risk-table th,

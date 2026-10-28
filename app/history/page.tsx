@@ -33,26 +33,28 @@ export default function HistoryPage() {
           zh="此頁已封存。三個舊網址現在用 meta refresh 轉到 /test-status/history/，並附上 canonical 與可點連結。本頁就是那個目標。"
         />
       </p>
-      <table className="history-url-table">
-        <thead>
-          <tr>
-            <th scope="col"><T en="Previous name" zh="舊名稱" /></th>
-            <th scope="col"><T en="Address in this build" zh="這個版本的網址" /></th>
-            <th scope="col"><T en="Published path" zh="發布路徑" /></th>
-            <th scope="col"><T en="Redirects now" zh="現在是否跳轉" /></th>
-          </tr>
-        </thead>
-        <tbody>
-          {history.previous.map((item: { shortName: string; route: string; published: string; en: string; zh: string; redirectsNow: boolean }) => (
-            <tr data-history-route={item.route} key={item.route}>
-              <td><code>{item.shortName}</code><p><T en={item.en} zh={item.zh} /></p></td>
-              <td><a href={siteHref(item.route)}>{item.route}</a></td>
-              <td><code>{item.published}</code></td>
-              <td data-redirects={item.redirectsNow ? "yes" : "no"}><T en={item.redirectsNow ? "Yes" : "No"} zh={item.redirectsNow ? "是" : "否"} /></td>
+      <div className="risk-table-wrap">
+        <table className="history-url-table">
+          <thead>
+            <tr>
+              <th scope="col"><T en="Previous name" zh="舊名稱" /></th>
+              <th scope="col"><T en="Address in this build" zh="這個版本的網址" /></th>
+              <th scope="col"><T en="Published path" zh="發布路徑" /></th>
+              <th scope="col"><T en="Redirects now" zh="現在是否跳轉" /></th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {history.previous.map((item: { shortName: string; route: string; published: string; en: string; zh: string; redirectsNow: boolean }) => (
+              <tr data-history-route={item.route} key={item.route}>
+                <td><code>{item.shortName}</code><p><T en={item.en} zh={item.zh} /></p></td>
+                <td><a href={siteHref(item.route)}>{item.route}</a></td>
+                <td><code>{item.published}</code></td>
+                <td data-redirects={item.redirectsNow ? "yes" : "no"}><T en={item.redirectsNow ? "Yes" : "No"} zh={item.redirectsNow ? "是" : "否"} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <p>
         <T
           en={`Later destination: ${history.destination}`}

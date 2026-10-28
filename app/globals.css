@@ -87,6 +87,8 @@ a:hover { color: var(--signal); }
 }
 .qa-language-toggle button[aria-pressed="true"],
 .qa-language-toggle .is-active { color: var(--signal); }
+html[data-theme="light"] .qa-language-toggle button[aria-pressed="true"],
+html[data-theme="light"] .qa-language-toggle .is-active { color: #b63c26; }
 .qa-language-toggle .qa-language-separator { padding-inline: 0; color: var(--rule); }
 
 @media print {
@@ -535,7 +537,7 @@ html[data-theme="light"] {
   --ct-blue-bg: rgba(2, 132, 199, 0.1);
   --ct-blue-border: rgba(2, 132, 199, 0.3);
   --ct-purple: #6d28d9;
-  --ct-amber: #b45309;
+  --ct-amber: #92400e;
   --ct-amber-bg: rgba(245, 158, 11, 0.14);
   --ct-amber-border: rgba(217, 119, 6, 0.4);
   --ct-red: #be123c;
@@ -1650,6 +1652,9 @@ html:not([data-theme="light"]) .defect-record dl > div {
   background: rgba(15, 23, 42, 0.55);
   color: inherit;
 }
+html[data-theme="light"] .ct-wb-tab code {
+  background: var(--ct-surface);
+}
 .ct-wb-groups {
   display: grid;
   gap: 0.85rem;
@@ -1917,6 +1922,7 @@ html[data-theme="light"] .ct-diff-actual {
 html[data-theme="light"] .ct-run-details .case-table th {
   background: var(--ct-surface-2) !important;
 }
+/* div.defect-record.ct-defect-card must stay after the dark-theme .defect-record rule (~line 1392); equal specificity means source order sets the background. */
 div.defect-record.ct-defect-card {
   background: var(--ct-surface);
   border: 1px solid var(--ct-red-border);
@@ -2538,6 +2544,9 @@ table.lt-bach-table {
   color: var(--ct-muted);
   opacity: 0.78;
 }
+html[data-theme="light"] .lt-ms-off {
+  opacity: 1;
+}
 .lt-ms-oos-span {
   grid-column: span 3;
   background: transparent;
@@ -2754,6 +2763,10 @@ table.lt-bach-table {
 .status-lamp--warning { --lamp-ink: var(--lamp-warning); --lamp-bg: var(--lamp-warning-bg); --lamp-border: var(--lamp-warning-border); }
 .status-lamp--bad { --lamp-ink: var(--lamp-bad); --lamp-bg: var(--lamp-bad-bg); --lamp-border: var(--lamp-bad-border); }
 .status-lamp--unknown { --lamp-ink: var(--lamp-unknown); --lamp-bg: var(--lamp-unknown-bg); --lamp-border: var(--lamp-unknown-border); }
+html:not([data-theme="light"]) .status-lamp--unknown {
+  --lamp-ink: #94a3b8;
+  --lamp-bg: #242d40;
+}
 .status-lamp-symbol { font-size: 0.95rem; line-height: 1; }
 .decision-bar-compact { display: none; min-width: 0; max-width: 100%; }
 .decision-bar-compact summary {

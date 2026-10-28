@@ -33,7 +33,8 @@ export default function HistoryPage() {
           zh="此頁已封存。三個舊網址現在用 meta refresh 轉到 /test-status/history/，並附上 canonical 與可點連結。本頁就是那個目標。"
         />
       </p>
-      <div className="risk-table-wrap">
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <div className="risk-table-wrap" tabIndex={0} role="region" aria-label="Previous addresses" data-aria-label-en="Previous addresses" data-aria-label-zh="先前網址">
         <table className="history-url-table">
           <thead>
             <tr>

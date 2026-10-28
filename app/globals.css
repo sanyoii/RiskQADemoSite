@@ -2901,6 +2901,7 @@ table.lt-bach-table {
 .risk-table-wrap,
 .history-url-table { max-width: 100%; }
 .risk-table-wrap { overflow-x: auto; }
+.risk-table-wrap:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
 .risk-table,
 .history-url-table { width: 100%; border-collapse: collapse; }
 .risk-table th,

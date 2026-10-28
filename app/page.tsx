@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { siteHref } from "./_site";
 import { pageLanguageData, T } from "./_i18n";
 import { DecisionDashboard } from "./_dashboard";
+import { DecisionBar } from "./_decision-bar";
 import { ControlTowerNav } from "./_shared-nav";
 import { homepageExitCriteria, homepagePreviousComparisons, homepageRisks } from "./dashboard-data";
 import { navRoute, type ActivePageId } from "./_nav-items";
@@ -117,15 +118,10 @@ export default function Home() {
             <span className="ct-brand-tag ct-sr-compat"><T en="B+C HYBRID · CONTROL TOWER" zh="B+C 混搭黃金版 · 風險決策控制台" /></span>
           </div>
         </div>
-        <div className="ct-topbar-right">
-          <div className="ct-snapshot-pill">
-            <span aria-hidden="true">📌</span>
-            <T en="Pinned snapshot: 2026-09-07 · SHA fc1e060 & 643b017 · expired self-review, not a current Go" zh="鎖定快照：2026-09-07 · SHA fc1e060 與 643b017 · 自審已過期，不是目前的 Go" />
-          </div>
-        </div>
       </div>
       <p className="ct-masthead-sub"><T en="Inspired by James Bach (1997): Do not count vanity numbers — make evidence-based assessments with 3-stage plain-language coverage milestones." zh="源自 James Bach (1997) Low-Tech Testing Dashboard：「不計算虛榮數字，而是基於證據做出主觀評估」——以三階段白話里程碑呈現測試深度與風險邊界。" /></p>
     </header>
+    <DecisionBar />
     <ControlTowerNav active="dashboard" />
     <div id="formal-dashboard">
       <HomeBrief />

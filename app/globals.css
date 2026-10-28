@@ -2674,57 +2674,85 @@ html[data-theme="light"] .lt-ms-off {
 }
 
 .decision-bar-shell {
-  position: sticky;
-  top: 0;
-  z-index: 20;
+  position: static;
   box-sizing: border-box;
   width: 100%;
   max-width: 100%;
-  padding: 0.55rem 6.5rem 0.75rem 1rem;
-  border-bottom: 1px solid var(--ct-border, var(--rule));
+  margin: 0.85rem 0 0;
+  padding: 0.85rem 6.75rem 0.9rem 1rem;
+  border: 1px solid var(--ct-border, var(--rule));
+  border-radius: 12px;
   background: var(--ct-surface, var(--paper));
+  box-shadow: var(--shadow);
   overflow-x: clip;
 }
 .decision-bar-title {
-  margin: 0 0 0.4rem;
-  font-size: 0.95rem;
+  margin: 0;
+  color: var(--ct-muted, var(--muted));
+  font-size: 0.78rem;
+  font-weight: 700;
   letter-spacing: 0;
   line-height: 1.3;
 }
+.decision-bar-verdict {
+  margin: 0.28rem 0 0.65rem;
+  color: var(--ct-heading, var(--ink));
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.35;
+}
 .approval-computed-on {
-  margin: 0.35rem 0 0.6rem;
+  margin: 0.55rem 0 0;
   color: var(--muted);
   font-family: "Cascadia Code", Consolas, monospace;
   font-size: 0.75rem;
 }
-.decision-bar-legend,
-.decision-bar-row {
+.decision-bar-legend {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0.65rem 0 0.7rem;
+}
+.decision-bar-legend-item,
+.decision-bar-row,
+.decision-bar-detail-head {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.35rem 0.75rem;
+  gap: 0.3rem 0.65rem;
   min-width: 0;
   max-width: 100%;
 }
-.decision-bar-legend { margin-bottom: 0.45rem; }
-.decision-bar-rows {
+.decision-bar-legend-item { margin: 0; }
+.decision-bar-legend-text,
+.decision-bar-status-line,
+.decision-bar-verdict,
+.decision-bar-snapshot {
+  min-width: 0;
+  max-width: 100%;
+}
+.decision-bar-rows,
+.decision-bar-details-list {
   display: grid;
-  gap: 0.45rem;
+  gap: 0.4rem;
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.decision-bar-row {
-  padding-top: 0.35rem;
+.decision-bar-row,
+.decision-bar-detail {
+  padding-top: 0.4rem;
   border-top: 1px solid var(--ct-border, var(--rule));
 }
 .decision-bar-repo,
 .decision-bar-field,
-.decision-bar-next {
+.decision-bar-next,
+.decision-bar-status-line {
   min-width: 0;
   max-width: 100%;
 }
 .decision-bar-repo { font-weight: 700; }
+.decision-bar-status-line { flex: 1 1 16rem; line-height: 1.4; }
 .decision-bar-kicker {
   margin-right: 0.35rem;
   color: var(--ct-muted, var(--muted));
@@ -2733,7 +2761,8 @@ html[data-theme="light"] .lt-ms-off {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.decision-bar-next { flex: 1 1 18rem; }
+.decision-bar-field { margin: 0.2rem 0; }
+.decision-bar-next { margin-bottom: 0; }
 .archived-demo {
   display: inline-flex;
   align-items: center;
@@ -2769,19 +2798,38 @@ html:not([data-theme="light"]) .status-lamp--unknown {
   --lamp-bg: #242d40;
 }
 .status-lamp-symbol { font-size: 0.95rem; line-height: 1; }
-.decision-bar-compact { display: none; min-width: 0; max-width: 100%; }
-.decision-bar-compact summary {
-  display: list-item;
+.decision-bar-details { min-width: 0; max-width: 100%; }
+.decision-bar-summary {
+  display: inline-flex;
+  align-items: center;
   max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  cursor: pointer;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--ct-border-strong, var(--rule));
+  border-radius: 8px;
+  background: var(--ct-surface-2, transparent);
+  color: var(--ct-heading, var(--ink));
   font-weight: 700;
+  line-height: 1.35;
   list-style: none;
+  cursor: pointer;
 }
-.decision-bar-compact summary::-webkit-details-marker { display: none; }
-.decision-bar-compact-body { margin-top: 0.6rem; }
+.decision-bar-summary::-webkit-details-marker { display: none; }
+.decision-bar-summary:focus-visible {
+  outline: 3px solid var(--signal);
+  outline-offset: 3px;
+}
+.decision-bar-summary .when-open { display: none; }
+.decision-bar-details[open] > .decision-bar-summary .when-closed { display: none; }
+.decision-bar-details[open] > .decision-bar-summary .when-open { display: inline; }
+.decision-bar-panel { margin-top: 0.75rem; }
+.decision-bar-snapshot {
+  margin: 0.75rem 0 0;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid var(--ct-border, var(--rule));
+  border-radius: 8px;
+  line-height: 1.4;
+}
 @media (max-width: 480px) {
   :root { --anchor-scroll-offset: 8rem; }
   .ct-split-inspector { grid-template-columns: 1fr; }
@@ -2801,26 +2849,25 @@ html:not([data-theme="light"]) .status-lamp--unknown {
   .ct-repo-cell-title,
   .ct-chrono-card strong,
   .ct-section-title { white-space: normal; }
-  .decision-bar-shell { padding-right: 7.75rem; }
-  .decision-bar-compact summary { font-size: 0.82rem; line-height: 1.4; }
-  .decision-bar-title {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-  .decision-bar-full { display: none; }
-  .decision-bar-compact { display: block; }
+  .ct-topbar { padding: 0.65rem 0.75rem; }
+  .ct-masthead-sub { margin-top: 0.35rem; font-size: 0.82rem; line-height: 1.35; }
+  .decision-bar-shell { margin-top: 0.4rem; padding: 0.45rem 6.5rem 0.5rem 0.65rem; }
+  .decision-bar-verdict { margin: 0.1rem 0 0.28rem; font-size: 0.95rem; line-height: 1.25; }
+  .decision-bar-rows,
+  .decision-bar-details-list { gap: 0.12rem; }
+  .decision-bar-row,
+  .decision-bar-detail { padding-top: 0.16rem; gap: 0.12rem 0.45rem; }
+  .decision-bar-status-line,
+  .decision-bar-legend-text { font-size: 0.8rem; line-height: 1.25; }
+  .decision-bar-legend { margin: 0.28rem 0 0.28rem; gap: 0.15rem; }
+  .decision-bar-shell .status-lamp { min-height: 1.5rem; padding: 0.04rem 0.42rem; font-size: 0.72rem; }
+  .decision-bar-summary { min-height: 2.5rem; padding: 0.22rem 0.65rem; font-size: 0.82rem; }
 }
 @media print {
-  .decision-bar-compact { display: none !important; }
-  .decision-bar-full { display: block !important; }
-  .decision-bar-shell { position: static; }
+  .decision-bar-shell { position: static; box-shadow: none; }
+  .decision-bar-details > .decision-bar-panel { display: block !important; }
+  .decision-bar-summary .when-closed { display: none !important; }
+  .decision-bar-summary .when-open { display: inline !important; }
 }
 
 .home-brief {

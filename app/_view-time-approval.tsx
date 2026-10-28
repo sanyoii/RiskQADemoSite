@@ -42,7 +42,7 @@ function viewClockOnServer() {
   return 0;
 }
 
-function useViewNow() {
+export function useViewNow() {
   const now = useSyncExternalStore(subscribeViewClock, viewClockOnClient, viewClockOnServer);
   return now === 0 ? null : now;
 }

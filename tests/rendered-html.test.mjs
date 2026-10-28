@@ -205,7 +205,8 @@ test("old design URLs meta-refresh to the archived history page", async () => {
     assert.match(html, /href="https:\/\/sanyoii\.github\.io\/test-status\/history\/"/, route);
     assert.match(html, /<a href="\/test-status\/history\/">/, route);
     const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1] ?? "";
-    assert.doesNotMatch(main, /cex-market-data-quality-lab|Formal Go approved|data-status="ready"/, route);
+    const pageBody = main.replace(/<section class="decision-bar-shell"[\s\S]*?<\/section>/, "");
+    assert.doesNotMatch(pageBody, /cex-market-data-quality-lab|Formal Go approved|data-status="ready"/, route);
   }
 });
 
@@ -276,13 +277,11 @@ test("server-renders Option B+C Hybrid Control Tower, 4-stage traceability board
 
 
 test("shared shell renders lamps, the decision bar, enabled nav items, and the language toggle", async () => {
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  const barRule = css.match(/\.decision-bar-shell\s*\{[^}]*\}/)?.[0] ?? "";
+  assert.match(barRule, /position:\s*static/);
+  assert.doesNotMatch(barRule, /sticky/);
   const routes = ["/", "/exit-criteria", "/risks", "/run-records", "/run-records/fail-demo", "/templates", "/history", "/dashboard-demo", "/dashboard-demo/ac", "/dashboard-demo/abc"];
-  const lamps = [
-    ["good", "✓", "Good", "良好"],
-    ["warning", "!", "Attention", "注意"],
-    ["bad", "✕", "Poor", "差"],
-    ["unknown", "?", "Unknown", "未知"],
-  ];
   const navLabels = ["Decision", "Exit criteria", "Risks", "Run records", "Failure drill", "QA templates", "Design history"];
 
   for (const route of routes) {
@@ -296,9 +295,11 @@ test("shared shell renders lamps, the decision bar, enabled nav items, and the l
 
     const bar = html.match(/<section class="decision-bar-shell"[\s\S]*?<\/section>/)?.[0];
     assert.ok(bar, `${route} decision bar`);
-    assert.match(bar, /<details class="decision-bar-compact">/);
-    assert.doesNotMatch(bar, /<details class="decision-bar-compact"[^>]*\bopen/);
-    assert.match(bar, /<summary\b(?=[^>]*\bclass="decision-bar-summary")(?=[^>]*\baria-expanded="false")[^>]*>/);
+    assert.match(html, /<\/header>\s*<section class="decision-bar-shell"/, `${route} bar follows the page header`);
+    assert.match(bar, /<details class="decision-bar-details">/);
+    assert.doesNotMatch(bar, /<details class="decision-bar-details"[^>]*\bopen/);
+    assert.match(bar, /<summary\b(?=[^>]*\bclass="decision-bar-summary")(?=[^>]*\baria-expanded="false")(?=[^>]*\baria-controls="decision-bar-panel")[^>]*>/);
+    assert.match(bar, /id="decision-bar-panel"/);
     for (const name of ["cex-market-data-quality-lab", "sanyoii.github.io", "William"]) assert.ok(bar.includes(name), `${route} ${name}`);
     assert.match(bar, /data-en="Hold" data-zh="暫緩"/);
     assert.match(bar, /data-marker="archived-demo"/);
@@ -307,6 +308,17 @@ test("shared shell renders lamps, the decision bar, enabled nav items, and the l
     assert.match(bar, /data-en="Decision date" data-zh="決策日"/);
     assert.match(bar, /data-en="Expiry" data-zh="到期日"/);
     assert.match(bar, /data-en="Next step" data-zh="下一步"/);
+    assert.match(bar, /data-en="Show decision details" data-zh="展開決策細節"/);
+    assert.match(bar, /data-en="Collapse" data-zh="收合"/);
+    assert.match(bar, /data-en="Both projects are on Hold: approval is paused, and they will be retested after the revamp launches\."/);
+    assert.match(bar, /data-zh="目前 2 個專案都暫緩核准，等改版上線後再重測。"/);
+    assert.match(bar, /data-en="Approval on hold; the approval expired on 2026-09-08 23:59 \(Taipei time\)\."/);
+    assert.match(bar, /data-zh="暫緩核准；核准已於 2026-09-08 23:59（台北時間）到期。"/);
+    assert.match(bar, /data-en="Approval on hold; the approval expired on 2026-09-13 20:40 \(Taipei time\)\."/);
+    assert.match(bar, /data-zh="暫緩核准；核准已於 2026-09-13 20:40（台北時間）到期。"/);
+    assert.match(bar, /data-en="Hold: not approved for release for now\." data-zh="暫緩：目前不核准發布。"/);
+    assert.match(bar, /data-en="Pinned snapshot: 2026-09-07 · SHA fc1e060 &amp; 643b017 · expired self-review, not a current Go"/);
+    assert.match(bar, /data-zh="鎖定快照：2026-09-07 · SHA fc1e060 與 643b017 · 自審已過期，不是目前的 Go"/);
     assert.ok(bar.includes("2026-09-07 23:11 (Taipei time)"));
     assert.ok(bar.includes("2026-09-07 23:11（台北時間）"));
     assert.ok(bar.includes("2026-09-08 23:59 (Taipei time)"));
@@ -314,14 +326,11 @@ test("shared shell renders lamps, the decision bar, enabled nav items, and the l
     assert.ok(bar.includes("2026-09-13 20:40 (Taipei time)"));
     assert.ok(bar.includes("Do not re-approve in this revision. Retest after the revamp launches and record a new approval period; keep the historical approval."));
     assert.ok(bar.includes("本次不重新核准。改版上線後重測，並重新記錄核准與效期；保留歷史核准。"));
-    assert.ok(bar.includes("Hold · Archived demo · 2"));
+    assert.doesNotMatch(bar, /Hold · Archived demo/);
     assert.doesNotMatch(bar, /範例資料|Sample data|同範圍重測後重新核准/);
-    for (const [tone, symbol, en, zh] of lamps) {
-      const escaped = symbol.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const lamp = new RegExp(`class="status-lamp status-lamp--${tone}"[\\s\\S]{0,240}?${escaped}[\\s\\S]{0,240}?data-en="${en}" data-zh="${zh}"`);
-      assert.match(bar, lamp, `${route} ${tone}`);
-    }
-    assert.match(bar, /data-en="Hold" data-zh="暫緩"/);
+    assert.doesNotMatch(bar, /status-lamp--good|status-lamp--bad|status-lamp--unknown/);
+    const holdLamp = /class="status-lamp status-lamp--warning"[\s\S]{0,240}![\s\S]{0,240}data-en="Hold" data-zh="暫緩"/;
+    assert.match(bar, holdLamp, `${route} hold lamp`);
 
     const nav = html.match(/<nav class="decision-nav ct-nav ct-hybrid-nav"[\s\S]*?<\/nav>/)?.[0];
     assert.ok(nav, `${route} nav`);

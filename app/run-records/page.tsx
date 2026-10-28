@@ -1,5 +1,6 @@
 import { siteHref } from "../_site";
 import { pageLanguageData, T } from "../_i18n";
+import { DecisionBar } from "../_decision-bar";
 import { ControlTowerNav } from "../_shared-nav";
 import { RecordsWorkbench } from "./_records-workbench";
 import { caseGroupTitlesEn, caseTextEn, deterministicGroups, liveGroups, manualGroups, type TestCaseGroup } from "./cases";
@@ -104,7 +105,7 @@ export default function RunRecords() {
           <T en="Evidence ledger backing the Low-Tech Whiteboard: 6 pinned JUnit run receipts (67 checks) and the 34 canonical test case specifications." zh="支撐主控白板評估結論的底層證據帳本：收錄 6 筆鎖定版本之公開版 JUnit 執行收據（67 項檢查，已移除本機路徑）與 34 項標準測試案例規格。" />
         </p>
       </header>
-
+      <DecisionBar />
       <ControlTowerNav active="run-records" />
 
       <nav className="ct-chronology-index ct-chrono-slim" aria-label="Record sections index" data-aria-label-en="Record sections index" data-aria-label-zh="執行記錄區段索引">

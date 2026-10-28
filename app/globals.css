@@ -72,6 +72,7 @@ a:hover { color: var(--signal); }
   backdrop-filter: blur(.5rem);
 }
 .qa-language-toggle:hover { color: var(--signal); }
+html[data-theme="light"] .qa-language-toggle:hover { color: #b63c26; }
 .qa-language-toggle:active { transform: translateY(1px); }
 .qa-language-toggle button {
   min-width: 2.75rem;
@@ -2910,6 +2911,8 @@ html:not([data-theme="light"]) .status-lamp--unknown {
 .exit-criteria-evidence a { overflow-wrap: anywhere; }
 .risk-table-wrap,
 .history-url-table { max-width: 100%; }
+.risk-table-wrap { overflow-x: auto; }
+.risk-table-wrap:focus-visible { outline: 3px solid var(--signal); outline-offset: 2px; }
 .risk-table,
 .history-url-table { width: 100%; border-collapse: collapse; }
 .risk-table th,

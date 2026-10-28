@@ -53,7 +53,8 @@ export default function RisksPage() {
           zh="嚴重度、負責人與處置都是已定案內容。"
         />
       </p>
-      <div className="risk-table-wrap">
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
+      <div className="risk-table-wrap" tabIndex={0} role="region" aria-label="Risk table" data-aria-label-en="Risk table" data-aria-label-zh="風險表">
         <table className="risk-table">
           <thead>
             <tr>

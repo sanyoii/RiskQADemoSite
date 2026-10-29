@@ -1,7 +1,8 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { taipeiCalendarDate } from "../lib/approval-expiry.mjs";
 
 test("registry validates every public snapshot and repository mapping", () => {
   const result = spawnSync(process.execPath, ["scripts/validate-registry.mjs", "data/repos/index.json", "--historical"], {
@@ -16,10 +17,17 @@ test("registry validates every public snapshot and repository mapping", () => {
 });
 
 test("registry archive flags and the generated decision index stay on settled risks", () => {
+  const indexPath = new URL("../data/decision-index.json", import.meta.url);
   const registry = JSON.parse(readFileSync(new URL("../data/repos/index.json", import.meta.url), "utf8"));
   const catalog = JSON.parse(readFileSync(new URL("../data/risks.json", import.meta.url), "utf8"));
-  const index = JSON.parse(readFileSync(new URL("../data/decision-index.json", import.meta.url), "utf8"));
+  const committed = readFileSync(indexPath, "utf8");
+  const index = JSON.parse(committed);
   assert.equal(index.policyVersion, "3.0.0");
+  assert.match(index.evaluatedOn, /^\d{4}-\d{2}-\d{2}$/);
+  assert.equal(Number.isFinite(Date.parse(`${index.evaluatedOn}T00:00:00.000Z`)), true);
+  const today = taipeiCalendarDate(new Date());
+  assert.ok(today);
+  assert.ok(index.evaluatedOn <= today, `evaluatedOn ${index.evaluatedOn} is after ${today}`);
   assert.equal(catalog.risks.length, 6);
   assert.equal(catalog.risks.filter(risk => risk.severity === "S1").length, 2);
   assert.equal(catalog.risks.some(risk => risk.synthetic === true), false);
@@ -37,10 +45,15 @@ test("registry archive flags and the generated decision index stay on settled ri
   }
   const portfolio = index.repositories.find(item => item.snapshot.repository.name === "sanyoii.github.io");
   assert.equal(portfolio.risks.some(risk => risk.severity === "S2"), false);
-  const regenerated = spawnSync(process.execPath, ["scripts/prepare-decision-data.mjs"], {
+  // Rebuild at the stamped Taipei noon so a later wall clock does not rewrite evaluatedOn.
+  const regenerated = spawnSync(process.execPath, ["scripts/prepare-decision-data.mjs", "--now", `${index.evaluatedOn}T12:00:00+08:00`], {
     cwd: new URL("../", import.meta.url),
     encoding: "utf8",
   });
-  assert.equal(regenerated.status, 0, regenerated.stderr);
-  assert.equal(readFileSync(new URL("../data/decision-index.json", import.meta.url), "utf8"), JSON.stringify(index, null, 2) + "\n");
+  try {
+    assert.equal(regenerated.status, 0, regenerated.stderr);
+    assert.equal(readFileSync(indexPath, "utf8"), JSON.stringify(index, null, 2) + "\n");
+  } finally {
+    writeFileSync(indexPath, committed);
+  }
 });

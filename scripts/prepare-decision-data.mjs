@@ -13,7 +13,12 @@ const registry = JSON.parse(await readFile(registryPath, "utf8"));
 const releaseRecords = JSON.parse(await readFile(new URL("../data/release-records.json", import.meta.url), "utf8"));
 const riskCatalog = JSON.parse(await readFile(new URL("../data/risks.json", import.meta.url), "utf8"));
 const risks = Array.isArray(riskCatalog.risks) ? riskCatalog.risks : [];
-const evaluatedAt = new Date();
+const nowFlag = process.argv.indexOf("--now");
+const evaluatedAt = nowFlag < 0 ? new Date() : new Date(process.argv[nowFlag + 1] ?? "");
+if (!Number.isFinite(evaluatedAt.getTime())) {
+  console.error("CLOCK_INVALID");
+  process.exit(1);
+}
 const evaluatedOn = new Intl.DateTimeFormat("en-CA", {
   timeZone: "Asia/Taipei",
   year: "numeric",

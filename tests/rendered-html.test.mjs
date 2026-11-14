@@ -312,6 +312,8 @@ test("shared shell renders lamps, the decision bar, enabled nav items, and the l
     assert.match(bar, /data-en="Collapse" data-zh="收合"/);
     assert.match(bar, /data-en="Both projects are on Hold: approval is paused, and they will be retested after the revamp launches\."/);
     assert.match(bar, /data-zh="目前 2 個專案都暫緩核准，等改版上線後再重測。"/);
+    assert.match(bar, /class="decision-bar-why"[\s\S]*?data-en="Why Hold: the approvals have expired\. This desk does not keep a green light on stale evidence\./);
+    assert.match(bar, /data-zh="為什麼暫緩：核准已過期。這個看板不讓過期的證據繼續亮綠燈；/);
     assert.match(bar, /data-en="Approval on hold; the approval expired on 2026-09-08 23:59 \(Taipei time\)\."/);
     assert.match(bar, /data-zh="暫緩核准；核准已於 2026-09-08 23:59（台北時間）到期。"/);
     assert.match(bar, /data-en="Approval on hold; the approval expired on 2026-09-13 20:40 \(Taipei time\)\."/);

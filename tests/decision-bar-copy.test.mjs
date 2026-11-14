@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import {
   decisionVerdict,
+  holdReasonNote,
   lampLegends,
   pinnedSnapshotLine,
   projectStatusLine,
@@ -92,4 +93,20 @@ test("a hold that has not expired does not say the approval already ended", () =
   assert.equal(projectStatusLine(open).en, "Approval on hold until 2026-09-08 23:59 (Taipei time).");
   assert.equal(projectStatusLine(open).zh, "暫緩核准；核准至 2026-09-08 23:59（台北時間）。");
   assert.doesNotMatch(projectStatusLine(open).zh, /到期/);
+});
+
+test("an expired approval on Hold says in plain words why it is not green", () => {
+  assert.deepEqual(holdReasonNote(recorded), {
+    en: "Why Hold: the approvals have expired. This desk does not keep a green light on stale evidence. Earlier results stay on record, and the status holds until a retest and a new approval.",
+    zh: "為什麼暫緩：核准已過期。這個看板不讓過期的證據繼續亮綠燈；先前的結果都保留，要重測並重新核准後，狀態才會改變。",
+  });
+  assert.match(holdReasonNote([recorded[0]]).en, /^Why Hold: the approval has expired\./);
+
+  const open = recorded.map((repo) => ({ ...repo, approvalExpired: false }));
+  assert.equal(holdReasonNote(open), null);
+  const ready = recorded.map((repo) => ({ ...repo, status: "ready", approvalExpired: false }));
+  assert.equal(holdReasonNote(ready), null);
+  const mixed = [recorded[0], { ...recorded[1], status: "blocked" }];
+  assert.equal(holdReasonNote(mixed), null);
+  assert.equal(holdReasonNote([]), null);
 });

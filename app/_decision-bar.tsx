@@ -3,6 +3,7 @@
 import { entryDecisionAt } from "../lib/approval-expiry.mjs";
 import {
   decisionVerdict,
+  holdReasonNote,
   lampLegends,
   pinnedSnapshotLine,
   projectStatusLine,
@@ -39,6 +40,7 @@ export function DecisionBar() {
   const now = useViewNow();
   const repos = dashboardData.repositories.map((entry) => toRepo(entry, now));
   const verdict = decisionVerdict(repos);
+  const holdReason = holdReasonNote(repos);
   const legends = lampLegends(repos);
   const snapshot = pinnedSnapshotLine(repos);
 
@@ -51,6 +53,7 @@ export function DecisionBar() {
     >
       <h2 className="decision-bar-title"><T en="Release decisions" zh="發布決策" /></h2>
       <p className="decision-bar-verdict"><T en={verdict.en} zh={verdict.zh} /></p>
+      {holdReason ? <p className="decision-bar-why"><T en={holdReason.en} zh={holdReason.zh} /></p> : null}
       <ol className="decision-bar-rows">
         {repos.map((repo) => {
           const line = projectStatusLine({

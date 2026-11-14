@@ -566,7 +566,7 @@ export function DecisionDashboard() {
                   {isHoldPreview ? (
                     <T en="1 demo S1 (DEF-MDQ-004)" zh="1 個示範 S1 (DEF-MDQ-004)" />
                   ) : (
-                    <T en="No unresolved S1 (1 external warning)" zh="沒有未解決的 S1（1 項外部 Warning）" />
+                    <T en="No S1 defect in the locked snapshots (1 external warning)" zh="鎖定快照沒有 S1 缺陷（1 項外部 Warning）" />
                   )}
                 </strong>
               </div>
@@ -578,8 +578,8 @@ export function DecisionDashboard() {
             <div className="lt-sig-drawer">
               <p>
                 <T
-                  en="No unresolved S1 in the locked snapshots. The public Binance feed stays a warning because it depends on an outside network. Preview the S1 Fail hold to see why a confirmed Fail cannot be Ready."
-                  zh="鎖定快照沒有未解決的 S1。Binance 公開連線仍是 Warning，因為它依賴外部網路。可預覽 S1 Fail 攔截，看已確認 Fail 為何不能是 Ready。"
+                  en="The locked snapshots recorded no S1 defect. Current risks, including the expired approvals, are counted under Exit criteria and Risks above. The public Binance feed stays a warning because it depends on an outside network. Preview the S1 Fail hold to see why a confirmed Fail cannot be Ready."
+                  zh="鎖定快照沒有記錄 S1 缺陷。目前的風險（包含核准過期）算在上方的結束條件與風險裡。Binance 公開連線仍是 Warning，因為它依賴外部網路。可預覽 S1 Fail 攔截，看已確認 Fail 為何不能是 Ready。"
                 />
               </p>
             </div>

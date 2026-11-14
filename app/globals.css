@@ -2702,6 +2702,14 @@ html[data-theme="light"] .lt-ms-off {
   letter-spacing: 0;
   line-height: 1.35;
 }
+.decision-bar-why {
+  margin: -0.3rem 0 0.65rem;
+  min-width: 0;
+  max-width: 100%;
+  color: var(--ct-heading, var(--ink));
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
 .approval-computed-on {
   margin: 0.55rem 0 0;
   color: var(--muted);
@@ -2853,6 +2861,7 @@ html:not([data-theme="light"]) .status-lamp--unknown {
   .ct-masthead-sub { margin-top: 0.35rem; font-size: 0.82rem; line-height: 1.35; }
   .decision-bar-shell { margin-top: 0.4rem; padding: 0.45rem 6.5rem 0.5rem 0.65rem; }
   .decision-bar-verdict { margin: 0.1rem 0 0.28rem; font-size: 0.95rem; line-height: 1.25; }
+  .decision-bar-why { margin: 0 0 0.3rem; font-size: 0.82rem; line-height: 1.35; }
   .decision-bar-rows,
   .decision-bar-details-list { gap: 0.12rem; }
   .decision-bar-row,
